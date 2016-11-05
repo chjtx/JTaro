@@ -1,0 +1,28 @@
+p {
+  margin: 0;
+  padding: 10px;
+}
+.my-head {
+  height: 44px;
+  line-height: 44px;
+  padding: 0 20px;
+  background: #ddd;
+  text-align: center;
+}
+
+.my-head a.left {
+  float: left;
+}
+.my-head a.right {
+  float: right;
+}
+
+#home_wrapper, #about_wrapper, #list_wrapper {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+}

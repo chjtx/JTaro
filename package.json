@@ -1,0 +1,31 @@
+{
+  "name": "jtaro",
+  "version": "0.0.1",
+  "description": "A H5 SPA framework for Vue.js 2.0",
+  "main": "dist/jtaro.js",
+  "scripts": {
+    "dev": "gulp dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chjtx/JTaro"
+  },
+  "keywords": [
+    "jtaro",
+    "vue",
+    "spa"
+  ],
+  "author": "BarZu",
+  "license": "MIT",
+  "dependencies": {
+    "jroll": "^2.3.2",
+    "vue": "^2.0.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.17.5",
+    "eslint": "^3.9.1",
+    "eslint-config-vue": "^2.0.0",
+    "eslint-plugin-vue": "^1.0.0",
+    "gulp": "^3.9.1"
+  }
+}
