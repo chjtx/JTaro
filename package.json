@@ -26,6 +26,9 @@
     "eslint": "^3.9.1",
     "eslint-config-vue": "^2.0.0",
     "eslint-plugin-vue": "^1.0.0",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-header": "^1.8.8",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.0.0"
   }
 }

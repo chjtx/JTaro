@@ -1,9 +1,4 @@
-/*!
- * JTaro.js v0.0.1
- * (c) 2016 BarZu
- * Released under the MIT License.
- * Git: https://github.com/chjtx/JTaro
- */
+/*! JTaro.js v0.0.1 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 
 /* global define */
 ;(function (global, factory) {
@@ -104,6 +99,10 @@
     }
   }
 
+  function reset () {
+    WIDTH = window.innerWidth
+  }
+
   // Vue install
   JTaro.install = function (Vue, options) {
     // 页面组件
@@ -137,6 +136,9 @@
     window.addEventListener('hashchange', function () {
       pushView(window.location.hash, options.jroll)
     })
+    // 页面宽度改变更新动画宽度
+    window.addEventListener('resize', reset)
+    window.addEventListener('orientationchange', reset)
 
     // 启动，跳到默认路由
     JTaro.boot = function (page) {

@@ -1,0 +1,4 @@
+*
+*/**
+!dist/jtaro.min.js
+!src/jtaro.js
