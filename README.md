@@ -30,21 +30,21 @@ npm install jtaro
 
 ## 快速上手
 
-1. 创建index.html文件并在head里引入Vue、JRoll
+1、 创建index.html文件并在head里引入Vue、JRoll
 
 ```html
 <script src='https://unpkg.com/vue/dist/vue.js'></script>
 <script src='https://unpkg.com/jroll/src/jroll.js'></script>
 ```
 
-2. 在body里创建id为`jtaro_app`的div，并在其后引入JTaro
+2、 在body里创建id为`jtaro_app`的div，并在其后引入JTaro
 
 ```html
 <div id="jtaro_app"></div>
 <script src='https://unpkg.com/jtaro/src/jtaro.js'></script>
 ```
 
-3. 在`div#jtaro_app`之后编写Vue组件，并执行`JTaro.boot()`启动应用
+3、 在`div#jtaro_app`之后编写Vue组件，并执行`JTaro.boot()`启动应用
 
 ```html
 <script>
@@ -56,7 +56,7 @@ JTaro.boot()
 </script>
 ```
 
-4. 将index.html文件拖到浏览器访问
+4、 将index.html文件拖到浏览器访问
 
 要了解更多请查看示例
 
