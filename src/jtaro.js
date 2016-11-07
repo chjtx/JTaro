@@ -1,4 +1,4 @@
-/*! JTaro.js v0.0.1 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.0.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 
 /* global define */
 ;(function (global, factory) {
@@ -24,6 +24,7 @@
   var JTaro = Object.create(null)
 
   JTaro.params = null
+  JTaro.views = []
 
   // 页面切入动画（新增页面）
   function slideIn (el, _jroll) {
@@ -55,9 +56,11 @@
 
   // 递归删除页面
   function recursionDelPage (views, children, _jroll, i) {
-    if (views.length - 1 > i) {
-      slideOut(children[views.length - 2].$el, _jroll, function () {
-        views.splice(views.length - 1)
+    var l = views.length
+    if (l - 1 > i) {
+      slideOut(children[l - 2], _jroll, function () {
+        views.splice(l - 1)
+        children[l - 1].parentNode.removeChild(children[l - 1])
         setTimeout(function () {
           recursionDelPage(views, children, _jroll, i)
         }, 0)
@@ -75,12 +78,24 @@
     return o
   }
 
+  function findElFromVueComponent (_hash) {
+    var children = JTaro.vm.$children
+    var i = 0
+    var l = children.length
+    for (; i < l; i++) {
+      if (children[i].jtaro_tag === _hash) {
+        return children[i].$el
+      }
+    }
+  }
+
   /* 删除或添加页面
    * 1、与路由对应页面不存在->添加
    * 2、与路由对应页面已存在->将该页面往后的所有页面都删除
    */
   function pushView (_hash, _jroll) {
     var h = _hash.replace('#!', '')
+    var c
 
     // 截取url参数
     var p = h.split('?')
@@ -90,12 +105,19 @@
     }
 
     var v = JTaro.vm.$data.views
-    var i = v.indexOf(h)
+    var i = JTaro.views.indexOf(h)
 
     if (i === -1) {
-      v.push(h)
+      if (v.indexOf(h) === -1) {
+        v.push(h)
+      } else {
+        c = findElFromVueComponent(h)
+        JTaro.vm.$el.appendChild(c)
+        slideIn(c, _jroll)
+      }
+      JTaro.views.push(h)
     } else {
-      recursionDelPage(v, JTaro.vm.$children, _jroll, i)
+      recursionDelPage(JTaro.views, JTaro.vm.$el.childNodes, _jroll, i)
     }
   }
 
@@ -111,7 +133,7 @@
       props: ['view'],
       data: function () {
         return {
-          mask: false
+          jtaro_tag: this.view
         }
       },
       render: function (h) {
