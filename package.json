@@ -1,7 +1,7 @@
 {
   "name": "jtaro",
   "version": "0.0.1",
-  "description": "A H5 SPA framework for Vue.js 2.0",
+  "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {
     "dev": "gulp dev"
