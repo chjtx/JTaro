@@ -72,6 +72,8 @@ npm install
 npm run dev
 ```
 
+> `npm install`下载太慢？那就直接`clone`之后将`index.html`的Vue和JRoll替换成CDN路径，然后拖到浏览器即可。不要用`cnpm`，会导致很多依赖缺失
+
 ## 方法
 
 ### 启动 boot
