@@ -1,4 +1,4 @@
-/*! JTaro.js v0.0.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.0.3 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 
 /* global define */
 ;(function (global, factory) {
@@ -78,13 +78,13 @@
     return o
   }
 
-  function findElFromVueComponent (_hash) {
+  function findVueComponent (_hash) {
     var children = JTaro.vm.$children
     var i = 0
     var l = children.length
     for (; i < l; i++) {
       if (children[i].jtaro_tag === _hash) {
-        return children[i].$el
+        return children[i]
       }
     }
   }
@@ -111,7 +111,7 @@
       if (v.indexOf(h) === -1) {
         v.push(h)
       } else {
-        c = findElFromVueComponent(h)
+        c = findVueComponent(h).$el
         JTaro.vm.$el.appendChild(c)
         slideIn(c, _jroll)
       }
@@ -145,6 +145,16 @@
     }
 
     Vue.component('jt-view', JTaroView)
+
+    // 注册postMessage方法
+    Vue.prototype.postMessage = function (msg, name) {
+      var view = findVueComponent(name)
+      var component = Vue.options.components[name]
+      var method = component ? component.options.onMessage : null
+      if (view && method) {
+        method.call(view.$children[0], { message: msg, origin: this.$parent.jtaro_tag })
+      }
+    }
 
     JTaro.vm = new Vue({
       el: options.el,

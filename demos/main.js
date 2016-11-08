@@ -17,7 +17,6 @@ var mixin = {
       })()
     }
   },
-  jroll: 'null',
   methods: {
     deleteItem: function (i) {
       this.$data.items.splice(this.$data.items.indexOf(i), 1)
@@ -31,10 +30,20 @@ var mixin = {
 // 首页
 Vue.component('home', {
   template: '<div id="home">' +
-              '<my-head>Home<a class="right" href="javascript:void(0)" @click="go">about &gt;&gt;</a></my-head>' +
+              '<my-head>{{title}}<a class="right" href="javascript:void(0)" @click="go">about &gt;&gt;</a></my-head>' +
               '<div id="home_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">home page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
+  data: function () {
+    return {
+      title: 'Home'
+    }
+  },
+  onMessage: function (event) {
+    if (event.message === 'modifyTitle' && event.origin === 'about') {
+      this.title = 'Home Back'
+    }
+  },
   methods: {
     go: function () {
       JTaro.go('about?a=1&b=2&c=3', {
@@ -59,6 +68,8 @@ Vue.component('about', {
   mixins: [mixin],
   methods: {
     go: function () {
+      this.postMessage('modifyTitle', 'home')
+      this.postMessage('modifyTitle', 'list') // nothing will do
       JTaro.go('home')
     },
     goList: function () {
@@ -74,8 +85,29 @@ Vue.component('about', {
 Vue.component('list', {
   template: '<div id="list">' +
               '<my-head><a class="left" href="javascript:void(0)" @click="go">&lt;&lt; about</a>' +
-              '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>List</my-head>' +
+              'List<a class="right" href="javascript:void(0)" @click="goFour">four &gt;&gt;</a></my-head>' +
               '<div id="list_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
+            '<div>',
+  mixins: [mixin],
+  methods: {
+    go: function () {
+      JTaro.go('about')
+    },
+    goFour: function () {
+      JTaro.go('four')
+    }
+  },
+  mounted: function () {
+    this.jroll = new JRoll('#list_wrapper')
+  }
+})
+
+// 第四页
+Vue.component('four', {
+  template: '<div id="four">' +
+              '<my-head><a class="left" href="javascript:void(0)" @click="go">&lt;&lt; about</a>' +
+              '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>Four</my-head>' +
+              '<div id="four_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">four page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
   methods: {
@@ -87,6 +119,6 @@ Vue.component('list', {
     }
   },
   mounted: function () {
-    this.jroll = new JRoll('#list_wrapper')
+    this.jroll = new JRoll('#four_wrapper')
   }
 })

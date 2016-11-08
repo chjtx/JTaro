@@ -2,6 +2,7 @@ p {
   margin: 0;
   padding: 10px;
 }
+
 .my-head {
   height: 44px;
   line-height: 44px;
@@ -13,11 +14,15 @@ p {
 .my-head a.left {
   float: left;
 }
+
 .my-head a.right {
   float: right;
 }
 
-#home_wrapper, #about_wrapper, #list_wrapper {
+#home_wrapper,
+#about_wrapper,
+#list_wrapper,
+#four_wrapper {
   position: absolute;
   top: 44px;
   left: 0;

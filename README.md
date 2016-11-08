@@ -114,13 +114,49 @@ JTaro.go('page', {a: 1, b: 2})
 - 尽量使用`JTaro.go`进行页面跳转，避免直接操作hash破坏路由历史记录，而且`JTaro.go`在页面切换动画进行时不会触发，阻止频繁切换页面
 - 尽量使用`JTaro.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`JTaro.go(-2)`，如此类推
 
+## 页面组件间通讯
+
+- 使用`this.postMessage(<msg>, <page>)`发送消息
+
+```js
+/* postMessage(<msg>, <name>)
+ * @param msg 消息内容
+ * @param name Vue组件名称
+ */
+Vue.component('about', {
+  mounted: function () {
+    //向home页面发送modifyTitle消息通知home页面修改标题
+    this.postMessage('modifyTitle', 'home')
+  }
+})
+```
+
+- 使用`onMessage`选项接收消息
+
+```js
+Vue.component('home', {
+  onMessage: function (event) {
+    console.log(event) // {message: 'modifyTitle', origin: 'about'}
+  }
+})
+```
+
+> 注意：只有页面组件（与路由对应的组件）才可以使用postMessage和onMessage，
+
+### Q & A
+
+*问：为什么不提供获取页面实例的方法？例如`getPageByName('home')`获取home页面，然后可以在其它页面操作home页面*
+
+*答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。*
+
+
 ## 配合vue-cli使用
 
 敬请期待...
 
 ## TODO
 
-- [ ] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
+- [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
 - [ ] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
 - [ ] 实现beforeRouteEnter、afterRouteEnter和beforeRouteLeave、afterRouteLeave路由勾子
 
