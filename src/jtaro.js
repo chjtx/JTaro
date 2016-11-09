@@ -1,4 +1,4 @@
-/*! JTaro.js v0.0.3 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.1.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 
 /* global define */
 ;(function (global, factory) {
@@ -30,12 +30,22 @@
   function slideIn (el, _jroll) {
     var preSib = el.previousElementSibling
     JTaro.sliding = true
-    if (preSib) {
-      _jroll.utils.moveTo(preSib, -WIDTH, 0, 300)
-    }
 
     _jroll.utils.moveTo(el, WIDTH, 0)
     setTimeout(function () {
+
+      // 收入当前页
+      if (preSib) {
+        _jroll.utils.moveTo(preSib, -WIDTH, 0, 300, function () {
+          // 将当前页的上一页隐藏，保持只有两个页面为display:block
+          var preSibSib = preSib.previousElementSibling
+          if (preSibSib) {
+            preSibSib.style.display = 'none'
+          }
+        })
+      }
+
+      // 滑进新建页
       _jroll.utils.moveTo(el, 0, 0, 300, function () {
         JTaro.sliding = false
       })
@@ -46,11 +56,20 @@
   function slideOut (el, _jroll, cb) {
     var nxtSib = el.nextElementSibling
     JTaro.sliding = true
+
+    // 撤出当前页
     if (nxtSib) {
       _jroll.utils.moveTo(nxtSib, WIDTH, 0, 300, cb)
     }
+
+    // 滑出上一页
     _jroll.utils.moveTo(el, 0, 0, 300, function () {
       JTaro.sliding = false
+      // 将上一页的上一页显示，保持有两个页面为display:block
+      var preSib = el.previousElementSibling
+      if (preSib) {
+        preSib.style.display = 'block'
+      }
     })
   }
 
@@ -129,7 +148,6 @@
   JTaro.install = function (Vue, options) {
     // 页面组件
     var JTaroView = {
-      name: 'jt-view',
       props: ['view'],
       data: function () {
         return {

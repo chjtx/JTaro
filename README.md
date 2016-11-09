@@ -1,4 +1,4 @@
-# JTaro 醉芋头
+# 醉芋头 JTaro
 
 > An H5 SPA framework for Vue.js 2.0
 
@@ -159,6 +159,7 @@ Vue.component('home', {
 ## TODO
 
 - [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
-- [ ] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
+- [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
 - [ ] 实现beforeRouteEnter、afterRouteEnter和beforeRouteLeave、afterRouteLeave路由勾子
+- [ ] 嵌入微型fastclick解决老机点击300ms延迟问题
 
