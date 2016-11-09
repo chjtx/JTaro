@@ -1,6 +1,6 @@
 /*! JTaro.js v0.1.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 
-/* global define */
+/* global define, Vue */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -27,29 +27,43 @@
   JTaro.views = []
 
   // 页面切入动画（新增页面）
-  function slideIn (el, _jroll) {
+  function slideIn (view, el, _jroll) {
     var preSib = el.previousElementSibling
     JTaro.sliding = true
 
     _jroll.utils.moveTo(el, WIDTH, 0)
-    setTimeout(function () {
 
-      // 收入当前页
-      if (preSib) {
-        _jroll.utils.moveTo(preSib, -WIDTH, 0, 300, function () {
-          // 将当前页的上一页隐藏，保持只有两个页面为display:block
-          var preSibSib = preSib.previousElementSibling
-          if (preSibSib) {
-            preSibSib.style.display = 'none'
-          }
+    function doSlide () {
+      setTimeout(function () {
+        // 收入当前页
+        if (preSib) {
+          _jroll.utils.moveTo(preSib, -WIDTH, 0, 300, function () {
+            // 将当前页的上一页隐藏，保持只有两个页面为display:block
+            var preSibSib = preSib.previousElementSibling
+            if (preSibSib) {
+              preSibSib.style.display = 'none'
+            }
+          })
+        }
+
+        // 滑进新建页
+        _jroll.utils.moveTo(el, 0, 0, 300, function () {
+          JTaro.sliding = false
         })
-      }
+      }, 0)
+    }
 
-      // 滑进新建页
-      _jroll.utils.moveTo(el, 0, 0, 300, function () {
-        JTaro.sliding = false
-      })
-    }, 0)
+    // beforeEnter hook
+    var beforeEnter = Vue.options.components[view.jtaro_tag].options.beforeEnter
+    if (beforeEnter) {
+      if (beforeEnter.call(view, function () {
+        doSlide()
+      })) {
+        doSlide()
+      }
+    } else {
+      doSlide()
+    }
   }
 
   // 页面切出动画（删除页面）
@@ -130,9 +144,9 @@
       if (v.indexOf(h) === -1) {
         v.push(h)
       } else {
-        c = findVueComponent(h).$el
-        JTaro.vm.$el.appendChild(c)
-        slideIn(c, _jroll)
+        c = findVueComponent(h)
+        JTaro.vm.$el.appendChild(c.$el)
+        slideIn(c, c.$el, _jroll)
       }
       JTaro.views.push(h)
     } else {
@@ -158,7 +172,7 @@
         return h(Vue.options.components[this.view] || NotFound)
       },
       mounted: function () {
-        slideIn(this.$el, options.jroll)
+        slideIn(this, this.$el, options.jroll)
       }
     }
 
@@ -202,14 +216,14 @@
   }
 
   // 跳到路由
-  JTaro.go = function (param, options) {
+  JTaro.go = function (route, options) {
     // 页面切换过程中不执行路由跳转
     if (!JTaro.sliding) {
-      if (typeof param === 'string') {
-        window.location.hash = '!' + param
+      if (typeof route === 'string') {
+        window.location.hash = '!' + route
       }
-      if (typeof param === 'number') {
-        window.history.go(param)
+      if (typeof route === 'number') {
+        window.history.go(route)
       }
       if (options) {
         JTaro.params = options

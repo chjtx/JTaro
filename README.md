@@ -90,15 +90,16 @@ boot允许传入一个字符串作为默认路由，参数为空时默认为`hom
 ### 跳转 go
 
 ```js
+// 跳到page页
 JTaro.go('page')
 
-// or
+// or 返回上一页
 JTaro.go(-1)
 
-// or
+// or Url带参跳到page页
 JTaro.go('page?a=1&b=2')
 
-// or
+// or 键值对带参跳到page页
 JTaro.go('page', {a: 1, b: 2})
 ```
 
