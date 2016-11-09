@@ -44,6 +44,22 @@ Vue.component('home', {
       this.title = 'Home Back'
     }
   },
+  beforeEnter: function (cb) {
+    console.log('beforeEnter')
+    return true
+  },
+  afterEnter: function () {
+    console.log('afterEnter')
+  },
+  beforeLeave: function (cb) {
+    setTimeout(function () {
+      console.log('beforeLeave')
+      cb()
+    })
+  },
+  afterLeave: function () {
+    console.log('afterLeave')
+  },
   methods: {
     go: function () {
       JTaro.go('about?a=1&b=2&c=3', {

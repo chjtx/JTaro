@@ -110,11 +110,70 @@ JTaro.go('page', {a: 1, b: 2})
 
 ## 路由
 
+### 路由说明
+
 - 只识别以`#!`分割的hash
 - 每个hash路由都应有与之对应的Vue组件，如在浏览器访问index.html#!home，JTaro将自动查找以`home`命名的Vue组件并渲染到`div#jtaro_app`里
 - 路由不可重复，如有A、B、C、D四个页面，按顺序访问A->B->C->D，在D页面返回到B，将剩下A->B两个页面
-- 尽量使用`JTaro.go`进行页面跳转，避免直接操作hash破坏路由历史记录，而且`JTaro.go`在页面切换动画进行时不会触发，阻止频繁切换页面
-- 尽量使用`JTaro.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`JTaro.go(-2)`，如此类推
+- 请使用`JTaro.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`JTaro.go(-2)`，如此类推
+- 请使用`JTaro.go`进行页面跳转，其作用有：
+  - 调用路由勾子
+  - 避免直接操作hash破坏路由历史记录
+  - 在页面切换动画进行时不会触发hashChange，阻止频繁切换页面
+
+### 路由勾子
+
+- beforeEnter 进入该路由（页面滑入）之前执行
+
+```js
+Vue.component('home', {
+  beforeEnter: function () {
+    // ...
+    return true
+  }
+})
+```
+
+- beforeLeave 离开该路由（页面滑出）之前执行
+
+```js
+Vue.component('home', {
+  beforeLeave: function (cb) {
+    setTimeout(function () {
+      // ...
+      cb()
+    }, 1000)
+  }
+})
+```
+
+beforeEnter 和 beforeLeave 都会阻断路由执行，因此需要`return true`或者执行回调`cb()`继续执行后面的代码。
+  
+同步使用`return true`，异步使用`cb()`
+
+- afterEnter 进入该路由（页面已滑入，不含动画过程）后执行
+
+```js
+Vue.component('home', {
+  afterEnter: function () {
+    // ...
+  }
+})
+```
+
+- afterLeave 离开该路由（页面已滑出，不含动画过程）后执行
+
+```js
+Vue.component('home', {
+  afterLeave: function () {
+    // ...
+  }
+})
+```
+afterEnter 和 afterLeave 都不会阻断路由执行
+
+四个勾子执行顺序 beforeEnter -> afterEnter -> beforeLeave -> afterLeave
+
 
 ## 页面组件间通讯
 
@@ -160,6 +219,6 @@ Vue.component('home', {
 
 - [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
 - [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
-- [ ] 实现beforeRouteEnter、afterRouteEnter和beforeRouteLeave、afterRouteLeave路由勾子
+- [ ] 实现beforeEnter、afterEnter和beforeLeave、afterLeave路由勾子
 - [ ] 嵌入微型fastclick解决老机点击300ms延迟问题
 
