@@ -41,9 +41,15 @@
 
     // afterEnter路由钩子
     function afterEnterHook (viewCompoent) {
+      // **JTaro Error Start**
+      if (!Vue.options.components[viewCompoent.jtaro_tag]) {
+        console.error('[JTaro warn]: Vue component <' + viewCompoent.jtaro_tag + '> is not define, 请不要手动修改hash')
+      }
+      // **JTaro Error end**;;
+
       var afterEnter = Vue.options.components[viewCompoent.jtaro_tag].options.afterEnter
       if (typeof afterEnter === 'function') {
-        afterEnter.call(viewCompoent)
+        afterEnter.call(viewCompoent, JTaro.params)
       }
     }
 
@@ -232,10 +238,10 @@
             } else {
               JTaro.method = null
             }
-            if (options) {
-              JTaro.params = options
-            } else if (p[1]) {
+            if (p[1]) {
               JTaro.params = parseUrlParams(p[1])
+            } else if (options) {
+              JTaro.params = options
             } else {
               JTaro.params = null
             }

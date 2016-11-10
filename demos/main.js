@@ -1,4 +1,4 @@
-/* global Vue, JRoll */
+/* global Vue, JRoll, JTaro */
 
 Vue.component('MyHead', {
   template: '<div class="my-head"><slot></slot></div>'
@@ -91,6 +91,9 @@ Vue.component('about', {
     cb(function () {
       console.log(b)
     })
+  },
+  afterEnter: function (params) {
+    console.log(params)
   },
   methods: {
     goHome: function () {

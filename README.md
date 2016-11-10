@@ -76,36 +76,48 @@ npm run dev
 
 ## 方法
 
-### 启动 boot
+### 启动 JTaro.boot
 
 ```js
 JTaro.boot()
 
-// or
+// or 指定默认页
 JTaro.boot('page')
 ```
 
 boot允许传入一个字符串作为默认路由，参数为空时默认为`home`，因Vue不允许用main作为组件名，所以取home为默认值
 
-### 跳转 go
+### 跳转 this.go
 
 ```js
-// 跳到page页
-JTaro.go('page')
+Vue.component('home', {
+  methods: {
+    goPage: function () {
+      // 跳到page页
+      this.go('page')
 
-// or 返回上一页
-JTaro.go(-1)
+      // or 返回上一页
+      this.go(-1)
 
-// or Url带参跳到page页
-JTaro.go('page?a=1&b=2')
+      // or Url带参跳到page页
+      this.go('page?a=1&b=2')
 
-// or 键值对带参跳到page页
-JTaro.go('page', {a: 1, b: 2})
+      // or 键值对带参跳到page页
+      this.go('page', {a: 1, b: 2})
+    }
+  }
+})
+
+Vue.component('page', {
+  afterEnter: function (params) {
+    console.log(params)
+  }
+})
 ```
 
-- go可传入两个参数，第一个必须，第二个可选
+- this.go可传入两个参数，第一个必须，第二个可选
 - 参数一，字符串或数字，当为字符串时即渲染对应组件，为数字时调用原生history.go方法
-- 参数二，键值对，该键值将保存在JTaro.params里，用作传递给下一页面使用
+- 参数二，键值对，该键值将保存在JTaro.params里，并传递给下一页面的afterEnter钩子
 - 支持在url传参，使用`?a=1&b=2`形式，最终也是保存在JTaro.params里
 - url传参优先级高于键值对传参
 
@@ -113,12 +125,12 @@ JTaro.go('page', {a: 1, b: 2})
 
 ### 路由说明
 
-- 只识别以`#!`分割的hash
+- 只识别以`#!`分割的hash，不支持`history.pushState`
 - 每个hash路由都应有与之对应的Vue组件，如在浏览器访问index.html#!home，JTaro将自动查找以`home`命名的Vue组件并渲染到`div#jtaro_app`里
 - 路由不可重复，如有A、B、C、D四个页面，按顺序访问A->B->C->D，在D页面返回到B，将剩下A->B两个页面
-- 请使用`JTaro.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`JTaro.go(-2)`，如此类推
-- 请使用`JTaro.go`进行页面跳转，其作用有：
-  - 调用路由钩子
+- 请使用`this.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`this.go(-2)`，如此类推
+- 请使用`this.go`进行页面跳转，其作用有：
+  - 可调用路由钩子
   - 避免直接操作hash破坏路由历史记录
   - 在页面切换动画进行时不会触发hashChange，阻止频繁切换页面
 
@@ -235,6 +247,6 @@ Vue.component('home', {
 
 - [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
 - [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
-- [ ] 实现beforeEnter、afterEnter和beforeLeave、afterLeave路由钩子
+- [x] 实现beforeEnter、afterEnter和beforeLeave路由钩子
 - [ ] 嵌入微型fastclick解决老机点击300ms延迟问题
 
