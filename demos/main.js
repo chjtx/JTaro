@@ -1,4 +1,4 @@
-/* global Vue, JTaro, JRoll */
+/* global Vue, JRoll */
 
 Vue.component('MyHead', {
   template: '<div class="my-head"><slot></slot></div>'
@@ -30,7 +30,7 @@ var mixin = {
 // 首页
 Vue.component('home', {
   template: '<div id="home">' +
-              '<my-head>{{title}}<a class="right" href="javascript:void(0)" @click="go">about &gt;&gt;</a></my-head>' +
+              '<my-head>{{title}}<a class="right" href="javascript:void(0)" @click="goAbout">about &gt;&gt;</a></my-head>' +
               '<div id="home_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">home page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
@@ -46,7 +46,10 @@ Vue.component('home', {
   },
   beforeEnter: function (cb) {
     console.log('Home - beforeEnter')
-    return true
+    var b = '22'
+    cb(function () {
+      console.log(b)
+    })
   },
   afterEnter: function () {
     console.log('Home - afterEnter')
@@ -61,8 +64,8 @@ Vue.component('home', {
     console.log('Home - afterLeave')
   },
   methods: {
-    go: function () {
-      JTaro.go('about?a=1&b=2&c=3', {
+    goAbout: function () {
+      this.go('about?a=1&b=2&c=3', {
         x: 1,
         y: 2,
         z: 3
@@ -77,23 +80,26 @@ Vue.component('home', {
 // 关于页
 Vue.component('about', {
   template: '<div id="about">' +
-              '<my-head><a class="left" href="javascript:void(0)" @click="go">&lt;&lt; home</a>' +
+              '<my-head><a class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>' +
               'About<a class="right" href="javascript:void(0)" @click="goList">list &gt;&gt;</a></my-head>' +
               '<div id="about_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
   beforeEnter: function (cb) {
     console.log('About - beforeEnter')
-    return true
+    var b = '2'
+    cb(function () {
+      console.log(b)
+    })
   },
   methods: {
-    go: function () {
+    goHome: function () {
       this.postMessage('modifyTitle', 'home')
       this.postMessage('modifyTitle', 'list') // nothing will do
-      JTaro.go('home')
+      this.go('home')
     },
     goList: function () {
-      JTaro.go('list')
+      this.go('list')
     }
   },
   mounted: function () {
@@ -104,17 +110,17 @@ Vue.component('about', {
 // 列表页
 Vue.component('list', {
   template: '<div id="list">' +
-              '<my-head><a class="left" href="javascript:void(0)" @click="go">&lt;&lt; about</a>' +
+              '<my-head><a class="left" href="javascript:void(0)" @click="goAbout">&lt;&lt; about</a>' +
               'List<a class="right" href="javascript:void(0)" @click="goFour">four &gt;&gt;</a></my-head>' +
               '<div id="list_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
   methods: {
-    go: function () {
-      JTaro.go('about')
+    goAbout: function () {
+      this.go('about')
     },
     goFour: function () {
-      JTaro.go('four')
+      this.go('four')
     }
   },
   mounted: function () {
@@ -125,17 +131,17 @@ Vue.component('list', {
 // 第四页
 Vue.component('four', {
   template: '<div id="four">' +
-              '<my-head><a class="left" href="javascript:void(0)" @click="go">&lt;&lt; about</a>' +
+              '<my-head><a class="left" href="javascript:void(0)" @click="goAbout">&lt;&lt; about</a>' +
               '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>Four</my-head>' +
               '<div id="four_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">four page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
   methods: {
-    go: function () {
-      JTaro.go('about')
+    goAbout: function () {
+      this.go('about')
     },
     goHome: function () {
-      JTaro.go('home')
+      this.go('home')
     }
   },
   mounted: function () {
