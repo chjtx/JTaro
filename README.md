@@ -25,7 +25,7 @@ npm install jtaro
 
 - JTaro是一款基于Vue2.0开发的轻量级SPA框架
 - JTaro不需要vue-router，自身提供简单路由功能和页面切换动画
-- 页面组件名称即为路由，省去手动配置的麻烦
+- 页面组件名称即为路由，省去手动配置路由的麻烦
 - JTaro会自动创建一些css样式，将html、body的width、height设为100%，并overflow:hidden，超出内容需要使用JRoll进行滑动
 
 ## 快速上手
@@ -152,6 +152,8 @@ beforeEnter 和 beforeLeave 都会阻断路由执行，因此需要`return true`
   
 同步使用`return true`，异步使用`cb()`
 
+如果执行`return false`，或`cb(false)`将返回上一路由
+
 - afterEnter 进入该路由（页面已滑入，不含动画过程）后执行
 
 ```js
@@ -173,7 +175,20 @@ Vue.component('home', {
 ```
 afterEnter 和 afterLeave 都不会阻断路由执行
 
-四个勾子执行顺序 beforeEnter -> afterEnter -> beforeLeave -> afterLeave
+四个勾子执行顺序 (mounted) -> beforeEnter -> afterEnter -> beforeLeave -> afterLeave
+
+注意：
+
+1. mounted为Vue原有生命周期勾子，首次访问页面时会执行该勾子，此后JTaro将缓存该页面，不会再执行该勾子
+2. beforeEnter、afterEnter、beforeLeave、afterLeave在每次路由变更都会执行
+
+### 勾子使用技巧
+
+- mounted （Vue原有） 无论何时基本上不会发生变更的页面使用该勾子
+- beforeEnter （JTaro扩展） 先加载数据，若数据加载失败则不显示该页面的情况使用该勾子
+- afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该勾子
+- beforeLeave （JTaro扩展） 页面离开前先需要执行一此操作，例如关闭弹窗、确认表单等情况可使用该勾子
+- afterLeave （JTaro扩展） 页面离开后需要清空一些数据的情况可使用该勾子
 
 
 ## 页面组件间通讯

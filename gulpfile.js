@@ -3,6 +3,7 @@ var gulp = require('gulp')
 var browserSync = require('browser-sync')
 var uglify = require('gulp-uglify')
 var rename = require('gulp-rename')
+var replace = require('gulp-replace')
 var license = require('gulp-header')
 var reload = browserSync.reload
 
@@ -20,22 +21,22 @@ gulp.task('dev', function () {
 })
 
 gulp.task('build', function () {
-  fs.readFile('src/jtaro.js', function (err, data) {
-    if (err) throw err
-    var head = /([\s\S](?!\*\/))+/.exec(data.toString())
-    var copyright = ''
+  var version = JSON.parse(fs.readFileSync('./package.json')).version
+  var copyright = '/*! JTaro.js v{{version}} ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */\n'.replace('{{version}}', version)
 
-    if (head) {
-      copyright = head[0] + ' */\n;'
-    }
+  gulp.src('src/jtaro.js')
 
-    gulp.src('src/jtaro.js')
-      .pipe(uglify())
-      .pipe(license(copyright))
-      .pipe(rename({
-        basename: 'jtaro',
-        extname: '.min.js'
-      }))
-      .pipe(gulp.dest('dist/'))
-  })
+    // 修改版本号
+    .pipe(replace('{{version}}', version))
+    .pipe(license(copyright))
+    .pipe(gulp.dest('dist/'))
+
+    // 压缩
+    .pipe(uglify())
+    .pipe(license(copyright))
+    .pipe(rename({
+      basename: 'jtaro',
+      extname: '.min.js'
+    }))
+    .pipe(gulp.dest('dist/'))
 })
