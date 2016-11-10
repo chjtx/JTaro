@@ -82,6 +82,10 @@ Vue.component('about', {
               '<div id="about_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
+  beforeEnter: function (cb) {
+    console.log('About - beforeEnter')
+    return true
+  },
   methods: {
     go: function () {
       this.postMessage('modifyTitle', 'home')

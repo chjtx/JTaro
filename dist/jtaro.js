@@ -1,3 +1,4 @@
+/*! JTaro.js v0.1.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define, Vue */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -23,7 +24,7 @@
 
   JTaro.params = null
   JTaro.views = []
-  JTaro.version = '{{version}}'
+  JTaro.version = '0.1.0'
 
   // beforeEnter路由勾子
   function beforeEnterHook (viewCompoent, callback) {
@@ -48,29 +49,34 @@
   }
 
   // 页面切入动画（新增页面）
-  function slideIn (el, _jroll) {
+  function slideIn (viewCompoent, el, _jroll) {
     var preSib = el.previousElementSibling
 
-    JTaro.sliding = true
     _jroll.utils.moveTo(el, WIDTH, 0)
 
-    setTimeout(function () {
-      // 收入当前页
-      if (preSib) {
-        _jroll.utils.moveTo(preSib, -WIDTH, 0, 300, function () {
-          // 将当前页的上一页隐藏，保持只有两个页面为display:block
-          var preSibSib = preSib.previousElementSibling
-          if (preSibSib) {
-            preSibSib.style.display = 'none'
-          }
-        })
-      }
+    function doSlide () {
+      JTaro.sliding = true
+      setTimeout(function () {
+        // 收入当前页
+        if (preSib) {
+          _jroll.utils.moveTo(preSib, -WIDTH, 0, 300, function () {
+            // 将当前页的上一页隐藏，保持只有两个页面为display:block
+            var preSibSib = preSib.previousElementSibling
+            if (preSibSib) {
+              preSibSib.style.display = 'none'
+            }
+          })
+        }
 
-      // 滑进新建页
-      _jroll.utils.moveTo(el, 0, 0, 300, function () {
-        JTaro.sliding = false
-      })
-    }, 0)
+        // 滑进新建页
+        _jroll.utils.moveTo(el, 0, 0, 300, function () {
+          JTaro.sliding = false
+        })
+      }, 0)
+    }
+
+    // beforeEnter hook
+    beforeEnterHook(viewCompoent, doSlide)
   }
 
   // 页面切出动画（删除页面）
@@ -129,19 +135,13 @@
     }
   }
 
-  function mounted (viewCompoent, jroll) {
-    // beforeEnter hook 添加新页面
-    beforeEnterHook(viewCompoent, function () {
-      slideIn(viewCompoent.$el, jroll)
-    })
-  }
-
   /* 删除或添加页面
    * 1、与路由对应页面不存在->添加
    * 2、与路由对应页面已存在->将该页面往后的所有页面都删除
    */
-  function pushView (_hash, jroll) {
+  function pushView (_hash, _jroll) {
     var h = _hash.replace('#!', '')
+    var c
 
     // 截取url参数
     var p = h.split('?')
@@ -152,23 +152,18 @@
 
     var v = JTaro.vm.$data.views
     var i = JTaro.views.indexOf(h)
-    var viewCompoent = findVueComponent(h)
 
     if (i === -1) {
       if (v.indexOf(h) === -1) {
         v.push(h)
       } else {
-        JTaro.vm.$el.appendChild(viewCompoent.$el)
-
-        // beforeEnter hook 添加新页面
-        mounted(viewCompoent, jroll)
+        c = findVueComponent(h)
+        JTaro.vm.$el.appendChild(c.$el)
+        slideIn(c, c.$el, _jroll)
       }
       JTaro.views.push(h)
     } else {
-      // beforeEnter hook 返回上一页面
-      beforeEnterHook(viewCompoent, function () {
-        recursionDelPage(JTaro.views, JTaro.vm.$el.childNodes, jroll, i)
-      })
+      recursionDelPage(JTaro.views, JTaro.vm.$el.childNodes, _jroll, i)
     }
   }
 
@@ -190,7 +185,7 @@
         return h(Vue.options.components[this.view] || NotFound)
       },
       mounted: function () {
-        mounted(this, options.jroll)
+        slideIn(this, this.$el, options.jroll)
       }
     }
 
