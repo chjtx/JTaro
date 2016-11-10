@@ -31,6 +31,8 @@ gulp.task('build', function () {
     .pipe(license(copyright))
     .pipe(gulp.dest('dist/'))
 
+    // 去除JTaro警告
+    .pipe(replace(/\/\/ \*\*JTaro Error[^;]+;;/g, ''))
     // 压缩
     .pipe(uglify())
     .pipe(license(copyright))
