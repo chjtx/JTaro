@@ -25,7 +25,7 @@
   JTaro.views = []
   JTaro.version = '{{version}}'
 
-  // beforeEnter路由勾子
+  // beforeEnter路由钩子
   function beforeEnterHook (viewCompoent, callback) {
     var beforeEnter = Vue.options.components[viewCompoent.jtaro_tag].options.beforeEnter
     var syncForward
@@ -47,8 +47,22 @@
     }
   }
 
+  // afterEnter路由钩子
+  function afterEnterHook (viewCompoent) {
+    var afterEnter = Vue.options.components[viewCompoent.jtaro_tag].options.afterEnter
+    if (typeof afterEnter === 'function') {
+      afterEnter.call(viewCompoent)
+    }
+  }
+
+  // beforeLeave路由钩子
+  function beforeLeaveHook (viewCompoent) {
+
+  }
+
   // 页面切入动画（新增页面）
-  function slideIn (el, _jroll) {
+  function slideIn (viewCompoent, _jroll) {
+    var el = viewCompoent.$el
     var preSib = el.previousElementSibling
 
     JTaro.sliding = true
@@ -69,6 +83,9 @@
       // 滑进新建页
       _jroll.utils.moveTo(el, 0, 0, 300, function () {
         JTaro.sliding = false
+
+        // afterEnter hook 前进
+        afterEnterHook(viewCompoent)
       })
     }, 0)
   }
@@ -106,6 +123,10 @@
         }, 0)
       })
     }
+    if (l - 1 === i) {
+      // afterEnter hook 后退
+      afterEnterHook(findVueComponent(views[i]))
+    }
   }
 
   function parseUrlParams (a) {
@@ -130,9 +151,9 @@
   }
 
   function mounted (viewCompoent, jroll) {
-    // beforeEnter hook 添加新页面
+    // beforeEnter hook 前进
     beforeEnterHook(viewCompoent, function () {
-      slideIn(viewCompoent.$el, jroll)
+      slideIn(viewCompoent, jroll)
     })
   }
 
@@ -160,12 +181,12 @@
       } else {
         JTaro.vm.$el.appendChild(viewCompoent.$el)
 
-        // beforeEnter hook 添加新页面
+        // 挂载新页
         mounted(viewCompoent, jroll)
       }
       JTaro.views.push(h)
     } else {
-      // beforeEnter hook 返回上一页面
+      // beforeEnter hook 后退
       beforeEnterHook(viewCompoent, function () {
         recursionDelPage(JTaro.views, JTaro.vm.$el.childNodes, jroll, i)
       })

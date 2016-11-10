@@ -118,11 +118,11 @@ JTaro.go('page', {a: 1, b: 2})
 - 路由不可重复，如有A、B、C、D四个页面，按顺序访问A->B->C->D，在D页面返回到B，将剩下A->B两个页面
 - 请使用`JTaro.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`JTaro.go(-2)`，如此类推
 - 请使用`JTaro.go`进行页面跳转，其作用有：
-  - 调用路由勾子
+  - 调用路由钩子
   - 避免直接操作hash破坏路由历史记录
   - 在页面切换动画进行时不会触发hashChange，阻止频繁切换页面
 
-### 路由勾子
+### 路由钩子
 
 - beforeEnter 进入该路由（页面滑入）之前执行
 
@@ -175,20 +175,20 @@ Vue.component('home', {
 ```
 afterEnter 和 afterLeave 都不会阻断路由执行
 
-四个勾子执行顺序 (mounted) -> beforeEnter -> afterEnter -> beforeLeave -> afterLeave
+四个钩子执行顺序 (mounted) -> beforeEnter -> afterEnter -> beforeLeave -> afterLeave
 
 注意：
 
-1. mounted为Vue原有生命周期勾子，首次访问页面时会执行该勾子，此后JTaro将缓存该页面，不会再执行该勾子
+1. mounted为Vue原有生命周期钩子，首次访问页面时会执行该钩子，此后JTaro将缓存该页面，不会再执行该钩子
 2. beforeEnter、afterEnter、beforeLeave、afterLeave在每次路由变更都会执行
 
-### 勾子使用技巧
+### 钩子使用技巧
 
-- mounted （Vue原有） 无论何时基本上不会发生变更的页面使用该勾子
-- beforeEnter （JTaro扩展） 先加载数据，若数据加载失败则不显示该页面的情况使用该勾子
-- afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该勾子
-- beforeLeave （JTaro扩展） 页面离开前先需要执行一此操作，例如关闭弹窗、确认表单等情况可使用该勾子
-- afterLeave （JTaro扩展） 页面离开后需要清空一些数据的情况可使用该勾子
+- mounted （Vue原有） 无论何时基本上不会发生变更的页面使用该钩子
+- beforeEnter （JTaro扩展） 先加载数据，若数据加载失败则不显示该页面的情况使用该钩子
+- afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该钩子
+- beforeLeave （JTaro扩展） 页面离开前先需要执行一此操作，例如关闭弹窗、确认表单等情况可使用该钩子
+- afterLeave （JTaro扩展） 页面离开后需要清空一些数据的情况可使用该钩子
 
 
 ## 页面组件间通讯
@@ -235,6 +235,6 @@ Vue.component('home', {
 
 - [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
 - [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
-- [ ] 实现beforeEnter、afterEnter和beforeLeave、afterLeave路由勾子
+- [ ] 实现beforeEnter、afterEnter和beforeLeave、afterLeave路由钩子
 - [ ] 嵌入微型fastclick解决老机点击300ms延迟问题
 

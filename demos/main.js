@@ -45,20 +45,20 @@ Vue.component('home', {
     }
   },
   beforeEnter: function (cb) {
-    console.log('beforeEnter')
+    console.log('Home - beforeEnter')
     return true
   },
   afterEnter: function () {
-    console.log('afterEnter')
+    console.log('Home - afterEnter')
   },
   beforeLeave: function (cb) {
     setTimeout(function () {
-      console.log('beforeLeave')
+      console.log('Home - beforeLeave')
       cb()
     })
   },
   afterLeave: function () {
-    console.log('afterLeave')
+    console.log('Home - afterLeave')
   },
   methods: {
     go: function () {
