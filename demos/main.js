@@ -28,40 +28,40 @@ var mixin = {
 }
 
 // 首页
-Vue.component('home', {
-  template: '<div id="home">' +
+Vue.component('index', {
+  template: '<div id="index">' +
               '<my-head>{{title}}<a class="right" href="javascript:void(0)" @click="goAbout">about &gt;&gt;</a></my-head>' +
-              '<div id="home_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">home page {{ i }}</p></div></div>' +
+              '<div id="index_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">index page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
   data: function () {
     return {
-      title: 'Home'
+      title: 'Index'
     }
   },
   onMessage: function (event) {
     if (event.message === 'modifyTitle' && event.origin === 'about') {
-      this.title = 'Home Back'
+      this.title = 'Index Back'
     }
   },
   beforeEnter: function (cb) {
-    console.log('Home - beforeEnter')
+    console.log('Index - beforeEnter')
     var b = '22'
     cb(function () {
       console.log(b)
     })
   },
   afterEnter: function () {
-    console.log('Home - afterEnter')
+    console.log('Index - afterEnter')
   },
   beforeLeave: function (cb) {
     setTimeout(function () {
-      console.log('Home - beforeLeave')
+      console.log('Index - beforeLeave')
       cb()
     })
   },
   afterLeave: function () {
-    console.log('Home - afterLeave')
+    console.log('Index - afterLeave')
   },
   methods: {
     goAbout: function () {
@@ -73,39 +73,40 @@ Vue.component('home', {
     }
   },
   mounted: function () {
-    this.jroll = new JRoll('#home_wrapper')
+    this.jroll = new JRoll('#index_wrapper')
   }
 })
 
 // 关于页
 Vue.component('about', {
   template: '<div id="about">' +
-              '<my-head><a class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>' +
+              '<my-head><a class="left" href="javascript:void(0)" @click="goIndex">&lt;&lt; index</a>' +
               'About<a class="right" href="javascript:void(0)" @click="goList">list &gt;&gt;</a></my-head>' +
               '<div id="about_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
   beforeEnter: function (cb) {
     console.log('About - beforeEnter')
-    var b = '2'
+    console.log(this)
     cb(function () {
-      console.log(b)
+      console.log(this)
     })
   },
   afterEnter: function (params) {
     console.log(params)
   },
   methods: {
-    goHome: function () {
-      this.postMessage('modifyTitle', 'home')
+    goIndex: function () {
+      this.postMessage('modifyTitle', 'index')
       this.postMessage('modifyTitle', 'list') // nothing will do
-      this.go('home')
+      this.go('index')
     },
     goList: function () {
       this.go('list')
     }
   },
   mounted: function () {
+    console.log('About - mounted')
     this.jroll = new JRoll('#about_wrapper')
   }
 })
@@ -135,7 +136,7 @@ Vue.component('list', {
 Vue.component('four', {
   template: '<div id="four">' +
               '<my-head><a class="left" href="javascript:void(0)" @click="goAbout">&lt;&lt; about</a>' +
-              '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>Four</my-head>' +
+              '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goIndex">&lt;&lt; index</a>Four</my-head>' +
               '<div id="four_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">four page {{ i }}</p></div></div>' +
             '<div>',
   mixins: [mixin],
@@ -143,8 +144,8 @@ Vue.component('four', {
     goAbout: function () {
       this.go('about')
     },
-    goHome: function () {
-      this.go('home')
+    goIndex: function () {
+      this.go('index')
     }
   },
   mounted: function () {

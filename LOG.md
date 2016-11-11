@@ -1,5 +1,12 @@
 # 更新日志
 
+## v0.1.0 (2016-11-11)
+
+- 添加页面组件与页面组件之间的通讯postMessage、onMessage
+- 添加页面beforeEnter、afterEnter和beforeLeave路由钩子
+- 保持最多两个页面为display:block，其余为display:none
+- 修改JTaro.boot({...})选项配置
+
 ## v0.0.2 (2016-11-07)
 
 - 缓存每个页面的状态

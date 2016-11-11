@@ -26,6 +26,10 @@
     JTaro.params = null
     JTaro.views = []
     JTaro.version = '{{version}}'
+    JTaro.options = {
+      default: 'index',
+      distance: 0.3
+    }
 
     // beforeEnter路由钩子
     function beforeEnterHook (vueCompoent, callback) {
@@ -43,7 +47,7 @@
     function afterEnterHook (viewCompoent) {
       // **JTaro Error Start**
       if (!Vue.options.components[viewCompoent.jtaro_tag]) {
-        console.error('[JTaro warn]: Vue component <' + viewCompoent.jtaro_tag + '> is not define, 请不要手动修改hash')
+        console.error('[JTaro warn]: Vue component <' + viewCompoent.jtaro_tag + '> is not define. Please use `this.go` to modify the route, do not manually modify the hash')
       }
       // **JTaro Error end**;;
 
@@ -80,7 +84,7 @@
       setTimeout(function () {
         // 收入当前页
         if (preSib) {
-          _jroll.utils.moveTo(preSib, -WIDTH, 0, 300, function () {
+          _jroll.utils.moveTo(preSib, -WIDTH * JTaro.options.distance, 0, 300, function () {
             // 将当前页的上一页隐藏，保持只有两个页面为display:block
             var preSibSib = preSib.previousElementSibling
             if (preSibSib) {
@@ -272,13 +276,25 @@
     window.addEventListener('orientationchange', reset)
 
     // 启动，
-    JTaro.boot = function (page) {
+    JTaro.boot = function (bootOptions) {
+      // **JTaro Error Start**
+      if (bootOptions && (bootOptions.distance < 0 || bootOptions.distance > 1)) {
+        console.error('[JTaro warn]: distance options range must be: 0 < distance < 1')
+      }
+      // **JTaro Error end**;;
+
+      if (bootOptions) {
+        for (var k in bootOptions) {
+          JTaro.options[k] = bootOptions[k]
+        }
+      }
+
       var hash = window.location.hash
-      var vueCompoent = Vue.options.components[page || hash.replace('#!', '').split('?')[0] || 'home']
+      var vueCompoent = Vue.options.components[JTaro.options.default || hash.replace('#!', '').split('?')[0]]
 
       // **JTaro Error Start**
       if (!vueCompoent) {
-        console.error('[JTaro warn]: Vue component <' + (page || hash.replace('#!', '').split('?')[0] || 'home') + '> is not define')
+        console.error('[JTaro warn]: Vue component <' + (JTaro.options.default || hash.replace('#!', '').split('?')[0]) + '> is not define')
       }
       // **JTaro Error end**;;
 
@@ -292,7 +308,7 @@
 
           // 跳到默认路由
           if (hash === '') {
-            window.location.hash = page ? '!' + page : '!home'
+            window.location.hash = '!' + JTaro.options.default
 
           // 跳到指定路由
           } else {
