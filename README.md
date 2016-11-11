@@ -139,9 +139,9 @@ Vue.component('page', {
 
 ### 路由钩子
 
-- [beforeEnter](#beforeEnter)
-- [afterEnter](#afterEnter)
-- [beforeLeave](#beforeLeave)
+- [beforeEnter](#beforeenter)
+- [afterEnter](#afterenter)
+- [beforeLeave](#beforeleave)
 
 #### beforeEnter
 
@@ -272,6 +272,8 @@ Vue.component('index', {
 
 ## TODO
 
+- [x] 简单路由功能，根据组件名称动态创建页面
+- [x] 页面切换动画
 - [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
 - [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
 - [x] 实现页面beforeEnter、afterEnter和beforeLeave路由钩子
