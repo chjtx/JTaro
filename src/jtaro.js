@@ -1,4 +1,4 @@
-/* global define */
+/* global define, JRoll */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -10,6 +10,15 @@
 
   // Vue install
   JTaro.install = function (Vue, options) {
+    // **JTaro Error Start**
+    if (options && !options.jroll && !window.JRoll) {
+      console.error('[JTaro warn]: JTaro must depend on JRoll')
+    }
+    if (options && options.distance && (options.distance < 0 || options.distance > 1)) {
+      console.error('[JTaro warn]: distance options range must be: 0 < distance < 1')
+    }
+    // **JTaro Error end**;;
+
     // 创建样式
     var style = document.getElementById('jtaro_style')
     if (!style) {
@@ -23,12 +32,17 @@
 
     var WIDTH = window.innerWidth
 
+    options = options || {}
+
     JTaro.params = null
     JTaro.views = []
     JTaro.version = '{{version}}'
     JTaro.options = {
-      default: 'index',
-      distance: 0.3
+      jroll: options.jroll || JRoll,
+      el: options.el || '#jtaro_app', // 默认挂载元素
+      default: options.default || 'home',  // 默认页
+      distance: options.distance || 0.3,    // 页面后退距离百分比，以屏幕宽度为1
+      duration: options.duration || 200     // 页面过渡时间
     }
 
     // beforeEnter路由钩子
@@ -84,7 +98,7 @@
       setTimeout(function () {
         // 收入当前页
         if (preSib) {
-          _jroll.utils.moveTo(preSib, -WIDTH * JTaro.options.distance, 0, 300, function () {
+          _jroll.utils.moveTo(preSib, -WIDTH * JTaro.options.distance, 0, JTaro.options.duration, function () {
             // 将当前页的上一页隐藏，保持只有两个页面为display:block
             var preSibSib = preSib.previousElementSibling
             if (preSibSib) {
@@ -94,7 +108,7 @@
         }
 
         // 滑进新建页
-        _jroll.utils.moveTo(el, 0, 0, 300, function () {
+        _jroll.utils.moveTo(el, 0, 0, JTaro.options.duration, function () {
           JTaro.sliding = false
 
           // afterEnter hook 前进
@@ -110,11 +124,11 @@
 
       // 撤出当前页
       if (nxtSib) {
-        _jroll.utils.moveTo(nxtSib, WIDTH, 0, 300, cb)
+        _jroll.utils.moveTo(nxtSib, WIDTH, 0, JTaro.options.duration, cb)
       }
 
       // 滑出上一页
-      _jroll.utils.moveTo(el, 0, 0, 300, function () {
+      _jroll.utils.moveTo(el, 0, 0, JTaro.options.duration, function () {
         JTaro.sliding = false
         // 将上一页的上一页显示，保持有两个页面为display:block
         var preSib = el.previousElementSibling
@@ -205,7 +219,7 @@
         return h(Vue.options.components[this.view] || NotFound)
       },
       mounted: function () {
-        slideIn(this, options.jroll)
+        slideIn(this, JTaro.options.jroll)
       }
     }
 
@@ -260,35 +274,23 @@
     }
 
     JTaro.vm = new Vue({
-      el: options.el,
+      el: JTaro.options.el,
       data: {
         views: []
       },
-      template: '<div id="' + options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view"></jt-view></div>'
+      template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view"></jt-view></div>'
     })
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
-      pushView(window.location.hash, options.jroll)
+      pushView(window.location.hash, JTaro.options.jroll)
     })
     // 页面宽度改变更新动画宽度
     window.addEventListener('resize', reset)
     window.addEventListener('orientationchange', reset)
 
-    // 启动，
-    JTaro.boot = function (bootOptions) {
-      // **JTaro Error Start**
-      if (bootOptions && (bootOptions.distance < 0 || bootOptions.distance > 1)) {
-        console.error('[JTaro warn]: distance options range must be: 0 < distance < 1')
-      }
-      // **JTaro Error end**;;
-
-      if (bootOptions) {
-        for (var k in bootOptions) {
-          JTaro.options[k] = bootOptions[k]
-        }
-      }
-
+    // 启动
+    ;(function () {
       var hash = window.location.hash
       var vueCompoent = Vue.options.components[JTaro.options.default || hash.replace('#!', '').split('?')[0]]
 
@@ -312,18 +314,11 @@
 
           // 跳到指定路由
           } else {
-            pushView(hash, options.jroll)
+            pushView(hash, JTaro.options.jroll)
           }
         })
       }
-    }
-  }
-
-  if (window.Vue && window.JRoll) {
-    window.Vue.use(JTaro, {
-      jroll: window.JRoll,
-      el: '#jtaro_app'
-    })
+    })()
   }
 
   return JTaro
