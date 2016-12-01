@@ -1,4 +1,4 @@
-/* global Vue, JRoll, JTaro */
+/* global Vue, JRoll */
 
 Vue.component('MyHead', {
   template: '<div class="my-head"><slot></slot></div>'

@@ -4,7 +4,7 @@
 
 ## 依赖
 
-- Vue 2.0 [Vue 2.0 中文教程](https://www.vuefe.cn/)
+- Vue 2.x [Vue 2.x 中文教程](https://www.vuefe.cn/)
 - JRoll 2.x [JRoll 2.x 官网](http://www.chjtx.com/JRoll/)
 
 ## 下载
