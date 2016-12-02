@@ -2,6 +2,12 @@
 
 > An H5 SPA framework for Vue.js 2.0
 
+## 先睹为快
+
+<img width="160" height="160" src="http://www.chjtx.com/JTaro/demos/images/qrcode.png">
+
+[http://www.chjtx.com/JTaro/](http://www.chjtx.com/JTaro/)
+
 ## 依赖
 
 - Vue 2.x [Vue 2.x 中文教程](https://www.vuefe.cn/)
@@ -44,7 +50,9 @@ npm install jtaro
 <script src='https://unpkg.com/jtaro/src/jtaro.js'></script>
 ```
 
-3、 在`div#jtaro_app`之后编写Vue组件，并执行`JTaro.boot()`启动应用
+3、 在`div#jtaro_app`之后编写Vue组件，并执行`Vue.use(JTaro)`启动应用
+
+*注意：务必确保首页组件在Vue.use(JTaro)之前注册*
 
 ```html
 <script>
@@ -52,7 +60,7 @@ Vue.component('home', {
   template: '<div id="home">Hello JTaro!</div>'
 })
 
-JTaro.boot()
+Vue.use(JTaro)
 </script>
 ```
 
@@ -72,23 +80,33 @@ npm install
 npm run dev
 ```
 
-> `npm install`下载太慢？那就直接`clone`之后将`index.html`的Vue和JRoll替换成CDN路径，然后拖到浏览器即可。不要用`cnpm`，会导致很多依赖缺失
+> `npm install`下载太慢？那就直接`clone`之后将`index.html`拖到浏览器即可。不要用`cnpm`，会导致很多依赖缺失
 
-## 方法
+## 基础用法
 
-### 启动 JTaro.boot
+### 启动 Vue.use(JTaro)
 
 ```js
-JTaro.boot()
+Vue.use(JTaro)
 
 // or 传入选项参数
-JTaro.boot({
-  default: 'home', // 默认页
-  distance: 0.3     // 页面折叠距离位数，以屏幕宽度为1，取值范围为0 <= distance <= 1
+Vue.use(JTaro, {
+  el: '#jtaro_app',
+  default: 'home',
+  distance: 0.3,
+  duration: 200,
+  JRoll: window.JRoll
 })
 ```
 
-boot允许传入一个对象选项，为空时`default`默认为`home`，`distance`默认为`0.3`。
+| 选项 | 默认值 | 说明 |
+|:----:|:----:|:----|
+| el | '#jtaro_app' | 给Vue挂载的元素 |
+| default | 'home' | 默认首页 |
+| distance | 0.3 | 页面折叠距离位数，以屏幕宽度为1，取值范围为0 <= distance <= 1 |
+| duration | 200 | 页面切换过滤时间 |
+| JRoll | window.JRoll | 用于异步引入JRoll，不能确保JRoll和JTaro顺序时使用 |
+
 
 ### 跳转 this.go
 

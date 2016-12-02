@@ -1,4 +1,4 @@
-/* global define, JRoll */
+/* global define */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -11,7 +11,7 @@
   // Vue install
   JTaro.install = function (Vue, options) {
     // **JTaro Error Start**
-    if (options && !options.jroll && !window.JRoll) {
+    if (options && !options.JRoll && !window.JRoll) {
       console.error('[JTaro warn]: JTaro must depend on JRoll')
     }
     if (options && options.distance && (options.distance < 0 || options.distance > 1)) {
@@ -38,7 +38,7 @@
     JTaro.views = []
     JTaro.version = '{{version}}'
     JTaro.options = {
-      jroll: options.jroll || JRoll,
+      JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
       default: options.default || 'home',  // 默认页
       distance: options.distance || 0.3,    // 页面后退距离百分比，以屏幕宽度为1
@@ -219,7 +219,7 @@
         return h(Vue.options.components[this.view] || NotFound)
       },
       mounted: function () {
-        slideIn(this, JTaro.options.jroll)
+        slideIn(this, JTaro.options.JRoll)
       }
     }
 
@@ -283,7 +283,7 @@
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
-      pushView(window.location.hash, JTaro.options.jroll)
+      pushView(window.location.hash, JTaro.options.JRoll)
     })
     // 页面宽度改变更新动画宽度
     window.addEventListener('resize', reset)
@@ -314,7 +314,7 @@
 
           // 跳到指定路由
           } else {
-            pushView(hash, JTaro.options.jroll)
+            pushView(hash, JTaro.options.JRoll)
           }
         })
       }
