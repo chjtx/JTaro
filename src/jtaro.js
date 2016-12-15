@@ -42,6 +42,55 @@
   // JTaro
   var JTaro = Object.create(null)
 
+  /**
+   * JTaro Global Hooks 全局钩子
+   * <globalHook> 表示beforeEnter、afterEnter或beforeLeave
+   * JTaro.<globalHook>.add 添加钩子
+   *    @param name
+   *    @param method
+   * JTaro.<globalHook>.remove 删除钩子
+   *    @param name
+   * JTaro.<globalHook>.run 运行钩子
+   */
+  function createHook () {
+    return Object.create({
+      add: function (name, method) {
+        // **JTaro Error Start**
+        if (name === 'add' || name === 'remove' || name === 'run') {
+          console.error('[JTaro warn]: `add` `remove` `run` is preserve key, please use other key')
+          return
+        }
+        if (typeof name !== 'string') {
+          console.error('[JTaro warn]: first argument must be string')
+          return
+        }
+        if (typeof method !== 'function') {
+          console.error('[JTaro warn]: second argument must be function')
+          return
+        }
+        if (this.hasOwnProperty(name)) {
+          console.error('[JTaro warn]: [ ' + name + ' ] already exits')
+          return
+        }
+        // **JTaro Error end**;;
+        this[name] = method
+      },
+      remove: function (name) {
+        delete this[name]
+      },
+      run: function () {
+        for (var i in this) {
+          if (this.hasOwnProperty(i) && typeof this[i] === 'function') {
+            this[i]()
+          }
+        }
+      }
+    })
+  }
+  JTaro.beforeEnter = createHook()
+  JTaro.afterEnter = createHook()
+  JTaro.beforeLeave = createHook()
+
   // Vue install
   JTaro.install = function (Vue, options) {
     // **JTaro Error Start**
@@ -82,6 +131,10 @@
     // beforeEnter路由钩子
     function beforeEnterHook (vueCompoent, callback) {
       var beforeEnter = vueCompoent.options.beforeEnter
+
+      // 先执行全局beforeEnter路由钩子
+      JTaro.beforeEnter.run()
+
       if (typeof beforeEnter === 'function') {
         if (beforeEnter.call(JTaro, function (method) { callback(method) })) {
           callback()
@@ -100,6 +153,10 @@
       // **JTaro Error end**;;
 
       var afterEnter = Vue.options.components[viewCompoent.jtaro_tag].options.afterEnter
+
+      // 先执行全局afterEnter路由钩子
+      JTaro.afterEnter.run()
+
       if (typeof afterEnter === 'function') {
         afterEnter.call(viewCompoent, JTaro.params)
       }
@@ -108,6 +165,10 @@
     // beforeLeave路由钩子
     function beforeLeaveHook (viewCompoent, callback) {
       var beforeLeave = Vue.options.components[viewCompoent.$parent.jtaro_tag].options.beforeLeave
+
+      // 先执行全局beforeLeave路由钩子
+      JTaro.beforeLeave.run()
+
       if (typeof beforeLeave === 'function') {
         if (beforeLeave.call(viewCompoent, function () { callback() })) {
           callback()

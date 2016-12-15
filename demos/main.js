@@ -1,4 +1,4 @@
-/* global Vue, JRoll */
+/* global Vue, JRoll, JTaro */
 
 Vue.component('MyHead', {
   template: '<div class="my-head"><slot></slot></div>'
@@ -151,4 +151,15 @@ Vue.component('four', {
   mounted: function () {
     this.jroll = new JRoll('#four_wrapper')
   }
+})
+
+// 注册全局路由钩子
+JTaro.beforeEnter.add('m1', function () {
+  console.log('===============> global beforeEnter')
+})
+JTaro.afterEnter.add('m1', function () {
+  console.log('===============> global afterEnter')
+})
+JTaro.beforeLeave.add('m1', function () {
+  console.log('===============> global beforeLeave')
 })

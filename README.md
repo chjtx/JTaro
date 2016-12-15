@@ -247,6 +247,38 @@ beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要`return
 - afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该钩子
 - beforeLeave （JTaro扩展） 页面离开前先需要执行一此操作，例如关闭弹窗、确认表单等情况可使用该钩子
 
+### 全局路由钩子
+
+#### 添加全局路由钩子 add
+```js
+JTaro.beforeEnter.add('hook', function () { ... })
+JTaro.afterEnter.add('hook', function () { ... })
+JTaro.beforeLeave.add('hook', function () { ... })
+```
+
+JTaro.[globalHook].add(name, method)
+
+- [globalHook]表示beforeEnter、afterEnter或beforeLeave
+- name 钩子名称，其值不能为`add`、`remove`或`run`等全局路由钩子的保留键
+- method 是函数方法，可使用bind绑定作用域
+
+#### 移除全局路由钩子 remove
+
+```js
+JTaro.beforeEnter.remove('hook')
+JTaro.afterEnter.remove('hook')
+JTaro.beforeLeave.remove('hook')
+```
+
+#### 手动执行全局路由钩子 run
+
+```js
+JTaro.beforeEnter.run()
+JTaro.afterEnter.run()
+JTaro.beforeLeave.run()
+```
+
+注意：`run`方法一般不需要我们手动调用，JTaro会在适当的时候自动调用
 
 ## 页面组件间通讯
 
@@ -283,6 +315,11 @@ Vue.component('home', {
 
 *答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。*
 
+## 优化
+
+JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。
+
+该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素
 
 ## 配合vue-cli使用
 
@@ -296,6 +333,6 @@ Vue.component('home', {
 - [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
 - [x] 实现页面beforeEnter、afterEnter和beforeLeave路由钩子
 - [x] JTaro.boot({...})选项配置
-- [ ] 实现全局路由钩子
-- [ ] 嵌入微型fastclick解决老机点击300ms延迟问题
+- [x] 实现全局路由钩子
+- [x] 嵌入微型fastclick解决老机点击300ms延迟问题
 

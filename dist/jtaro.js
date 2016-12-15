@@ -1,5 +1,5 @@
-/*! JTaro.js v0.1.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
-/* global define */
+/*! JTaro.js v0.2.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/* global define MouseEvent */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -7,7 +7,90 @@
 }(this, function () {
   'use strict'
 
+  /**
+   * 微型fastclick
+   * 忽略表单控件，只保证div等普通元素点击加速
+   */
+  var clickEvent
+  var stopClick
+  var clickTime
+  document.addEventListener('touchstart', function (e) {
+    clickEvent = e
+    clickTime = e.timeStamp
+    if (/^AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA$/.test(e.target.tagName)) {
+      stopClick = true
+    } else {
+      stopClick = false
+    }
+  }, true)
+  document.addEventListener('touchmove', function () {
+    stopClick = true
+  }, true)
+  document.addEventListener('touchend', function (e) {
+    if (!stopClick && (e.timeStamp - clickTime < 300)) {
+      e.preventDefault()
+      e.stopPropagation()
+      var evt = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true
+      })
+      document.activeElement.blur()
+      clickEvent.target.dispatchEvent(evt)
+      return false
+    }
+  }, true)
+
+  // JTaro
   var JTaro = Object.create(null)
+
+  /**
+   * JTaro Global Hooks 全局钩子
+   * <globalHook> 表示beforeEnter、afterEnter或beforeLeave
+   * JTaro.<globalHook>.add 添加钩子
+   *    @param name
+   *    @param method
+   * JTaro.<globalHook>.remove 删除钩子
+   *    @param name
+   * JTaro.<globalHook>.run 运行钩子
+   */
+  function createHook () {
+    return Object.create({
+      add: function (name, method) {
+        // **JTaro Error Start**
+        if (name === 'add' || name === 'remove' || name === 'run') {
+          console.error('[JTaro warn]: `add` `remove` `run` is preserve key, please use other key')
+          return
+        }
+        if (typeof name !== 'string') {
+          console.error('[JTaro warn]: first argument must be string')
+          return
+        }
+        if (typeof method !== 'function') {
+          console.error('[JTaro warn]: second argument must be function')
+          return
+        }
+        if (this.hasOwnProperty(name)) {
+          console.error('[JTaro warn]: [ ' + name + ' ] already exits')
+          return
+        }
+        // **JTaro Error end**;;
+        this[name] = method
+      },
+      remove: function (name) {
+        delete this[name]
+      },
+      run: function () {
+        for (var i in this) {
+          if (this.hasOwnProperty(i) && typeof this[i] === 'function') {
+            this[i]()
+          }
+        }
+      }
+    })
+  }
+  JTaro.beforeEnter = createHook()
+  JTaro.afterEnter = createHook()
+  JTaro.beforeLeave = createHook()
 
   // Vue install
   JTaro.install = function (Vue, options) {
@@ -37,7 +120,7 @@
 
     JTaro.params = null
     JTaro.views = []
-    JTaro.version = '0.1.2'
+    JTaro.version = '0.2.0'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -49,6 +132,10 @@
     // beforeEnter路由钩子
     function beforeEnterHook (vueCompoent, callback) {
       var beforeEnter = vueCompoent.options.beforeEnter
+
+      // 先执行全局beforeEnter路由钩子
+      JTaro.beforeEnter.run()
+
       if (typeof beforeEnter === 'function') {
         if (beforeEnter.call(JTaro, function (method) { callback(method) })) {
           callback()
@@ -67,6 +154,10 @@
       // **JTaro Error end**;;
 
       var afterEnter = Vue.options.components[viewCompoent.jtaro_tag].options.afterEnter
+
+      // 先执行全局afterEnter路由钩子
+      JTaro.afterEnter.run()
+
       if (typeof afterEnter === 'function') {
         afterEnter.call(viewCompoent, JTaro.params)
       }
@@ -75,6 +166,10 @@
     // beforeLeave路由钩子
     function beforeLeaveHook (viewCompoent, callback) {
       var beforeLeave = Vue.options.components[viewCompoent.$parent.jtaro_tag].options.beforeLeave
+
+      // 先执行全局beforeLeave路由钩子
+      JTaro.beforeLeave.run()
+
       if (typeof beforeLeave === 'function') {
         if (beforeLeave.call(viewCompoent, function () { callback() })) {
           callback()
