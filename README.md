@@ -329,7 +329,7 @@ JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解
 
 - [x] 简单路由功能，根据组件名称动态创建页面
 - [x] 页面切换动画
-- [x] 页面组件与页面组件之间的通讯postMessage、onMessage，使用方式要比官方的$on和$emit更简单
+- [x] 页面组件与页面组件之间的通讯postMessage、onMessage
 - [x] 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题
 - [x] 实现页面beforeEnter、afterEnter和beforeLeave路由钩子
 - [x] JTaro.boot({...})选项配置
