@@ -1,0 +1,34 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #dadada;
+}
+
+header {
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    background: #da020c;
+    color: #fff;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+header>a {
+    height: 34px;
+    line-height: 34px;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+
+[qwe] {
+    color:red;
+}

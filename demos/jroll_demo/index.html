@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0">
+    <title>JTaro 醉芋头</title>
+    <link rel="stylesheet" href="index.css">
+    <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/jroll/src/jroll.js"></script>-->
+    <script src="../../node_modules/vue/dist/vue.js"></script>
+    <script src="../../node_modules/jroll/src/jroll.js"></script>
+    <script src="../../src/jtaro-loader.js"></script>
+</head>
+<body>
+    <div id="jtaro_app"></div>
+    <!--<script src="./dist/jtaro.js"></script>-->
+    <script src="../../src/jtaro.js"></script>
+    <script>
+        Vue.use(JTaro, {
+            default: 'pages/home'
+        })
+    </script>
+</body>
+</html>
