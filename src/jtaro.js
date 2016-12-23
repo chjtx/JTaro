@@ -1,4 +1,4 @@
-/* global define MouseEvent JTaroModule */
+/* global define MouseEvent JTaroLoader */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -147,12 +147,12 @@
     // afterEnter路由钩子
     function afterEnterHook (viewCompoent) {
       // **JTaro Error Start**
-      if (!Vue.options.components[viewCompoent.jtaro_tag.replace(/\//g, '___')]) {
+      if (!Vue.options.components[viewCompoent.jtaro_tag.replace(/\//g, '__')]) {
         console.error('[JTaro warn]: Vue component <' + viewCompoent.jtaro_tag + '> is not define. Please use `this.go` to modify the route, do not manually modify the hash')
       }
       // **JTaro Error end**;;
 
-      var afterEnter = Vue.options.components[viewCompoent.jtaro_tag.replace(/\//g, '___')].options.afterEnter
+      var afterEnter = Vue.options.components[viewCompoent.jtaro_tag.replace(/\//g, '__')].options.afterEnter
 
       // 先执行全局afterEnter路由钩子
       JTaro.afterEnter.run()
@@ -164,7 +164,7 @@
 
     // beforeLeave路由钩子
     function beforeLeaveHook (viewCompoent, callback) {
-      var beforeLeave = Vue.options.components[viewCompoent.$parent.jtaro_tag.replace(/\//g, '___')].options.beforeLeave
+      var beforeLeave = Vue.options.components[viewCompoent.$parent.jtaro_tag.replace(/\//g, '__')].options.beforeLeave
 
       // 先执行全局beforeLeave路由钩子
       JTaro.beforeLeave.run()
@@ -280,18 +280,7 @@
       var h = _hash.replace('#!', '').split('?')[0]
       var v = JTaro.vm.$data.views
       var i = JTaro.views.indexOf(h)
-      var viewCompoent = findVueComponent(h.replace(/\//g, '___'))
-
-      // **JTaro Error Start**
-      if (!viewCompoent) {
-        JTaroModule.import(h, function (c) {
-          viewCompoent = c
-        })
-        if (!viewCompoent) {
-          console.error('[JTaro warn]: Vue component <' + h + '> is not define')
-        }
-      }
-      // **JTaro Error end**;;
+      var viewCompoent = findVueComponent(h.replace(/\//g, '__'))
 
       if (i === -1) {
         if (v.indexOf(h) === -1) {
@@ -322,7 +311,7 @@
         }
       },
       render: function (h) {
-        return h(Vue.options.components[this.view.replace(/\//g, '___')] || NotFound)
+        return h(Vue.options.components[this.view.replace(/\//g, '__')] || NotFound)
       },
       mounted: function () {
         slideIn(this, JTaro.options.JRoll)
@@ -334,7 +323,7 @@
     // 注册postMessage方法
     Vue.prototype.postMessage = function (msg, name) {
       var view = findVueComponent(name)
-      var component = Vue.options.components[name.replace(/\//g, '___')]
+      var component = Vue.options.components[name.replace(/\//g, '__')]
       var method = component ? component.options.onMessage : null
       if (view && method) {
         method.call(view.$children[0], { message: msg, origin: this.$parent.jtaro_tag })
@@ -351,14 +340,14 @@
           var p = h.split('?')
 
           // **JTaro Error Start**
-          if (!Vue.options.components[p[0].replace(/\//g, '___')]) {
-            JTaroModule.import(p[0])
+          if (!Vue.options.components[p[0].replace(/\//g, '__')]) {
+            JTaroLoader.import(p[0])
 
             console.error('[JTaro warn]: Vue component <' + p[0] + '> is not define')
           }
           // **JTaro Error end**;;
 
-          beforeEnterHook(Vue.options.components[p[0].replace(/\//g, '___')], function (method) {
+          beforeEnterHook(Vue.options.components[p[0].replace(/\//g, '__')], function (method) {
             if (method) {
               JTaro.method = method
             } else {
@@ -400,16 +389,33 @@
     // 启动
     ;(function () {
       var hash = window.location.hash
-      var vueCompoent = Vue.options.components[(hash.replace('#!', '').split('?')[0] || JTaro.options.default).replace(/\//g, '___')]
+      var vueCompoent = Vue.options.components[(hash.replace('#!', '').split('?')[0] || JTaro.options.default).replace(/\//g, '__')]
 
       // **JTaro Error Start**
       if (!vueCompoent) {
-        JTaroModule.import(hash.replace('#!', '').split('?')[0] || JTaro.options.default, function (c) {
-          vueCompoent = c
+        JTaroLoader.import(hash.replace('#!', '').split('?')[0] || JTaro.options.default, function (c) {
+          if (!c) {
+            console.error('[JTaro warn]: Vue component <' + (hash.replace('#!', '').split('?')[0] || JTaro.options.default) + '> is not define')
+          } else {
+            beforeEnterHook(c, function (method) {
+              if (method) {
+                JTaro.method = method
+              } else {
+                JTaro.method = null
+              }
+
+              // 跳到默认路由
+              if (hash === '') {
+                window.location.hash = '!' + JTaro.options.default
+
+              // 跳到指定路由
+              } else {
+                pushView(hash, JTaro.options.JRoll)
+              }
+            })
+          }
         })
-        if (!vueCompoent) {
-          console.error('[JTaro warn]: Vue component <' + (hash.replace('#!', '').split('?')[0] || JTaro.options.default) + '> is not define')
-        }
+        return
       }
       // **JTaro Error end**;;
 

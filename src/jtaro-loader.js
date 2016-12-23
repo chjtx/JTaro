@@ -1,6 +1,7 @@
 /* global XMLHttpRequest Vue */
 (function () {
-  window.JTaroModule = {
+  window.JTaroModules = {}
+  window.JTaroLoader = {
     // 同步加载
     ajax: function (path, callback) {
       var xhr = new XMLHttpRequest()
@@ -9,16 +10,16 @@
           callback(xhr.responseText)
         }
       }
-      xhr.open('GET', path + '.js' + '?' + Date.now(), false)
+      xhr.open('GET', path, false)
       xhr.send()
     },
     // 解释模板
-    parse: function (path, text) {
-      var id = path.replace(/\//g, '___')
-      text = text.replace(/export\s+default/, 'return')
-      var obj = new Function(text)()
+    parse: function (path, obj) {
+      var id = path.replace(/\//g, '__')
+      // text = text.replace(/export\s+default/, 'return')
+      // var obj = new Function(text)()
       if (!obj.template) {
-        this.ajax(path + '.html' + '?' + Date.now(), function (data) {
+        this.ajax(path + '.html', function (data) {
           var reg = /<style>([\s\S]+)<\/style>/
           var styleText = reg.exec(data)
           var style
@@ -50,10 +51,20 @@
     // 引入模块
     import: function (path, callback) {
       var me = this
-      this.ajax(path + '.js' + '?' + Date.now(), function (data) {
-        var d = me.parse(path, data)
+      // this.ajax(path + '.js', function (data) {
+      //   var d = me.parse(path, data)
+      //   if (typeof callback === 'function') callback(d)
+      // })
+      var mod = path.replace(/\//g, '__')
+      var s = document.createElement('script')
+      s.src = path + '.js?jtaro_module=' + mod
+      s.onload = function () {
+        // Vue.component(mod, window.JTaroModules[mod])
+        // callback(Vue.options.components[mod])
+        var d = me.parse(path, window.JTaroModules[mod])
         if (typeof callback === 'function') callback(d)
-      })
+      }
+      document.head.appendChild(s)
     }
   }
 })()
