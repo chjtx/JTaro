@@ -32,7 +32,7 @@ gulp.task('build', function () {
     .pipe(gulp.dest('dist/'))
 
     // 去除JTaro警告
-    .pipe(replace(/\/\/ \*\*JTaro Error[^;]+;;/g, ''))
+    .pipe(replace(/\/\/ \*\*JTaro Comment[^;]+;;/g, ''))
     // 压缩
     .pipe(uglify())
     .pipe(license(copyright))
