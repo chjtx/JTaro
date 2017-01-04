@@ -4,7 +4,8 @@
   "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {
-    "dev": "gulp dev"
+    "dev": "gulp dev",
+    "demo": "node jtaro-module/server.js 3030"
   },
   "repository": {
     "type": "git",

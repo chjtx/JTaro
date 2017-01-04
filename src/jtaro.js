@@ -55,7 +55,7 @@
   function createHook () {
     return Object.create({
       add: function (name, method) {
-        // **JTaro Error Start**
+        // **JTaro Comment Start**
         if (name === 'add' || name === 'remove' || name === 'run') {
           console.error('[JTaro warn]: `add` `remove` `run` is preserve key, please use other key')
           return
@@ -72,7 +72,7 @@
           console.error('[JTaro warn]: [ ' + name + ' ] already exits')
           return
         }
-        // **JTaro Error end**;;
+        // **JTaro Comment end**;;
         this[name] = method
       },
       remove: function (name) {
@@ -93,14 +93,14 @@
 
   // Vue install
   JTaro.install = function (Vue, options) {
-    // **JTaro Error Start**
+    // **JTaro Comment Start**
     if (options && !options.JRoll && !window.JRoll) {
       console.error('[JTaro warn]: JTaro must depend on JRoll')
     }
     if (options && options.distance && (options.distance < 0 || options.distance > 1)) {
       console.error('[JTaro warn]: distance options range must be: 0 < distance < 1')
     }
-    // **JTaro Error end**;;
+    // **JTaro Comment end**;;
 
     // 创建样式
     var style = document.getElementById('jtaro_style')
@@ -146,11 +146,11 @@
 
     // afterEnter路由钩子
     function afterEnterHook (viewCompoent) {
-      // **JTaro Error Start**
+      // **JTaro Comment Start**
       if (!Vue.options.components[viewCompoent.jtaro_tag.replace(/\//g, '__')]) {
         console.error('[JTaro warn]: Vue component <' + viewCompoent.jtaro_tag + '> is not define. Please use `this.go` to modify the route, do not manually modify the hash')
       }
-      // **JTaro Error end**;;
+      // **JTaro Comment end**;;
 
       var afterEnter = Vue.options.components[viewCompoent.jtaro_tag.replace(/\//g, '__')].options.afterEnter
 
@@ -339,13 +339,13 @@
           var h = route.replace('#!', '')
           var p = h.split('?')
 
-          // **JTaro Error Start**
+          // **JTaro Comment Start**
           if (!Vue.options.components[p[0].replace(/\//g, '__')]) {
-            JTaroLoader.import(p[0])
+            JTaroDevelopImport(p[0])
 
             console.error('[JTaro warn]: Vue component <' + p[0] + '> is not define')
           }
-          // **JTaro Error end**;;
+          // **JTaro Comment end**;;
 
           beforeEnterHook(Vue.options.components[p[0].replace(/\//g, '__')], function (method) {
             if (method) {
@@ -391,9 +391,9 @@
       var hash = window.location.hash
       var vueCompoent = Vue.options.components[(hash.replace('#!', '').split('?')[0] || JTaro.options.default).replace(/\//g, '__')]
 
-      // **JTaro Error Start**
+      // **JTaro Comment Start**
       if (!vueCompoent) {
-        JTaroLoader.import(hash.replace('#!', '').split('?')[0] || JTaro.options.default, function (c) {
+        JTaroDevelopImport(hash.replace('#!', '').split('?')[0] || JTaro.options.default, function (c) {
           if (!c) {
             console.error('[JTaro warn]: Vue component <' + (hash.replace('#!', '').split('?')[0] || JTaro.options.default) + '> is not define')
           } else {
@@ -417,7 +417,7 @@
         })
         return
       }
-      // **JTaro Error end**;;
+      // **JTaro Comment end**;;
 
       if (vueCompoent) {
         beforeEnterHook(vueCompoent, function (method) {
@@ -442,3 +442,11 @@
 
   return JTaro
 }))
+
+// **JTaro Comment Start**
+function JTaroDevelopImport (path, callback) {console.log(document.currentScript)
+  JTaroLoader.import('../demos/jroll_demo/' + path + '.js', function (data) {
+    console.log(data)
+  })
+}
+// **JTaro Comment end**;;
