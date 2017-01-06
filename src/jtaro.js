@@ -1,4 +1,4 @@
-/* global define MouseEvent JTaroLoader */
+/* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -9,6 +9,7 @@
   /**
    * 微型fastclick
    * 忽略表单控件，只保证div等普通元素点击加速
+   * 注意！！！微型fastclick的代码将来可能会移除，交由将要开发的`JTaro UI`处理
    */
   var clickEvent
   var stopClick
@@ -341,9 +342,10 @@
 
           // **JTaro Comment Start**
           if (!Vue.options.components[p[0].replace(/\//g, '__')]) {
-            JTaroDevelopImport(p[0])
+            // JTaroDevelopImport(p[0])
 
             console.error('[JTaro warn]: Vue component <' + p[0] + '> is not define')
+            return
           }
           // **JTaro Comment end**;;
 
@@ -393,7 +395,7 @@
 
       // **JTaro Comment Start**
       if (!vueCompoent) {
-        JTaroDevelopImport(hash.replace('#!', '').split('?')[0] || JTaro.options.default, function (c) {
+        JTaroDevelopImport(Vue, hash.replace('#!', '').split('?')[0] || JTaro.options.default, function (c) {
           if (!c) {
             console.error('[JTaro warn]: Vue component <' + (hash.replace('#!', '').split('?')[0] || JTaro.options.default) + '> is not define')
           } else {
@@ -444,9 +446,20 @@
 }))
 
 // **JTaro Comment Start**
-function JTaroDevelopImport (path, callback) {console.log(document.currentScript)
-  JTaroLoader.import('../demos/jroll_demo/' + path + '.js', function (data) {
-    console.log(data)
+function JTaroDevelopImport (Vue, path, callback) {
+  function computeVueId (s) {
+    var base = document.baseURI.replace(window.location.origin, '').split('?')[0].split('#')[0]
+    var r = /^[^/]*\//
+    while (r.test(base) === r.test(s)) {
+      base = base.replace(r, '')
+      s = s.replace(r, '')
+    }
+    return s.replace(/\.\w+$/, '').replace(/\/|\\/, '__')
+  }
+  JTaroLoader.import(path + '.js', function (data) {
+    var id = computeVueId(data.src)
+    Vue.component(id, JTaroModules[data.src])
+    callback(Vue.options.components[id])
   })
 }
 // **JTaro Comment end**;;

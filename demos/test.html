@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1, user-scalable=0">
+    <title>JTaro 醉芋头</title>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="jtaro_app"><component v-bind:is="dom"></component></div>
+    <form id="f">
+        <input name="a" value="aaa">
+        <input name="b" value="bbb">
+        <input name="c" value="ccc">
+    </form>
+    <script>
+        var a
+        var vm = new Vue({
+            el: '#jtaro_app',
+            data: {
+                dom: {
+                    template: '<div>123</div>'
+                }
+            },
+            mounted: function () {
+                setTimeout(function () {
+                    vm.$data.dom = a
+                }, 1000)
+            }
+        })
+        a = {
+            render: function (h) {
+                return h('div', 'abc')
+            }
+        }
+    </script>
+</body>
+</html>

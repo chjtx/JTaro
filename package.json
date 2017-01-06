@@ -5,7 +5,7 @@
   "main": "dist/jtaro.js",
   "scripts": {
     "dev": "gulp dev",
-    "demo": "node jtaro-module/server.js 3030"
+    "demo": "node node_modules/jtaro-module/src/server.js 3030"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "jroll": "^2.3.2",
-    "vue": "^2.0.3"
+    "vue": "^2.1.8"
   },
   "devDependencies": {
     "browser-sync": "^2.17.5",
