@@ -32,7 +32,7 @@
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.0.0",
-    "jtaro-module": "0.0.3",
+    "jtaro-module": "0.0.6",
     "rollup": "^0.40.0",
     "rollup-plugin-jtaro-module": "0.0.2"
   }
