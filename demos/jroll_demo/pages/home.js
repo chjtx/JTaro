@@ -5,7 +5,7 @@ export default {
   template: tpl,
   methods: {
     goto: function (p) {
-      this.go('pages/' + 1)
+      this.go('pages/' + p)
     }
   },
   mounted: function () {
