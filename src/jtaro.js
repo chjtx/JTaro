@@ -116,8 +116,6 @@
       document.head.appendChild(style)
     }
 
-    var NotFound = { template: '<div style="text-align:center;padding-top:100px">404 Page not found</div>' }
-
     var WIDTH = window.innerWidth
 
     options = options || {}
@@ -285,7 +283,7 @@
       var h = _hash.replace('#/', '').split('?')[0]
       var v = JTaro.vm.$data.views
       var i = JTaro.views.indexOf(h)
-      var viewCompoent = findVueComponent(path2id(h))
+      var viewCompoent = findVueComponent(h)
 
       if (i === -1) {
         if (v.indexOf(h) === -1) {
@@ -316,7 +314,7 @@
         }
       },
       render: function (h) {
-        return h(Vue.options.components[path2id(this.view)] || NotFound)
+        return h(Vue.options.components[path2id(this.view)])
       },
       mounted: function () {
         slideIn(this, JTaro.options.JRoll)
@@ -409,6 +407,20 @@
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
+      // **JTaro Comment Start**
+      var hash = window.location.hash.replace('#/', '').split('?')[0]
+      var vueCompoent = Vue.options.components[path2id(hash)]
+      if (!vueCompoent) {
+        JTaroDevelopImport(Vue, hash, function (c) {
+          if (!c) {
+            console.error('[JTaro warn]: Vue component <' + path2id(hash) + '> is not define')
+          } else {
+            pushView(window.location.hash, JTaro.options.JRoll)
+          }
+        })
+        return
+      }
+      // **JTaro Comment end**;;
       pushView(window.location.hash, JTaro.options.JRoll)
     })
     // 页面宽度改变更新动画宽度
@@ -424,7 +436,7 @@
       if (!vueCompoent) {
         JTaroDevelopImport(Vue, hash.replace('#/', '').split('?')[0] || JTaro.options.default, function (c) {
           if (!c) {
-            console.error('[JTaro warn]: Vue component <' + (hash.replace('#/', '').split('?')[0] || JTaro.options.default).replace(/\/|\\/, '__') + '> is not define')
+            console.error('[JTaro warn]: Vue component <' + path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default) + '> is not define')
           } else {
             beforeEnterHook(c, function (method) {
               if (method) {
@@ -481,7 +493,7 @@ function JTaroDevelopImport (Vue, path, callback) {
       base = base.replace(r, '')
       s = s.replace(r, '')
     }
-    return s.replace(/\.\w+$/, '').replace(/\/|\\/, '__')
+    return s.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
   }
   JTaroLoader.import(path + '.js', {
     count: 1,

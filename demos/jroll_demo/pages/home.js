@@ -9,6 +9,6 @@ export default {
     }
   },
   mounted: function () {
-    this.jroll = new JRoll('#wrapper')
+    this.jroll = new JRoll(this.$el)
   }
 }

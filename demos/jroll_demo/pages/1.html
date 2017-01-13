@@ -1,17 +1,17 @@
 <style>
-    #wrapper {
+    .wrapper {
         position: absolute;
         top: 44px;
         bottom: 0;
         width: 100%;
     }
     
-    #scroller {
+    .scroller {
         margin: 0;
         padding: 0;
     }
     
-    #scroller li {
+    .scroller li {
         height: 60px;
         line-height: 60px;
         border-bottom: 1px solid #ddd;
@@ -19,7 +19,7 @@
         background: #fff;
     }
     
-    #scroller li:nth-last-child(1) {
+    .scroller li:nth-last-child(1) {
         border-bottom: none;
     }
     
@@ -70,13 +70,9 @@
     }
 </style>
 <div>
-    <!--<header>
-        <h1>各种级别数据量测试</h1>
-        <a onclick="javascript:history.back()">&lt;返回</a>
-    </header>-->
-    <my-header></my-header>
-    <div id="wrapper">
-        <ul id="scroller"></ul>
+    <my-header title="各种级别数据量测试"></my-header>
+    <div class="wrapper">
+        <ul class="scroller"></ul>
     </div>
     <ul id="menu">
         <li class="current">6</li>

@@ -1,5 +1,5 @@
-/*! JTaro.js v0.2.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
-/* global define MouseEvent */
+/*! JTaro.js v0.3.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
@@ -10,6 +10,7 @@
   /**
    * 微型fastclick
    * 忽略表单控件，只保证div等普通元素点击加速
+   * 注意！！！微型fastclick的代码将来可能会移除，交由将要开发的`JTaro UI`处理
    */
   var clickEvent
   var stopClick
@@ -40,6 +41,10 @@
     }
   }, true)
 
+  function path2id (p) {
+    return p.replace(/\/|\\/g, '__')
+  }
+
   // JTaro
   var JTaro = Object.create(null)
 
@@ -56,7 +61,7 @@
   function createHook () {
     return Object.create({
       add: function (name, method) {
-        // **JTaro Error Start**
+        // **JTaro Comment Start**
         if (name === 'add' || name === 'remove' || name === 'run') {
           console.error('[JTaro warn]: `add` `remove` `run` is preserve key, please use other key')
           return
@@ -73,7 +78,7 @@
           console.error('[JTaro warn]: [ ' + name + ' ] already exits')
           return
         }
-        // **JTaro Error end**;;
+        // **JTaro Comment end**;;
         this[name] = method
       },
       remove: function (name) {
@@ -94,14 +99,14 @@
 
   // Vue install
   JTaro.install = function (Vue, options) {
-    // **JTaro Error Start**
+    // **JTaro Comment Start**
     if (options && !options.JRoll && !window.JRoll) {
       console.error('[JTaro warn]: JTaro must depend on JRoll')
     }
     if (options && options.distance && (options.distance < 0 || options.distance > 1)) {
       console.error('[JTaro warn]: distance options range must be: 0 < distance < 1')
     }
-    // **JTaro Error end**;;
+    // **JTaro Comment end**;;
 
     // 创建样式
     var style = document.getElementById('jtaro_style')
@@ -112,15 +117,13 @@
       document.head.appendChild(style)
     }
 
-    var NotFound = { template: '<div style="text-align:center;padding-top:100px">404 Page not found</div>' }
-
     var WIDTH = window.innerWidth
 
     options = options || {}
 
     JTaro.params = null
     JTaro.views = []
-    JTaro.version = '0.2.0'
+    JTaro.version = '0.3.0'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -147,13 +150,13 @@
 
     // afterEnter路由钩子
     function afterEnterHook (viewCompoent) {
-      // **JTaro Error Start**
-      if (!Vue.options.components[viewCompoent.jtaro_tag]) {
+      // **JTaro Comment Start**
+      if (!Vue.options.components[path2id(viewCompoent.jtaro_tag)]) {
         console.error('[JTaro warn]: Vue component <' + viewCompoent.jtaro_tag + '> is not define. Please use `this.go` to modify the route, do not manually modify the hash')
       }
-      // **JTaro Error end**;;
+      // **JTaro Comment end**;;
 
-      var afterEnter = Vue.options.components[viewCompoent.jtaro_tag].options.afterEnter
+      var afterEnter = Vue.options.components[path2id(viewCompoent.jtaro_tag)].options.afterEnter
 
       // 先执行全局afterEnter路由钩子
       JTaro.afterEnter.run()
@@ -165,7 +168,7 @@
 
     // beforeLeave路由钩子
     function beforeLeaveHook (viewCompoent, callback) {
-      var beforeLeave = Vue.options.components[viewCompoent.$parent.jtaro_tag].options.beforeLeave
+      var beforeLeave = Vue.options.components[path2id(viewCompoent.$parent.jtaro_tag)].options.beforeLeave
 
       // 先执行全局beforeLeave路由钩子
       JTaro.beforeLeave.run()
@@ -278,7 +281,7 @@
     * 2、与路由对应页面已存在->将该页面往后的所有页面都删除
     */
     function pushView (_hash, jroll) {
-      var h = _hash.replace('#!', '').split('?')[0]
+      var h = _hash.replace('#/', '').split('?')[0]
       var v = JTaro.vm.$data.views
       var i = JTaro.views.indexOf(h)
       var viewCompoent = findVueComponent(h)
@@ -312,7 +315,7 @@
         }
       },
       render: function (h) {
-        return h(Vue.options.components[this.view] || NotFound)
+        return h(Vue.options.components[path2id(this.view)])
       },
       mounted: function () {
         slideIn(this, JTaro.options.JRoll)
@@ -324,7 +327,7 @@
     // 注册postMessage方法
     Vue.prototype.postMessage = function (msg, name) {
       var view = findVueComponent(name)
-      var component = Vue.options.components[name]
+      var component = Vue.options.components[path2id(name)]
       var method = component ? component.options.onMessage : null
       if (view && method) {
         method.call(view.$children[0], { message: msg, origin: this.$parent.jtaro_tag })
@@ -337,16 +340,42 @@
       if (!JTaro.sliding) {
         beforeLeaveHook(this, function () {
           // 截取url参数
-          var h = route.replace('#!', '')
+          var h = route.replace('#/', '')
           var p = h.split('?')
 
-          // **JTaro Error Start**
-          if (!Vue.options.components[p[0]]) {
-            console.error('[JTaro warn]: Vue component <' + p[0] + '> is not define')
-          }
-          // **JTaro Error end**;;
+          // **JTaro Comment Start**
+          if (!Vue.options.components[path2id(p[0])]) {
+            JTaroDevelopImport(Vue, p[0], function (c) {
+              if (!c) {
+                console.error('[JTaro warn]: Vue component <' + path2id(p[0]) + '> is not define')
+              } else {
+                beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
+                  if (method) {
+                    JTaro.method = method
+                  } else {
+                    JTaro.method = null
+                  }
+                  if (p[1]) {
+                    JTaro.params = parseUrlParams(p[1])
+                  } else if (options) {
+                    JTaro.params = options
+                  } else {
+                    JTaro.params = null
+                  }
+                  if (typeof route === 'number') {
+                    window.history.go(route)
+                  } else {
+                    window.location.hash = '/' + route
+                  }
+                })
+              }
+            })
 
-          beforeEnterHook(Vue.options.components[p[0]], function (method) {
+            return
+          }
+          // **JTaro Comment end**;;
+
+          beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
             if (method) {
               JTaro.method = method
             } else {
@@ -362,7 +391,7 @@
             if (typeof route === 'number') {
               window.history.go(route)
             } else {
-              window.location.hash = '!' + route
+              window.location.hash = '/' + route
             }
           })
         })
@@ -379,6 +408,20 @@
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
+      // **JTaro Comment Start**
+      var hash = window.location.hash.replace('#/', '').split('?')[0]
+      var vueCompoent = Vue.options.components[path2id(hash)]
+      if (!vueCompoent) {
+        JTaroDevelopImport(Vue, hash, function (c) {
+          if (!c) {
+            console.error('[JTaro warn]: Vue component <' + path2id(hash) + '> is not define')
+          } else {
+            pushView(window.location.hash, JTaro.options.JRoll)
+          }
+        })
+        return
+      }
+      // **JTaro Comment end**;;
       pushView(window.location.hash, JTaro.options.JRoll)
     })
     // 页面宽度改变更新动画宽度
@@ -388,13 +431,35 @@
     // 启动
     ;(function () {
       var hash = window.location.hash
-      var vueCompoent = Vue.options.components[JTaro.options.default || hash.replace('#!', '').split('?')[0]]
+      var vueCompoent = Vue.options.components[path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default)]
 
-      // **JTaro Error Start**
+      // **JTaro Comment Start**
       if (!vueCompoent) {
-        console.error('[JTaro warn]: Vue component <' + (JTaro.options.default || hash.replace('#!', '').split('?')[0]) + '> is not define')
+        JTaroDevelopImport(Vue, hash.replace('#/', '').split('?')[0] || JTaro.options.default, function (c) {
+          if (!c) {
+            console.error('[JTaro warn]: Vue component <' + path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default) + '> is not define')
+          } else {
+            beforeEnterHook(c, function (method) {
+              if (method) {
+                JTaro.method = method
+              } else {
+                JTaro.method = null
+              }
+
+              // 跳到默认路由
+              if (hash === '') {
+                window.location.hash = '/' + JTaro.options.default
+
+              // 跳到指定路由
+              } else {
+                pushView(hash, JTaro.options.JRoll)
+              }
+            })
+          }
+        })
+        return
       }
-      // **JTaro Error end**;;
+      // **JTaro Comment end**;;
 
       if (vueCompoent) {
         beforeEnterHook(vueCompoent, function (method) {
@@ -406,7 +471,7 @@
 
           // 跳到默认路由
           if (hash === '') {
-            window.location.hash = '!' + JTaro.options.default
+            window.location.hash = '/' + JTaro.options.default
 
           // 跳到指定路由
           } else {
@@ -419,3 +484,25 @@
 
   return JTaro
 }))
+
+// **JTaro Comment Start**
+function JTaroDevelopImport (Vue, path, callback) {
+  function computeVueId (s) {
+    var base = document.baseURI.replace(window.location.origin, '').split('?')[0].split('#')[0]
+    var r = /^[^/]*\//
+    while (r.test(base) === r.test(s)) {
+      base = base.replace(r, '')
+      s = s.replace(r, '')
+    }
+    return s.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
+  }
+  JTaroLoader.import(path + '.js', {
+    count: 1,
+    callback: function (data) {
+      var id = computeVueId(data.src)
+      Vue.component(id, JTaroModules[data.src].default)
+      callback(Vue.options.components[id])
+    }
+  })
+}
+// **JTaro Comment end**;;

@@ -6,8 +6,8 @@ export default {
   template: tpl,
   components: { myHeader: header },
   mounted: function () {
-    var wrapper = document.getElementById('wrapper')
-    var scroller = document.getElementById('scroller')
+    var wrapper = this.$el.querySelector('.wrapper')
+    var scroller = this.$el.querySelector('.scroller')
     var jroll = new JRoll(wrapper, {
       id: 'demo1',
       scrollBarY: true
