@@ -1,0 +1,84 @@
+<style>
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  img {
+    padding: 0;
+    margin: 0;
+    border: none;
+    display: block;
+  }
+  
+  .wrapper {
+    position: absolute;
+    width: 100%;
+    top: 44px;
+    left: 0;
+    bottom: 0;
+  }
+  
+  .wrapper li {
+    line-height: 32px;
+    height: 32px;
+    background: #DDD;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #eee;
+    padding-left: 1em;
+    list-style-type: none;
+    overflow: hidden;
+    display: block;
+  }
+  
+  .scroller {
+    width: 100%;
+  }
+  
+  #btns {
+    position: absolute;
+    top: 58px;
+    right: 10px;
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+  }
+  
+  #btns li {
+    list-style-type: none;
+    line-height: 32px;
+    padding: 0 10px;
+  }
+</style>
+<div>
+  <my-header title="动态调整可选项"></my-header>
+  <div class="wrapper">
+    <ul class="scroller"></ul>
+  </div>
+  <ul id="btns">
+    <li>
+      <input type="checkbox">
+      <span>scrollX</span>
+    </li>
+    <li>
+      <input type="checkbox" checked>
+      <span>scrollY</span>
+    </li>
+    <li>
+      <input type="checkbox">
+      <span>scrollFree</span>
+    </li>
+    <li>
+      <input type="checkbox">
+      <span>zoom</span>
+    </li>
+    <li>
+      <input type="checkbox" checked>
+      <span>bounce</span>
+    </li>
+    <li>
+      <input type="checkbox" checked>
+      <span>momentum</span>
+    </li>
+  </ul>
+</div>

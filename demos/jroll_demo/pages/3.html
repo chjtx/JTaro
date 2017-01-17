@@ -1,0 +1,53 @@
+<style>
+  .wrapper {
+    position: absolute;
+    top: 44px;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .scroller {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+  
+  .scroller li {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px solid #ddd;
+    text-indent: 1em;
+    background: #fff;
+  }
+  
+  .scroller li:nth-last-child(1) {
+    border-bottom: none;
+  }
+  
+  #info {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: rgba(0, 0, 0, .2);
+    line-height: 30px;
+    padding: 0 10px;
+    width: 140px;
+    font-size: 14px;
+  }
+  
+  #info>div {
+    height: 30px;
+    overflow: hidden;
+  }
+</style>
+<div>
+  <my-header title="滚动事件"></my-header>
+  <div class="wrapper">
+    <div class="scroller">
+    </div>
+  </div>
+  <div id="info">
+    <div>事件：<span id="evt">null</span></div>
+    <div>位置：<span id="pos">(0, 0)</span></div>
+  </div>
+</div>
