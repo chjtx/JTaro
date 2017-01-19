@@ -1,3 +1,5 @@
+# 注意：尚在开发中...暂供学习研究...
+
 # 醉芋头 JTaro
 
 > An H5 SPA framework for Vue.js 2.0
@@ -325,7 +327,7 @@ JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解
 
 ~~敬请期待...~~
 
-算了，不写了
+算了，不写了，将来将会使用JTaro Module配合开发
 
 ## TODO
 
