@@ -1,4 +1,4 @@
-/*! JTaro.js v0.3.0 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.3.1 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -123,7 +123,7 @@
 
     JTaro.params = null
     JTaro.views = []
-    JTaro.version = '0.3.0'
+    JTaro.version = '0.3.1'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -350,6 +350,11 @@
                 console.error('[JTaro warn]: Vue component <' + path2id(p[0]) + '> is not define')
               } else {
                 beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
+                  var i = JTaro.views.indexOf(p[0])
+                  if (~i) {
+                    i = 1 - JTaro.views.length - i
+                    if (i) route = i
+                  }
                   if (method) {
                     JTaro.method = method
                   } else {
@@ -376,6 +381,15 @@
           // **JTaro Comment end**;;
 
           beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
+            /** Fixed issues#1
+             *  如果目标路由对应的页面已存在，且非当前路由，转为负数使用history.go(-?)清除历史记录
+             */
+            var i = JTaro.views.indexOf(p[0])
+            if (~i) {
+              i = 1 - JTaro.views.length - i
+              if (i) route = i
+            }
+
             if (method) {
               JTaro.method = method
             } else {
