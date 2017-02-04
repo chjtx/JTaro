@@ -161,7 +161,7 @@
       JTaro.afterEnter.run()
 
       if (typeof afterEnter === 'function') {
-        afterEnter.call(viewCompoent, JTaro.params)
+        afterEnter.call(viewCompoent.$children[0], JTaro.params)
       }
     }
 
@@ -187,7 +187,7 @@
       var preSib = el.previousElementSibling
 
       if (JTaro.method) {
-        JTaro.method.call(viewCompoent, viewCompoent)
+        JTaro.method.call(viewCompoent.$children[0], viewCompoent.$children[0])
       }
 
       JTaro.sliding = true

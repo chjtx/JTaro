@@ -1,4 +1,4 @@
-/*! JTaro.js v0.3.1 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.3.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -123,7 +123,7 @@
 
     JTaro.params = null
     JTaro.views = []
-    JTaro.version = '0.3.1'
+    JTaro.version = '0.3.2'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -162,7 +162,7 @@
       JTaro.afterEnter.run()
 
       if (typeof afterEnter === 'function') {
-        afterEnter.call(viewCompoent, JTaro.params)
+        afterEnter.call(viewCompoent.$children[0], JTaro.params)
       }
     }
 
@@ -188,7 +188,7 @@
       var preSib = el.previousElementSibling
 
       if (JTaro.method) {
-        JTaro.method.call(viewCompoent, viewCompoent)
+        JTaro.method.call(viewCompoent.$children[0], viewCompoent.$children[0])
       }
 
       JTaro.sliding = true
