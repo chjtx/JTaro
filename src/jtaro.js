@@ -161,7 +161,7 @@
       JTaro.afterEnter.run()
 
       if (typeof afterEnter === 'function') {
-        afterEnter.call(viewCompoent, JTaro.params)
+        afterEnter.call(viewCompoent.$children[0], JTaro.params)
       }
     }
 
@@ -187,7 +187,7 @@
       var preSib = el.previousElementSibling
 
       if (JTaro.method) {
-        JTaro.method.call(viewCompoent, viewCompoent)
+        JTaro.method.call(viewCompoent.$children[0], viewCompoent.$children[0])
       }
 
       JTaro.sliding = true
@@ -349,6 +349,11 @@
                 console.error('[JTaro warn]: Vue component <' + path2id(p[0]) + '> is not define')
               } else {
                 beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
+                  var i = JTaro.views.indexOf(p[0])
+                  if (~i) {
+                    i = 1 - JTaro.views.length - i
+                    if (i) route = i
+                  }
                   if (method) {
                     JTaro.method = method
                   } else {
@@ -375,6 +380,15 @@
           // **JTaro Comment end**;;
 
           beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
+            /** Fixed issues#1
+             *  如果目标路由对应的页面已存在，且非当前路由，转为负数使用history.go(-?)清除历史记录
+             */
+            var i = JTaro.views.indexOf(p[0])
+            if (~i) {
+              i = 1 - JTaro.views.length - i
+              if (i) route = i
+            }
+
             if (method) {
               JTaro.method = method
             } else {

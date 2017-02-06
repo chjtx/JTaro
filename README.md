@@ -233,7 +233,7 @@ Vue.component('home', {
 })
 ```
 
-beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要`return true`或者执行回调`cb()`来继续执行后面的代码
+beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要`return true`或者执行回调`cb()`来继续执行后面的代码。不同的是beforeLeave能够获取到this，因而在`cb()`里传入function是无效的。
 
 四个钩子执行顺序 beforeEnter -> (mounted) -> afterEnter -> beforeLeave
 
