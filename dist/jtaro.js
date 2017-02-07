@@ -1,4 +1,4 @@
-/*! JTaro.js v0.3.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.3.3 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -113,7 +113,7 @@
     if (!style) {
       style = document.createElement('style')
       style.id = 'jtaro_style'
-      style.innerHTML = 'html,body{height:100%;padding:0;margin:0}#jtaro_app{position:relative;width:100%;height:100%;overflow:hidden}.jtaro-view{position:absolute;width:100%;height:100%;overflow:hidden;background:#fff}'
+      style.innerHTML = 'html,body{height:100%;padding:0;margin:0}#jtaro_app{position:relative;width:100%;height:100%;overflow:hidden}.jtaro-view{position:absolute;width:100%;height:100%;overflow:hidden;background:#fff;-webkit-box-shadow: rgba(0,0,0,.3) -5px 0 8px;box-shadow: rgba(0,0,0,.3) -5px 0 8px;}'
       document.head.appendChild(style)
     }
 
@@ -123,7 +123,7 @@
 
     JTaro.params = null
     JTaro.views = []
-    JTaro.version = '0.3.2'
+    JTaro.version = '0.3.3'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -386,7 +386,7 @@
              */
             var i = JTaro.views.indexOf(p[0])
             if (~i) {
-              i = 1 - JTaro.views.length - i
+              i = 1 - (JTaro.views.length - i)
               if (i) route = i
             }
 
