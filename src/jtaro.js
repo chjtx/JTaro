@@ -40,6 +40,7 @@
     }
   }, true)
 
+  // 将路径转为vue组件id
   function path2id (p) {
     return p.replace(/\/|\\/g, '__')
   }
@@ -122,6 +123,7 @@
 
     JTaro.params = null
     JTaro.views = []
+    JTaro.history = []
     JTaro.version = '{{version}}'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
@@ -242,6 +244,8 @@
       if (l - 1 > i) {
         slideOut(children[l - 2], _jroll, function () {
           views.splice(l - 1)
+          JTaro.history.splice(l - 1)
+          window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
           children[l - 1].parentNode.removeChild(children[l - 1])
           setTimeout(function () {
             recursionDelPage(views, children, _jroll, i)
@@ -293,6 +297,12 @@
           slideIn(viewCompoent, jroll)
         }
         JTaro.views.push(h)
+        JTaro.history.push({
+          view: h,
+          url: _hash.replace('#/', ''),
+          params: JTaro.params
+        })
+        window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
       } else {
         if (JTaro.method) {
           JTaro.method.call(viewCompoent, viewCompoent)
@@ -310,7 +320,7 @@
       props: ['view'],
       data: function () {
         return {
-          jtaro_tag: this.view
+          'jtaro_tag': this.view
         }
       },
       render: function (h) {
@@ -335,9 +345,15 @@
 
     // 跳到路由
     Vue.prototype.go = function (route, options) {
+      function findJTaroView (v) {
+        while (!v.$el.classList.contains('jtaro-view')) {
+          if (v.$parent) v = v.$parent
+        }
+        return v
+      }
       // 页面切换过程中不执行路由跳转
       if (!JTaro.sliding) {
-        beforeLeaveHook(this, function () {
+        beforeLeaveHook(findJTaroView(this), function () {
           // 截取url参数
           var h = route.replace('#/', '')
           var p = h.split('?')
@@ -350,8 +366,10 @@
               } else {
                 beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
                   var i = JTaro.views.indexOf(p[0])
+                  var k
+                  var o
                   if (~i) {
-                    i = 1 - JTaro.views.length - i
+                    i = 1 - (JTaro.views.length - i)
                     if (i) route = i
                   }
                   if (method) {
@@ -359,10 +377,14 @@
                   } else {
                     JTaro.method = null
                   }
-                  if (p[1]) {
-                    JTaro.params = parseUrlParams(p[1])
-                  } else if (options) {
+                  if (options) {
                     JTaro.params = options
+                  }
+                  if (p[1]) {
+                    o = parseUrlParams(p[1])
+                    for (k in o) {
+                      JTaro.params[k] = o[k]
+                    }
                   } else {
                     JTaro.params = null
                   }
@@ -384,6 +406,8 @@
              *  如果目标路由对应的页面已存在，且非当前路由，转为负数使用history.go(-?)清除历史记录
              */
             var i = JTaro.views.indexOf(p[0])
+            var k
+            var o
             if (~i) {
               i = 1 - (JTaro.views.length - i)
               if (i) route = i
@@ -394,10 +418,14 @@
             } else {
               JTaro.method = null
             }
-            if (p[1]) {
-              JTaro.params = parseUrlParams(p[1])
-            } else if (options) {
+            if (options) {
               JTaro.params = options
+            }
+            if (p[1]) {
+              o = parseUrlParams(p[1])
+              for (k in o) {
+                JTaro.params[k] = o[k]
+              }
             } else {
               JTaro.params = null
             }
@@ -442,7 +470,7 @@
     window.addEventListener('orientationchange', reset)
 
     // 启动
-    ;(function () {
+    function boot () {
       var hash = window.location.hash
       var vueCompoent = Vue.options.components[path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default)]
 
@@ -465,6 +493,12 @@
 
               // 跳到指定路由
               } else {
+                var p = hash.split('?')
+                if (p[1]) {
+                  JTaro.params = parseUrlParams(p[1])
+                } else {
+                  JTaro.params = null
+                }
                 pushView(hash, JTaro.options.JRoll)
               }
             })
@@ -488,11 +522,37 @@
 
           // 跳到指定路由
           } else {
+            var p = hash.split('?')
+            if (p[1]) {
+              JTaro.params = parseUrlParams(p[1])
+            } else {
+              JTaro.params = null
+            }
             pushView(hash, JTaro.options.JRoll)
           }
         })
       }
-    })()
+    }
+
+    var historyViews = window.sessionStorage.getItem('JTaro.history')
+    function shiftHistoryViews (hv) {
+      setTimeout(function () {
+        var view = findVueComponent(hv.shift().view).$children[0]
+        if (hv.length > 0) {
+          view.go(hv[0].url, hv[0].params)
+          shiftHistoryViews(hv)
+        }
+      }, JTaro.options.duration + 100)
+    }
+    // 如果在非首页刷新页面，自动补全之前的页面
+    if (historyViews && (historyViews = JSON.parse(historyViews)).length > 1) {
+      window.history.go(1 - historyViews.length)
+      shiftHistoryViews(historyViews)
+
+    // 否则根据路由启动页面
+    } else {
+      boot()
+    }
   }
 
   return JTaro

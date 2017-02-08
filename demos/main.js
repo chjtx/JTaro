@@ -65,7 +65,7 @@ Vue.component('home', {
   },
   methods: {
     goAbout: function () {
-      this.go('about?a=1&b=2&c=3', {
+      this.go('about?a=1&b=2', {
         x: 1,
         y: 2,
         z: 3

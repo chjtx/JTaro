@@ -1,6 +1,6 @@
 {
   "name": "jtaro",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {
@@ -20,7 +20,7 @@
   "author": "BarZu",
   "license": "MIT",
   "dependencies": {
-    "jroll": "^2.3.2",
+    "jroll": "^2.4.4",
     "vue": "^2.1.8"
   },
   "devDependencies": {
