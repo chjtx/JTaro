@@ -534,20 +534,17 @@
       }
     }
 
+    // 自动补全历史页面功能
     var historyViews = window.sessionStorage.getItem('JTaro.history')
-    function shiftHistoryViews (hv) {
-      setTimeout(function () {
-        var view = findVueComponent(hv.shift().view).$children[0]
-        if (hv.length > 0) {
-          view.go(hv[0].url, hv[0].params)
-          shiftHistoryViews(hv)
-        }
-      }, JTaro.options.duration + 100)
-    }
+    JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
+      if (historyViews.length > 1) {
+        var view = findVueComponent(historyViews.shift().view).$children[0]
+        view.go(historyViews[0].url, historyViews[0].params)
+      }
+    })
     // 如果在非首页刷新页面，自动补全之前的页面
     if (historyViews && (historyViews = JSON.parse(historyViews)).length > 1) {
       window.history.go(1 - historyViews.length)
-      shiftHistoryViews(historyViews)
 
     // 否则根据路由启动页面
     } else {
