@@ -121,7 +121,6 @@
 
     options = options || {}
 
-    JTaro.params = null
     JTaro.views = []
     JTaro.history = []
     JTaro.version = '{{version}}'
@@ -377,17 +376,19 @@
                   } else {
                     JTaro.method = null
                   }
+
+                  // 设置当前页面的参数
+                  JTaro.params = {}
                   if (options) {
                     JTaro.params = options
                   }
                   if (p[1]) {
                     o = parseUrlParams(p[1])
                     for (k in o) {
-                      JTaro.params[k] = o[k]
+                      if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
                     }
-                  } else {
-                    JTaro.params = null
                   }
+
                   if (typeof route === 'number') {
                     window.history.go(route)
                   } else {
@@ -418,17 +419,19 @@
             } else {
               JTaro.method = null
             }
+
+            // 设置当前页面的参数
+            JTaro.params = {}
             if (options) {
               JTaro.params = options
             }
             if (p[1]) {
               o = parseUrlParams(p[1])
               for (k in o) {
-                JTaro.params[k] = o[k]
+                if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
               }
-            } else {
-              JTaro.params = null
             }
+
             if (typeof route === 'number') {
               window.history.go(route)
             } else {
@@ -494,10 +497,9 @@
               // 跳到指定路由
               } else {
                 var p = hash.split('?')
+                JTaro.params = {}
                 if (p[1]) {
                   JTaro.params = parseUrlParams(p[1])
-                } else {
-                  JTaro.params = null
                 }
                 pushView(hash, JTaro.options.JRoll)
               }
@@ -523,10 +525,9 @@
           // 跳到指定路由
           } else {
             var p = hash.split('?')
+            JTaro.params = {}
             if (p[1]) {
               JTaro.params = parseUrlParams(p[1])
-            } else {
-              JTaro.params = null
             }
             pushView(hash, JTaro.options.JRoll)
           }
@@ -537,7 +538,7 @@
     // 自动补全历史页面功能
     var historyViews = window.sessionStorage.getItem('JTaro.history')
     JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
-      if (historyViews.length > 1) {
+      if (historyViews && historyViews.length > 1) {
         var view = findVueComponent(historyViews.shift().view).$children[0]
         view.go(historyViews[0].url, historyViews[0].params)
       }
