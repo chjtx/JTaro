@@ -207,7 +207,7 @@
         }
 
         // 滑进新建页
-        _jroll.utils.moveTo(el, 0, 0, JTaro.options.duration, function () {
+        _jroll.utils.moveTo(el, 0, 0, (JTaro.views.length === 1 ? 0 : JTaro.options.duration), function () {
           JTaro.sliding = false
 
           // afterEnter hook 前进
