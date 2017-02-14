@@ -121,7 +121,7 @@ Vue.component('list', {
   mixins: [mixin],
   methods: {
     goAbout: function () {
-      this.go('about')
+      this.go('about?io=90')
     },
     goFour: function () {
       this.go('four')

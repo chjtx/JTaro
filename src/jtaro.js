@@ -97,6 +97,17 @@
   JTaro.afterEnter = createHook()
   JTaro.beforeLeave = createHook()
 
+  JTaro.tools = {
+    isEmptyObject: function (o) {
+      for (var i in o) {
+        if (o.hasOwnProperty(i)) {
+          return false
+        }
+      }
+      return true
+    }
+  }
+
   // Vue install
   JTaro.install = function (Vue, options) {
     // **JTaro Comment Start**
@@ -162,7 +173,7 @@
       JTaro.afterEnter.run()
 
       if (typeof afterEnter === 'function') {
-        afterEnter.call(viewCompoent.$children[0], JTaro.params)
+        afterEnter.call(viewCompoent.$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
       }
     }
 
@@ -299,7 +310,7 @@
         JTaro.history.push({
           view: h,
           url: _hash.replace('#/', ''),
-          params: JTaro.params
+          params: JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params
         })
         window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
       } else {
