@@ -569,20 +569,11 @@
 
 // **JTaro Comment Start**
 function JTaroDevelopImport (Vue, path, callback) {
-  function computeVueId (s) {
-    var base = document.baseURI.replace(window.location.origin, '').split('?')[0].split('#')[0]
-    var r = /^[^/]*\//
-    while (r.test(base) === r.test(s)) {
-      base = base.replace(r, '')
-      s = s.replace(r, '')
-    }
-    return s.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
-  }
   JTaroLoader.import(path + '.js', {
     count: 1,
-    callback: function (data) {
-      var id = computeVueId(data.src)
-      Vue.component(id, JTaroModules[data.src].default)
+    callback: function () {
+      var id = path.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
+      Vue.component(id, JTaroModules['/' + path + '.js'].default)
       callback(Vue.options.components[id])
     }
   })
