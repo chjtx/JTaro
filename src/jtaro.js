@@ -175,6 +175,7 @@
       if (typeof afterEnter === 'function') {
         afterEnter.call(viewCompoent.$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
       }
+      JTaro.params = null
     }
 
     // beforeLeave路由钩子
@@ -569,13 +570,10 @@
 
 // **JTaro Comment Start**
 function JTaroDevelopImport (Vue, path, callback) {
-  JTaroLoader.import(path + '.js', {
-    count: 1,
-    callback: function () {
-      var id = path.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
-      Vue.component(id, JTaroModules['/' + path + '.js'].default)
-      callback(Vue.options.components[id])
-    }
+  JTaroLoader.import(path + '.js', function () {
+    var id = path.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
+    Vue.component(id, JTaroModules['/' + path + '.js'].default)
+    callback(Vue.options.components[id])
   })
 }
 // **JTaro Comment end**;;

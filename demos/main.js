@@ -102,7 +102,7 @@ Vue.component('about', {
       this.go('home')
     },
     goList: function () {
-      this.go('list')
+      this.go('list', { a: 123 })
     }
   },
   mounted: function () {
