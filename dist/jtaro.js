@@ -1,4 +1,4 @@
-/*! JTaro.js v0.3.3 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.4.1 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -41,6 +41,7 @@
     }
   }, true)
 
+  // 将路径转为vue组件id
   function path2id (p) {
     return p.replace(/\/|\\/g, '__')
   }
@@ -97,6 +98,17 @@
   JTaro.afterEnter = createHook()
   JTaro.beforeLeave = createHook()
 
+  JTaro.tools = {
+    isEmptyObject: function (o) {
+      for (var i in o) {
+        if (o.hasOwnProperty(i)) {
+          return false
+        }
+      }
+      return true
+    }
+  }
+
   // Vue install
   JTaro.install = function (Vue, options) {
     // **JTaro Comment Start**
@@ -121,9 +133,9 @@
 
     options = options || {}
 
-    JTaro.params = null
     JTaro.views = []
-    JTaro.version = '0.3.3'
+    JTaro.history = []
+    JTaro.version = '0.4.1'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -162,8 +174,9 @@
       JTaro.afterEnter.run()
 
       if (typeof afterEnter === 'function') {
-        afterEnter.call(viewCompoent.$children[0], JTaro.params)
+        afterEnter.call(viewCompoent.$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
       }
+      JTaro.params = null
     }
 
     // beforeLeave路由钩子
@@ -207,7 +220,7 @@
         }
 
         // 滑进新建页
-        _jroll.utils.moveTo(el, 0, 0, JTaro.options.duration, function () {
+        _jroll.utils.moveTo(el, 0, 0, (JTaro.views.length === 1 ? 0 : JTaro.options.duration), function () {
           JTaro.sliding = false
 
           // afterEnter hook 前进
@@ -243,6 +256,8 @@
       if (l - 1 > i) {
         slideOut(children[l - 2], _jroll, function () {
           views.splice(l - 1)
+          JTaro.history.splice(l - 1)
+          window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
           children[l - 1].parentNode.removeChild(children[l - 1])
           setTimeout(function () {
             recursionDelPage(views, children, _jroll, i)
@@ -294,6 +309,12 @@
           slideIn(viewCompoent, jroll)
         }
         JTaro.views.push(h)
+        JTaro.history.push({
+          view: h,
+          url: _hash.replace('#/', ''),
+          params: JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params
+        })
+        window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
       } else {
         if (JTaro.method) {
           JTaro.method.call(viewCompoent, viewCompoent)
@@ -311,7 +332,7 @@
       props: ['view'],
       data: function () {
         return {
-          jtaro_tag: this.view
+          'jtaro_tag': this.view
         }
       },
       render: function (h) {
@@ -336,9 +357,15 @@
 
     // 跳到路由
     Vue.prototype.go = function (route, options) {
+      function findJTaroView (v) {
+        while (!v.$el.classList.contains('jtaro-view')) {
+          if (v.$parent) v = v.$parent
+        }
+        return v
+      }
       // 页面切换过程中不执行路由跳转
       if (!JTaro.sliding) {
-        beforeLeaveHook(this, function () {
+        beforeLeaveHook(findJTaroView(this), function () {
           // 截取url参数
           var h = route.replace('#/', '')
           var p = h.split('?')
@@ -351,8 +378,10 @@
               } else {
                 beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
                   var i = JTaro.views.indexOf(p[0])
+                  var k
+                  var o
                   if (~i) {
-                    i = 1 - JTaro.views.length - i
+                    i = 1 - (JTaro.views.length - i)
                     if (i) route = i
                   }
                   if (method) {
@@ -360,13 +389,19 @@
                   } else {
                     JTaro.method = null
                   }
-                  if (p[1]) {
-                    JTaro.params = parseUrlParams(p[1])
-                  } else if (options) {
+
+                  // 设置当前页面的参数
+                  JTaro.params = {}
+                  if (options) {
                     JTaro.params = options
-                  } else {
-                    JTaro.params = null
                   }
+                  if (p[1]) {
+                    o = parseUrlParams(p[1])
+                    for (k in o) {
+                      if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
+                    }
+                  }
+
                   if (typeof route === 'number') {
                     window.history.go(route)
                   } else {
@@ -385,6 +420,8 @@
              *  如果目标路由对应的页面已存在，且非当前路由，转为负数使用history.go(-?)清除历史记录
              */
             var i = JTaro.views.indexOf(p[0])
+            var k
+            var o
             if (~i) {
               i = 1 - (JTaro.views.length - i)
               if (i) route = i
@@ -395,13 +432,19 @@
             } else {
               JTaro.method = null
             }
-            if (p[1]) {
-              JTaro.params = parseUrlParams(p[1])
-            } else if (options) {
+
+            // 设置当前页面的参数
+            JTaro.params = {}
+            if (options) {
               JTaro.params = options
-            } else {
-              JTaro.params = null
             }
+            if (p[1]) {
+              o = parseUrlParams(p[1])
+              for (k in o) {
+                if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
+              }
+            }
+
             if (typeof route === 'number') {
               window.history.go(route)
             } else {
@@ -443,7 +486,7 @@
     window.addEventListener('orientationchange', reset)
 
     // 启动
-    ;(function () {
+    function boot () {
       var hash = window.location.hash
       var vueCompoent = Vue.options.components[path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default)]
 
@@ -466,6 +509,11 @@
 
               // 跳到指定路由
               } else {
+                var p = hash.split('?')
+                JTaro.params = {}
+                if (p[1]) {
+                  JTaro.params = parseUrlParams(p[1])
+                }
                 pushView(hash, JTaro.options.JRoll)
               }
             })
@@ -489,11 +537,33 @@
 
           // 跳到指定路由
           } else {
+            var p = hash.split('?')
+            JTaro.params = {}
+            if (p[1]) {
+              JTaro.params = parseUrlParams(p[1])
+            }
             pushView(hash, JTaro.options.JRoll)
           }
         })
       }
-    })()
+    }
+
+    // 自动补全历史页面功能
+    var historyViews = window.sessionStorage.getItem('JTaro.history')
+    JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
+      if (historyViews && historyViews.length > 1) {
+        var view = findVueComponent(historyViews.shift().view).$children[0]
+        view.go(historyViews[0].url, historyViews[0].params)
+      }
+    })
+    // 如果在非首页刷新页面，自动补全之前的页面
+    if (historyViews && (historyViews = JSON.parse(historyViews)).length > 1) {
+      window.history.go(1 - historyViews.length)
+
+    // 否则根据路由启动页面
+    } else {
+      boot()
+    }
   }
 
   return JTaro
@@ -501,22 +571,10 @@
 
 // **JTaro Comment Start**
 function JTaroDevelopImport (Vue, path, callback) {
-  function computeVueId (s) {
-    var base = document.baseURI.replace(window.location.origin, '').split('?')[0].split('#')[0]
-    var r = /^[^/]*\//
-    while (r.test(base) === r.test(s)) {
-      base = base.replace(r, '')
-      s = s.replace(r, '')
-    }
-    return s.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
-  }
-  JTaroLoader.import(path + '.js', {
-    count: 1,
-    callback: function (data) {
-      var id = computeVueId(data.src)
-      Vue.component(id, JTaroModules[data.src].default)
-      callback(Vue.options.components[id])
-    }
+  JTaroLoader.import(path + '.js', function () {
+    var id = path.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
+    Vue.component(id, JTaroModules['/' + path + '.js'].default)
+    callback(Vue.options.components[id])
   })
 }
 // **JTaro Comment end**;;
