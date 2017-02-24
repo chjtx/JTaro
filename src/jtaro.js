@@ -552,7 +552,10 @@
     JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
       if (historyViews && historyViews.length > 1) {
         var view = findVueComponent(historyViews.shift().view).$children[0]
-        view.go(historyViews[0].url, historyViews[0].params)
+        // setTimeout保证上一页面的afterEnter执行完再执行下一页
+        setTimeout(function () {
+          view.go(historyViews[0].url, historyViews[0].params)
+        }, 0)
       }
     })
     // 如果在非首页刷新页面，自动补全之前的页面

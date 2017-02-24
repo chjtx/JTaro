@@ -1,4 +1,4 @@
-/*! JTaro.js v0.4.1 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.4.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -135,7 +135,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.4.1'
+    JTaro.version = '0.4.2'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -553,7 +553,10 @@
     JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
       if (historyViews && historyViews.length > 1) {
         var view = findVueComponent(historyViews.shift().view).$children[0]
-        view.go(historyViews[0].url, historyViews[0].params)
+        // setTimeout保证上一页面的afterEnter执行完再执行下一页
+        setTimeout(function () {
+          view.go(historyViews[0].url, historyViews[0].params)
+        }, 0)
       }
     })
     // 如果在非首页刷新页面，自动补全之前的页面
