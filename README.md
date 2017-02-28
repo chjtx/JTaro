@@ -462,7 +462,7 @@ node ./node_modules/jtaro-module/src/server.js
 
 www/index.html
 
-```
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -536,4 +536,5 @@ JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html�
   - 开发版嵌入组件加载器，自动处理页面组件的html和js
   - 生产版去掉加载器，将所有页面组件打包成一个文件并使用uglify压缩
   - 尽可能使开发简化，只需要将代码拷贝下来即可运行，无需安装一大堆构建脚本
+- [x] 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板
 
