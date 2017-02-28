@@ -20,7 +20,8 @@
 ### CDN
 
 ```html
-<script src='https://unpkg.com/jtaro/src/jtaro.js'></script>
+<script src='https://unpkg.com/jtaro/dist/jtaro.js'></script>
+<script src='https://unpkg.com/jtaro/dist/jtaro.min.js'></script>
 ```
 
 ### NPM
@@ -31,16 +32,26 @@ npm install jtaro
 
 ## 说明
 
-- JTaro是一款基于Vue2.0开发的轻量级SPA框架
+- JTaro是一款基于Vue2.0开发的轻量级SPA（单页应用）框架
 - JTaro不需要vue-router，自身提供简单路由功能和页面切换动画
 - 页面组件名称即为路由，省去手动配置路由的麻烦
 - JTaro会自动创建一些css样式，将html、body的width、height设为100%，并overflow:hidden，超出内容需要使用JRoll进行滑动
+
+## 能解决什么问题
+
+- 使用Vue2作为底层，省去直接操作dom的烦恼，带来组件复用的便利
+- 提供页面切换动画，让H5应用看上去更像原生APP
+- 自动路由管理，无需手动配置
+- 在任何页面刷新，自动从第一页切回到当前页
+- 页面缓存，从列表页到详细页，再回到列表页不刷新
+- 基于页面开发，开发者只须关心各自的页面，更利于合作开发
 
 ## 快速上手
 
 1、 创建index.html文件并在head里引入Vue、JRoll
 
 ```html
+<!-- 国外网址，访问较慢，建议下载到本地 -->
 <script src='https://unpkg.com/vue/dist/vue.js'></script>
 <script src='https://unpkg.com/jroll/src/jroll.js'></script>
 ```
@@ -79,6 +90,11 @@ cd JTaro
 
 npm install
 
+# 使用 JTaro Module 配合开发
+npm run demo
+
+# 或
+# 配合browser-sync开发，修改文件自动刷新
 npm run dev
 ```
 
@@ -105,7 +121,7 @@ Vue.use(JTaro, {
 |:----:|:----:|:----|
 | el | '#jtaro_app' | 给Vue挂载的元素 |
 | default | 'home' | 默认首页 |
-| distance | 0.3 | 页面折叠距离位数，以屏幕宽度为1，取值范围为0 <= distance <= 1 |
+| distance | 0.3 | 页面折叠距离倍数，以屏幕宽度为1，取值范围为0 <= distance <= 1 |
 | duration | 200 | 页面切换过渡时间 |
 | JRoll | window.JRoll | 用于异步引入JRoll，不能确保JRoll和JTaro顺序时使用 |
 
@@ -148,10 +164,10 @@ Vue.component('page', {
 
 ### 路由说明
 
-- 只识别以`#!`分割的hash，不支持`history.pushState`
-- 每个hash路由都应有与之对应的Vue组件，如在浏览器访问index.html#!home，JTaro将自动查找以`home`命名的Vue组件并渲染到`div#jtaro_app`里
+- 只识别以`#/`分割的hash，不支持`history.pushState`
+- 每个hash路由都应有与之对应的Vue组件，如在浏览器访问`index.html#/home`，JTaro将自动查找以`home`命名的Vue组件并渲染到`div#jtaro_app`里。访问`index.html#/sub/abc`，将自动查找以`sub__abc`命名的Vue组件
 - 路由不可重复，如有A、B、C、D四个页面，按顺序访问A->B->C->D，在D页面返回到B，将剩下A->B两个页面
-- 请使用`this.go(-1)`进行页面后退操作，可让历史记录保持在最简洁状态，若要连续返回上两个页面，则使用`this.go(-2)`，如此类推
+- 使用`this.go`可带参数返回之前的页面，如果使用history.back或浏览器后退键，回退页的afterEnter接收到的参数为null
 - 请使用`this.go`进行页面跳转，其作用有：
   - 避免直接操作hash破坏路由历史记录
   - 可调用beforeEnter路由钩子，直接修改hash将不会触发beforeEnter钩子
@@ -210,8 +226,9 @@ Vue.component('home', {
 
 ```js
 Vue.component('home', {
-  afterEnter: function () {
-    // ...
+  afterEnter: function (params) {
+    // 这里获取上一个页面使用this.go携带的参数
+    console.log(params)
   }
 })
 ```
@@ -244,14 +261,15 @@ beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要`return
 
 ### 钩子使用技巧
 
-- beforeEnter （JTaro扩展） 先加载数据，若数据加载失败则不显示该页面的情况使用该钩子
-- mounted （Vue原有） 无论何时基本上不会发生变更的页面使用该钩子
-- afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该钩子
+- beforeEnter （JTaro扩展） 进入页面之前要先处理一些事情时使用该钩子
+- mounted （Vue原有） 无论何时基本上不会发生变更的页面使用该钩子，例如列表页
+- afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该钩子，例如详情页
 - beforeLeave （JTaro扩展） 页面离开前先需要执行一此操作，例如关闭弹窗、确认表单等情况可使用该钩子
 
 ### 全局路由钩子
 
 #### 添加全局路由钩子 add
+
 ```js
 JTaro.beforeEnter.add('hook', function () { ... })
 JTaro.afterEnter.add('hook', function () { ... })
@@ -315,7 +333,7 @@ Vue.component('home', {
 
 *问：为什么不提供获取页面实例的方法？例如`getPageByName('home')`获取home页面，然后可以在其它页面操作home页面*
 
-*答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。*
+*答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。这也是页面组件通讯的必要性*
 
 ## 优化
 
@@ -323,11 +341,179 @@ JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解
 
 该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素
 
-## 配合vue-cli使用
+## 配合 JTaro Module 使用
 
-~~敬请期待...~~
 
-算了，不写了，将来将会使用JTaro Module配合开发
+### 开发模式
+
+[JTaro Module](https://github.com/chjtx/JTaro-Module) 是开发JTaro应用时用于管理模块的插件，上线时可删除
+
+#### 【步骤一】安装使用
+
+需要 nodejs 6 以上版本，若未安装，请访问[http://nodejs.cn/](http://nodejs.cn/)
+
+创建一个空文件夹，然后在命令行里cd到该文件夹，初始化工程，然后安装JTaro、JTaro Module、JTaro Bundle
+
+```bash
+# 初始化
+npm init
+
+# 输入项目名称
+name: (jtaro-demo) jtaro-demo
+
+# 以下选项一路回车即可
+version: (1.0.0)
+description:
+entry point: (index.js)
+test command:
+git repository:
+keywords:
+author:
+license: (ISC)
+
+# 输入yes结束
+Is this ok? (yes) yes
+
+# 安装JTaro
+npm i -D jtaro jtaro-module jtaro-bundle
+```
+
+#### 【步骤二】创建index.html
+
+index.html
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello JTaro</title>
+    <script src="./node_modules/jtaro-module/src/client.js"></script>
+    <script src="./node_modules/jroll/src/jroll.js"></script>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="jtaro_app"></div>
+    <script src="./node_modules/jtaro/dist/jtaro.js"></script>
+    <script>
+        Vue.use(JTaro, {
+            default: 'pages/home'
+        })
+    </script>
+</body>
+</html>
+```
+
+#### 【步骤三】创建首页home
+
+新建一个文件夹，名字随意，例如命名为`pages`，将来上线可将pages文件夹打包成一个pages.js文件
+
+pages文件夹与index.html同级，在pages文件夹里新建home.js、home.html
+
+home.js的内容就是一个Vue组件，JTaro以页面组件为单元进行开发
+
+home.js
+
+```js
+import html from './home.html' //该路径是相对于home.js的，不能忽略./，否则在rollup.js打包时会出错
+
+export default {
+  template: html,
+  data: function () {
+    return {
+      title: 'Hello JTaro'
+    }
+  }
+}
+```
+
+home.html
+
+```html
+<style>
+    this {
+        padding-top: 50px;
+        text-align: center;
+        font-size: 42px;
+    }
+</style>
+<div>
+    {{title}}
+</div>
+```
+
+#### 【步骤四】跑起node服务
+
+在命令行运行
+
+```
+node ./node_modules/jtaro-module/src/server.js
+```
+
+在浏览器上运行`localhost:3000/`，能够看到`Hello JTaro`文字表示成功了
+
+### 上线模式
+
+[JTaro Bundle](https://github.com/chjtx/JTaro-Bundle) 是部署JTaro应用时用于将零散的开发代码合并压缩的插件
+
+#### 【步骤一】创建www/index.html
+
+在工程文件夹（即是与index.html同级）新建一个`www`文件夹，用于存放上线代码，在www文件夹下新建index.html
+
+www/index.html
+
+```
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello JTaro</title>
+    <script src="./node_modules/jroll/build/jroll.min.js"></script>
+    <script src="./node_modules/vue/dist/vue.min.js"></script>
+</head>
+<body>
+    <div id="jtaro_app"></div>
+    <script src="./node_modules/jtaro/dist/jtaro.min.js"></script>
+    <script src="./pages.js"></script>
+    <script>
+        Vue.use(JTaro, {
+            default: 'pages/home'
+        })
+    </script>
+</body>
+</html>
+```
+
+这个要上线的index.html与开发的index.html区别在于
+
+- 没有client.js，上线版本不需要node环境也可以运行
+- 多了pages.js，打包时 JTaro Bundle 会将pages文件夹打包成pages.js
+- jroll/vue/jtaro换成了带.min后缀的压缩版 （**注意：**jtaro.min删除了全部开发提示代码，不能在开发环境下运行）
+
+#### 【步骤二】打包
+
+在工程文件夹新建一个`build.js`
+
+build.js
+
+```js
+var jtaroBundle = require('jtaro-bundle')
+
+jtaroBundle.bundle({
+  origin: 'index.html',
+  target: 'www/index.html'
+})
+```
+
+在命令行运行
+
+```
+node build.js
+```
+
+JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件
+
+将会看到www文件夹下多了pages.js和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了
 
 ## TODO
 
@@ -339,14 +525,14 @@ JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解
 - [x] JTaro.boot({...})选项配置
 - [x] 实现全局路由钩子
 - [x] 嵌入微型fastclick解决老机点击300ms延迟问题
-- [ ] 使用webpack等构建工具进行开发的困扰
+- [x] 使用webpack等构建工具进行开发的困扰
   - 新人入项，总要安装一大堆脚本工具，npm安装则网络受限，cnpm安装则依赖缺失
   - 公司预算约束，不可能给每位开发者提供mac设备，在3000元windows机上运行webpack等开发环境备受挑战
   - webpack学习成本较高，出现问题处理成本更高，并非新手所能驾驭
   - 经webpack处理过的脚本，并不能很直观的反映出是哪段业务代码报的错误，增加开发成本
   - .vue文件将html、js、css合在一起适合编写单个组件，对于业务逻辑较多的文件应将html、css和js分离
   - 工具应该用于解放劳动力，而不应该因维护工具而适得其反
-- [ ] 自动加载Vue页面组件
+- [x] 自动加载Vue页面组件
   - 开发版嵌入组件加载器，自动处理页面组件的html和js
   - 生产版去掉加载器，将所有页面组件打包成一个文件并使用uglify压缩
   - 尽可能使开发简化，只需要将代码拷贝下来即可运行，无需安装一大堆构建脚本
