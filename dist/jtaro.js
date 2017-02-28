@@ -1,4 +1,4 @@
-/*! JTaro.js v0.4.2 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.4.3 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -135,7 +135,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.4.2'
+    JTaro.version = '0.4.3'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -576,7 +576,8 @@
 function JTaroDevelopImport (Vue, path, callback) {
   JTaroLoader.import(path + '.js', function () {
     var id = path.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
-    Vue.component(id, JTaroModules['/' + path + '.js'].default)
+    var basePath = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'))
+    Vue.component(id, JTaroModules[basePath + '/' + path + '.js'].default)
     callback(Vue.options.components[id])
   })
 }

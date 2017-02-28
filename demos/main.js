@@ -43,6 +43,9 @@ Vue.component('home', {
     if (event.message === 'modifyTitle' && event.origin === 'about') {
       this.title = 'Home Back'
     }
+    if (event.message === 'alertMessage' && event.origin === 'about') {
+      window.alert('I am going back!')
+    }
   },
   beforeEnter: function (cb) {
     console.log('Home - beforeEnter')
@@ -98,6 +101,7 @@ Vue.component('about', {
   methods: {
     goIndex: function () {
       this.postMessage('modifyTitle', 'home')
+      this.postMessage('alertMessage', 'home')
       this.postMessage('modifyTitle', 'list') // nothing will do
       this.go('home')
     },

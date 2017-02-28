@@ -575,7 +575,8 @@
 function JTaroDevelopImport (Vue, path, callback) {
   JTaroLoader.import(path + '.js', function () {
     var id = path.replace(/\.\w+$/, '').replace(/\/|\\/g, '__')
-    Vue.component(id, JTaroModules['/' + path + '.js'].default)
+    var basePath = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'))
+    Vue.component(id, JTaroModules[basePath + '/' + path + '.js'].default)
     callback(Vue.options.components[id])
   })
 }
