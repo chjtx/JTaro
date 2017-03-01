@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JTaro 醉芋头</title>
+    <link rel="stylesheet" href="./github-markdown.css">
+    <link rel="stylesheet" href="./github-gist.css">
+    <style>
+    body {
+      font-family: "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+      line-height: 1.75;
+    }
+
+    menu {
+      position: fixed;
+      top: 160px;
+      left: 20px;
+      line-height: 1.8;
+      overflow: auto;
+      bottom: 0;
+      width: 138px;
+    }
+
+    menu li {
+      list-style-type: none;
+    }
+
+    menu a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    menu a.active {
+      color: #da020c;
+    }
+
+    dd {
+      margin: 0 2em;
+    }
+
+    article {
+      margin: 20px 10px 100px 220px;
+
+    }
+
+    #logo {
+      background: url(http://www.chjtx.com/JRoll1/images/logo.png) center no-repeat;
+      background-size: 120px 120px;
+      width: 200px;
+      height: 160px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      border-bottom: 1px dashed #ddd;
+    }
+  </style>
+</head>
+
+<body>
+    <div id="logo"></div>
+    <menu>
+        <li><a href="#-download">下载</a></li>
+        <li><a href="#-brief">说明</a></li>
+        <li><a href="#-quick-start">快速上手</a></li>
+        <li><a href="#-run-demo">运行示例</a></li>
+        <li><a href="#-basic-usage">基础用法</a></li>
+        <li><a href="#-route">路由</a></li>
+        <li><a href="#-communication">页面组件间通讯</a></li>
+        <li><a href="#-jtaro-module-">组合开发</a></li>
+    </menu>
+    <article class="markdown-body">
+        <h1 id="-jtaro">醉芋头 JTaro</h1>
+<blockquote>
+<p>An H5 SPA framework for Vue.js 2.0</p>
+</blockquote>
+<h2 id="-">依赖</h2>
+<ul>
+<li>Vue 2.x <a target="_blank" href="http://cn.vuejs.org/v2/guide/">Vue 2.x 中文教程</a></li>
+<li>JRoll 2.x <a target="_blank" href="http://www.chjtx.com/JRoll/">JRoll 2.x 官网</a></li>
+</ul>
+<h2 id="-download">下载 download</h2>
+<h3 id="cdn">CDN</h3>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.min.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<h3 id="npm">NPM</h3>
+<pre><code class="lang-bash">npm <span class="hljs-keyword">install</span> jtaro
+</code></pre>
+<h2 id="-brief">说明 brief</h2>
+<ul>
+<li>JTaro是一款基于Vue2.0开发的轻量级SPA（单页应用）框架</li>
+<li>JTaro不需要vue-router，自身提供简单路由功能和页面切换动画</li>
+<li>页面组件名称即为路由，省去手动配置路由的麻烦</li>
+<li>JTaro会自动创建一些css样式，将html、body的width、height设为100%，并overflow:hidden，超出内容需要使用JRoll进行滑动</li>
+</ul>
+<h2 id="-">能解决什么问题</h2>
+<ul>
+<li>使用Vue2作为底层，省去直接操作dom的烦恼，带来组件复用的便利</li>
+<li>提供页面切换动画，让H5应用看上去更像原生APP</li>
+<li>自动路由管理，无需手动配置</li>
+<li>在任何页面刷新，自动从第一页切回到当前页</li>
+<li>页面缓存，从列表页到详细页，再回到列表页不刷新</li>
+<li>基于页面开发，开发者只须关心各自的页面，更利于合作开发</li>
+</ul>
+<h2 id="-quick-start">快速上手 quick start</h2>
+<p>1、 创建index.html文件并在head里引入Vue、JRoll</p>
+<pre><code class="lang-html"><span class="hljs-comment">&lt;!-- 国外网址，访问较慢，建议下载到本地 --&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/vue/dist/vue.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jroll/src/jroll.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>2、 在body里创建id为<code>jtaro_app</code>的div，并在其后引入JTaro</p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"jtaro_app"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/src/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>3、 在<code>div#jtaro_app</code>之后编写Vue组件，并执行<code>Vue.use(JTaro)</code>启动应用</p>
+<p><em>注意：务必确保首页组件在Vue.use(JTaro)之前注册</em></p>
+<pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="handlebars"><span class="xml">
+Vue.component('home', {
+  template: '<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"home"</span>&gt;</span>Hello JTaro!<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>'
+})
+
+Vue.use(JTaro)
+</span></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>4、 将index.html文件拖到浏览器访问</p>
+<p>要了解更多请查看示例</p>
+<h2 id="-run-demo">运行示例 run demo</h2>
+<pre><code class="lang-bash">git clone https://github.com/chjtx/JTaro.git
+
+cd JTaro
+
+npm install
+
+<span class="hljs-comment"># 使用 JTaro Module 配合开发</span>
+npm <span class="hljs-keyword">run</span><span class="bash"> demo
+</span>
+<span class="hljs-comment"># 或</span>
+<span class="hljs-comment"># 配合browser-sync开发，修改文件自动刷新</span>
+npm <span class="hljs-keyword">run</span><span class="bash"> dev</span>
+</code></pre>
+<blockquote>
+<p><code>npm install</code>下载太慢？那就直接<code>clone</code>之后将<code>index.html</code>拖到浏览器即可。不要用<code>cnpm</code>，会导致很多依赖缺失</p>
+</blockquote>
+<h2 id="-basic-usage">基础用法 basic usage</h2>
+<h3 id="-vue-use-jtaro-">启动 Vue.use(JTaro)</h3>
+<pre><code class="lang-js"><span class="hljs-selector-tag">Vue</span><span class="hljs-selector-class">.use</span>(JTaro)
+
+<span class="hljs-comment">// or 传入选项参数</span>
+<span class="hljs-selector-tag">Vue</span><span class="hljs-selector-class">.use</span>(JTaro, {
+  <span class="hljs-attribute">el</span>: <span class="hljs-string">'#jtaro_app'</span>,
+  <span class="hljs-attribute">default</span>: <span class="hljs-string">'home'</span>,
+  <span class="hljs-attribute">distance</span>: <span class="hljs-number">0.3</span>,
+  <span class="hljs-attribute">duration</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-attribute">JRoll</span>: window.JRoll
+})
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">选项</th>
+<th style="text-align:center">默认值</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">el</td>
+<td style="text-align:center">&#39;#jtaro_app&#39;</td>
+<td style="text-align:left">给Vue挂载的元素</td>
+</tr>
+<tr>
+<td style="text-align:center">default</td>
+<td style="text-align:center">&#39;home&#39;</td>
+<td style="text-align:left">默认首页</td>
+</tr>
+<tr>
+<td style="text-align:center">distance</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:left">页面折叠距离倍数，以屏幕宽度为1，取值范围为0 &lt;= distance &lt;= 1</td>
+</tr>
+<tr>
+<td style="text-align:center">duration</td>
+<td style="text-align:center">200</td>
+<td style="text-align:left">页面切换过渡时间</td>
+</tr>
+<tr>
+<td style="text-align:center">JRoll</td>
+<td style="text-align:center">window.JRoll</td>
+<td style="text-align:left">用于异步引入JRoll，不能确保JRoll和JTaro顺序时使用</td>
+</tr>
+</tbody>
+</table>
+<h3 id="-this-go">跳转 this.go</h3>
+<pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
+  <span class="hljs-attr">methods</span>: {
+    <span class="hljs-attr">goPage</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+      <span class="hljs-comment">// 跳到page页</span>
+      <span class="hljs-keyword">this</span>.go(<span class="hljs-string">'page'</span>)
+
+      <span class="hljs-comment">// or 返回上一页</span>
+      <span class="hljs-keyword">this</span>.go(<span class="hljs-number">-1</span>)
+
+      <span class="hljs-comment">// or Url带参跳到page页</span>
+      <span class="hljs-keyword">this</span>.go(<span class="hljs-string">'page?a=1&amp;b=2'</span>)
+
+      <span class="hljs-comment">// or 键值对带参跳到page页</span>
+      <span class="hljs-keyword">this</span>.go(<span class="hljs-string">'page'</span>, {<span class="hljs-attr">a</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">b</span>: <span class="hljs-number">2</span>})
+    }
+  }
+})
+
+Vue.component(<span class="hljs-string">'page'</span>, {
+  <span class="hljs-attr">afterEnter</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">params</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(params)
+  }
+})
+</code></pre>
+<ul>
+<li>this.go可传入两个参数，第一个必须，第二个可选</li>
+<li>参数一，字符串或数字，当为字符串时即渲染对应组件，为数字时调用原生history.go方法</li>
+<li>参数二，键值对，该键值将保存在JTaro.params里，并传递给下一页面的afterEnter钩子</li>
+<li>支持在url传参，使用<code>?a=1&amp;b=2</code>形式，最终也是保存在JTaro.params里</li>
+<li>url传参优先级高于键值对传参</li>
+</ul>
+<h2 id="-route">路由 route</h2>
+<h3 id="-">路由说明</h3>
+<ul>
+<li>只识别以<code>#/</code>分割的hash，不支持<code>history.pushState</code></li>
+<li>每个hash路由都应有与之对应的Vue组件，如在浏览器访问<code>index.html#/home</code>，JTaro将自动查找以<code>home</code>命名的Vue组件并渲染到<code>div#jtaro_app</code>里。访问<code>index.html#/sub/abc</code>，将自动查找以<code>sub__abc</code>命名的Vue组件</li>
+<li>路由不可重复，如有A、B、C、D四个页面，按顺序访问A-&gt;B-&gt;C-&gt;D，在D页面返回到B，将剩下A-&gt;B两个页面</li>
+<li>使用<code>this.go</code>可带参数返回之前的页面，如果使用history.back或浏览器后退键，回退页的afterEnter接收到的参数为null</li>
+<li>请使用<code>this.go</code>进行页面跳转，其作用有：<ul>
+<li>避免直接操作hash破坏路由历史记录</li>
+<li>可调用beforeEnter路由钩子，直接修改hash将不会触发beforeEnter钩子</li>
+<li>在页面切换动画进行时不会触发hashChange，阻止频繁切换页面</li>
+</ul>
+</li>
+</ul>
+<h3 id="-">路由钩子</h3>
+<ul>
+<li><a href="#beforeenter">beforeEnter</a></li>
+<li><a href="#afterenter">afterEnter</a></li>
+<li><a href="#beforeleave">beforeLeave</a></li>
+</ul>
+<h4 id="beforeenter">beforeEnter</h4>
+<p>进入该路由（页面滑入）之前执行</p>
+<pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
+  beforeEnter: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// 不！能！获取页面组件实例 `this`</span>
+    <span class="hljs-comment">// 因为当钩子执行时，组件实例还没被创建</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+  }
+})
+
+<span class="hljs-comment">// or</span>
+Vue.component(<span class="hljs-string">'home'</span>, {
+  beforeEnter: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(cb)</span> </span>{
+    <span class="hljs-comment">// 不！能！获取页面组件实例 `this`</span>
+    <span class="hljs-comment">// 因为当钩子执行时，组件实例还没被创建</span>
+    setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      cb()
+    }, <span class="hljs-number">3000</span>)
+  }
+})
+</code></pre>
+<p><code>beforeEnter</code>会阻断路由，可执行同步或异步代码，因此需要<code>return true</code>或者执行回调<code>cb()</code>继续执行后面的代码，同步使用<code>return true</code>，异步或需要使用页面组件实例<code>this</code>时请用<code>cb()</code></p>
+<p><code>beforeEnter</code>不能获取页面组件实例<code>this</code>，因为当勾子执行时，组件实例还没被创建，可将方法传进<code>cb()</code>，实例创建后会立即执行该方法</p>
+<pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
+  <span class="hljs-attr">beforeEnter</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>) <span class="hljs-comment">// JTaro</span>
+    cb(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">vm</span>) </span>{
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>) <span class="hljs-comment">// &lt;home&gt;组件实例`this`</span>
+      <span class="hljs-built_in">console</span>.log(vm)   <span class="hljs-comment">// &lt;home&gt;组件实例`this`</span>
+    })
+  }
+})
+</code></pre>
+<h4 id="afterenter">afterEnter</h4>
+<p>进入该路由（页面已滑入，不含动画过程）后执行</p>
+<pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
+  <span class="hljs-attr">afterEnter</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">params</span>) </span>{
+    <span class="hljs-comment">// 这里获取上一个页面使用this.go携带的参数</span>
+    <span class="hljs-built_in">console</span>.log(params)
+  }
+})
+</code></pre>
+<p>afterEnter 不会阻断路由执行</p>
+<h4 id="beforeleave">beforeLeave</h4>
+<p>离开该路由（页面滑出）之前执行</p>
+<pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
+  beforeLeave: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(cb)</span> </span>{
+    setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-comment">// ...</span>
+      cb()
+    }, <span class="hljs-number">1000</span>)
+  }
+})
+</code></pre>
+<p>beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要<code>return true</code>或者执行回调<code>cb()</code>来继续执行后面的代码。不同的是beforeLeave能够获取到this，因而在<code>cb()</code>里传入function是无效的。</p>
+<p>四个钩子执行顺序 beforeEnter -&gt; (mounted) -&gt; afterEnter -&gt; beforeLeave</p>
+<p><strong>注意：</strong></p>
+<ol>
+<li>mounted为Vue原有生命周期钩子，首次访问页面时会执行该钩子，此后JTaro将缓存该页面，不会再执行该钩子</li>
+<li>beforeEnter、afterEnter、beforeLeave在每次路由变更都会执行</li>
+</ol>
+<h3 id="-">钩子使用技巧</h3>
+<ul>
+<li>beforeEnter （JTaro扩展） 进入页面之前要先处理一些事情时使用该钩子</li>
+<li>mounted （Vue原有） 无论何时基本上不会发生变更的页面使用该钩子，例如列表页</li>
+<li>afterEnter （JTaro扩展） 页面加载后才开始加载数据，填充数据，并且每次进入该路由都有数据变更的情况使用该钩子，例如详情页</li>
+<li>beforeLeave （JTaro扩展） 页面离开前先需要执行一此操作，例如关闭弹窗、确认表单等情况可使用该钩子</li>
+</ul>
+<h3 id="-">全局路由钩子</h3>
+<h4 id="-add">添加全局路由钩子 add</h4>
+<pre><code class="lang-js">JTaro.beforeEnter.add(<span class="hljs-string">'hook'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ ... })
+JTaro.afterEnter.add(<span class="hljs-string">'hook'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ ... })
+JTaro.beforeLeave.add(<span class="hljs-string">'hook'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ ... })
+</code></pre>
+<p>JTaro.[globalHook].add(name, method)</p>
+<ul>
+<li>[globalHook]表示beforeEnter、afterEnter或beforeLeave</li>
+<li>name 钩子名称，其值不能为<code>add</code>、<code>remove</code>或<code>run</code>等全局路由钩子的保留键</li>
+<li>method 是函数方法，可使用bind绑定作用域</li>
+</ul>
+<h4 id="-remove">移除全局路由钩子 remove</h4>
+<pre><code class="lang-js">JTaro<span class="hljs-selector-class">.beforeEnter</span><span class="hljs-selector-class">.remove</span>(<span class="hljs-string">'hook'</span>)
+JTaro<span class="hljs-selector-class">.afterEnter</span><span class="hljs-selector-class">.remove</span>(<span class="hljs-string">'hook'</span>)
+JTaro<span class="hljs-selector-class">.beforeLeave</span><span class="hljs-selector-class">.remove</span>(<span class="hljs-string">'hook'</span>)
+</code></pre>
+<h4 id="-run">手动执行全局路由钩子 run</h4>
+<pre><code class="lang-js">JTaro<span class="hljs-selector-class">.beforeEnter</span><span class="hljs-selector-class">.run</span>()
+JTaro<span class="hljs-selector-class">.afterEnter</span><span class="hljs-selector-class">.run</span>()
+JTaro<span class="hljs-selector-class">.beforeLeave</span><span class="hljs-selector-class">.run</span>()
+</code></pre>
+<p>注意：<code>run</code>方法一般不需要我们手动调用，JTaro会在适当的时候自动调用</p>
+<h2 id="-communication">页面组件间通讯 communication</h2>
+<ul>
+<li>使用<code>this.postMessage(&lt;msg&gt;, &lt;page&gt;)</code>发送消息</li>
+</ul>
+<pre><code class="lang-js"><span class="hljs-comment">/* postMessage(&lt;msg&gt;, &lt;name&gt;)
+ * <span class="hljs-doctag">@param</span> msg 消息内容
+ * <span class="hljs-doctag">@param</span> name Vue组件名称
+ */</span>
+Vue.component(<span class="hljs-string">'about'</span>, {
+  mounted: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">//向home页面发送modifyTitle消息通知home页面修改标题</span>
+    this.postMessage(<span class="hljs-string">'modifyTitle'</span>, <span class="hljs-string">'home'</span>)
+  }
+})
+</code></pre>
+<ul>
+<li>使用<code>onMessage</code>选项接收消息</li>
+</ul>
+<pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
+  <span class="hljs-attr">onMessage</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(event) <span class="hljs-comment">// {message: 'modifyTitle', origin: 'about'}</span>
+  }
+})
+</code></pre>
+<blockquote>
+<p>注意：只有页面组件（与路由对应的组件）才可以使用postMessage和onMessage，</p>
+</blockquote>
+<h3 id="q-a">Q &amp; A</h3>
+<p><em>问：为什么不提供获取页面实例的方法？例如<code>getPageByName(&#39;home&#39;)</code>获取home页面，然后可以在其它页面操作home页面</em></p>
+<p><em>答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。这也是页面组件通讯的必要性</em></p>
+<h2 id="-">优化</h2>
+<p>JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。</p>
+<p>该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素</p>
+<h2 id="-jtaro-module-">配合 JTaro Module 使用</h2>
+<h3 id="-">开发模式</h3>
+<p><a target="_blank" href="https://github.com/chjtx/JTaro-Module">JTaro Module</a> 是开发JTaro应用时用于管理模块的插件，上线时可删除</p>
+<h4 id="-">【步骤一】安装使用</h4>
+<p>需要 nodejs 6 以上版本，若未安装，请访问<a target="_blank" href="http://nodejs.cn/">http://nodejs.cn/</a></p>
+<p>创建一个空文件夹，然后在命令行里cd到该文件夹，初始化工程，然后安装JTaro、JTaro Module、JTaro Bundle</p>
+<pre><code class="lang-bash"><span class="hljs-comment"># 初始化</span>
+npm init
+
+<span class="hljs-comment"># 输入项目名称</span>
+<span class="hljs-attr">name:</span> (jtaro-demo) jtaro-demo
+
+<span class="hljs-comment"># 以下选项一路回车即可</span>
+<span class="hljs-attr">version:</span> (<span class="hljs-number">1.0</span><span class="hljs-number">.0</span>)
+<span class="hljs-attr">description:</span>
+entry point: (index.js)
+test command:
+git repository:
+<span class="hljs-attr">keywords:</span>
+<span class="hljs-attr">author:</span>
+<span class="hljs-attr">license:</span> (ISC)
+
+<span class="hljs-comment"># 输入yes结束</span>
+Is this ok? (<span class="hljs-literal">yes</span>) <span class="hljs-literal">yes</span>
+
+<span class="hljs-comment"># 安装JTaro</span>
+npm i -D jtaro jtaro-module jtaro-bundle
+</code></pre>
+<h4 id="-index-html">【步骤二】创建index.html</h4>
+<p>index.html</p>
+<pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"zh-CN"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Hello JTaro<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/jtaro-module/src/client.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/jroll/src/jroll.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/vue/dist/vue.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"jtaro_app"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/jtaro/dist/jtaro.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+        Vue.use(JTaro, {
+            <span class="hljs-keyword">default</span>: <span class="hljs-string">'pages/home'</span>
+        })
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<h4 id="-home">【步骤三】创建首页home</h4>
+<p>新建一个文件夹，名字随意，例如命名为<code>pages</code>，将来上线可将pages文件夹打包成一个pages.js文件</p>
+<p>pages文件夹与index.html同级，在pages文件夹里新建home.js、home.html</p>
+<p>home.js的内容就是一个Vue组件，JTaro以页面组件为单元进行开发</p>
+<p>home.js</p>
+<pre><code class="lang-js"><span class="hljs-keyword">import</span> html <span class="hljs-keyword">from</span> <span class="hljs-string">'./home.html'</span> <span class="hljs-comment">//该路径是相对于home.js的，不能忽略./，否则在rollup.js打包时会出错</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">template</span>: html,
+  <span class="hljs-attr">data</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> {
+      <span class="hljs-attr">title</span>: <span class="hljs-string">'Hello JTaro'</span>
+    }
+  }
+}
+</code></pre>
+<p>home.html</p>
+<pre><code class="lang-html"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span>&gt;</span><span class="css">
+    <span class="hljs-selector-tag">this</span> {
+        <span class="hljs-attribute">padding-top</span>: <span class="hljs-number">50px</span>;
+        <span class="hljs-attribute">text-align</span>: center;
+        <span class="hljs-attribute">font-size</span>: <span class="hljs-number">42px</span>;
+    }
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+    </span><span class="hljs-template-variable">{{title}}</span><span class="xml">
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+</code></pre>
+<h4 id="-node-">【步骤四】跑起node服务</h4>
+<p>在命令行运行</p>
+<pre><code><span class="hljs-keyword">node</span> <span class="hljs-title">./node_modules</span>/jtaro-module/src/server.js
+</code></pre><p>在浏览器上运行<code>localhost:3000/</code>，能够看到<code>Hello JTaro</code>文字表示成功了</p>
+<h3 id="-">上线模式</h3>
+<p><a target="_blank" href="https://github.com/chjtx/JTaro-Bundle">JTaro Bundle</a> 是部署JTaro应用时用于将零散的开发代码合并压缩的插件</p>
+<h4 id="-www-index-html">【步骤一】创建www/index.html</h4>
+<p>在工程文件夹（即是与index.html同级）新建一个<code>www</code>文件夹，用于存放上线代码，在www文件夹下新建index.html</p>
+<p>www/index.html</p>
+<pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"zh-CN"</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">meta</span> <span class="hljs-attr">charset</span>=<span class="hljs-string">"UTF-8"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">title</span>&gt;</span>Hello JTaro<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/jroll/build/jroll.min.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/vue/dist/vue.min.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"jtaro_app"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./node_modules/jtaro/dist/jtaro.min.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./pages.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="actionscript">
+        Vue.use(JTaro, {
+            <span class="hljs-keyword">default</span>: <span class="hljs-string">'pages/home'</span>
+        })
+    </span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+<p>这个要上线的index.html与开发的index.html区别在于</p>
+<ul>
+<li>没有client.js，上线版本不需要node环境也可以运行</li>
+<li>多了pages.js，打包时 JTaro Bundle 会将pages文件夹打包成pages.js</li>
+<li>jroll/vue/jtaro换成了带.min后缀的压缩版 （<strong>注意：</strong>jtaro.min删除了全部开发提示代码，不能在开发环境下运行）</li>
+</ul>
+<h4 id="-">【步骤二】打包</h4>
+<p>在工程文件夹新建一个<code>build.js</code></p>
+<p>build.js</p>
+<pre><code class="lang-js">var jtaroBundle = require(<span class="hljs-symbol">'jtaro</span>-bundle')
+
+jtaroBundle.bundle({
+  origin: <span class="hljs-symbol">'index</span>.html',
+  target: <span class="hljs-symbol">'www</span>/index.html'
+})
+</code></pre>
+<p>在命令行运行</p>
+<pre><code><span class="hljs-keyword">node</span> <span class="hljs-title">build</span>.js
+</code></pre><p>JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件</p>
+<p>将会看到www文件夹下多了pages.js和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了</p>
+<h2 id="jtaro-">JTaro完成了哪些功能？</h2>
+<ul>
+<li><input type="checkbox" checked disabled> 简单路由功能，根据组件名称动态创建页面</li>
+<li><input type="checkbox" checked disabled> 页面切换动画</li>
+<li><input type="checkbox" checked disabled> 页面组件与页面组件之间的通讯postMessage、onMessage</li>
+<li><input type="checkbox" checked disabled> 保持最多不超过三个页面为display:block，其余为display:none，有效解决安卓机页面过多渲染慢的问题</li>
+<li><input type="checkbox" checked disabled> 实现页面beforeEnter、afterEnter和beforeLeave路由钩子</li>
+<li><input type="checkbox" checked disabled> JTaro.boot({...})选项配置</li>
+<li><input type="checkbox" checked disabled> 实现全局路由钩子</li>
+<li><input type="checkbox" checked disabled> 嵌入微型fastclick解决老机点击300ms延迟问题</li>
+<li><input type="checkbox" checked disabled> 使用 JTaro Module 进行模块管理</li>
+<li><input type="checkbox" checked disabled> 自动加载Vue页面组件</li>
+<li><input type="checkbox" checked disabled> 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板</li>
+</ul>
+
+    </article>
+    <script>
+    (function() {
+        var alist = document.querySelectorAll("menu a");
+        var hrefs = [];
+        var offsets = [];
+        Array.prototype.forEach.call(alist, function(a) {
+            var h = a.hash;
+            if (h.indexOf("#") !== -1) {
+            hrefs.push(h.replace("#", ""));
+            }
+        });
+        hrefs.forEach(function(o) {
+            var d = document.getElementById(o);
+            if (d) {
+            offsets.push(d.offsetTop);
+            }
+        });
+
+        function setMenuTag() {
+            var t = window.scrollY + 90;
+            for (var i = offsets.length - 1; i >= 0; i--) {
+            if (t > offsets[i]) {
+                Array.prototype.forEach.call(alist, function(a) {
+                a.classList.remove("active");
+                });
+                alist[i].classList.add("active");
+                break;
+            }
+            }
+        };
+        setMenuTag();
+        window.onscroll = setMenuTag;
+    })();
+    </script>
+</body>
+
+</html>

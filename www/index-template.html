@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JTaro 醉芋头</title>
+    <link rel="stylesheet" href="./github-markdown.css">
+    <link rel="stylesheet" href="./github-gist.css">
+    <style>
+    body {
+      font-family: "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+      line-height: 1.75;
+    }
+
+    menu {
+      position: fixed;
+      top: 160px;
+      left: 20px;
+      line-height: 1.8;
+      overflow: auto;
+      bottom: 0;
+      width: 138px;
+    }
+
+    menu li {
+      list-style-type: none;
+    }
+
+    menu a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    menu a.active {
+      color: #da020c;
+    }
+
+    dd {
+      margin: 0 2em;
+    }
+
+    article {
+      margin: 20px 10px 100px 220px;
+
+    }
+
+    #logo {
+      background: url(http://www.chjtx.com/JRoll1/images/logo.png) center no-repeat;
+      background-size: 120px 120px;
+      width: 200px;
+      height: 160px;
+      position: fixed;
+      left: 0;
+      top: 0;
+      border-bottom: 1px dashed #ddd;
+    }
+  </style>
+</head>
+
+<body>
+    <div id="logo"></div>
+    <menu>
+        <li><a href="#-download">下载</a></li>
+        <li><a href="#-brief">说明</a></li>
+        <li><a href="#-quick-start">快速上手</a></li>
+        <li><a href="#-run-demo">运行示例</a></li>
+        <li><a href="#-basic-usage">基础用法</a></li>
+        <li><a href="#-route">路由</a></li>
+        <li><a href="#-communication">页面组件间通讯</a></li>
+        <li><a href="#-jtaro-module-">组合开发</a></li>
+    </menu>
+    <article class="markdown-body">
+        {{doc}}
+    </article>
+    <script>
+    (function() {
+        var alist = document.querySelectorAll("menu a");
+        var hrefs = [];
+        var offsets = [];
+        Array.prototype.forEach.call(alist, function(a) {
+            var h = a.hash;
+            if (h.indexOf("#") !== -1) {
+            hrefs.push(h.replace("#", ""));
+            }
+        });
+        hrefs.forEach(function(o) {
+            var d = document.getElementById(o);
+            if (d) {
+            offsets.push(d.offsetTop);
+            }
+        });
+
+        function setMenuTag() {
+            var t = window.scrollY + 90;
+            for (var i = offsets.length - 1; i >= 0; i--) {
+            if (t > offsets[i]) {
+                Array.prototype.forEach.call(alist, function(a) {
+                a.classList.remove("active");
+                });
+                alist[i].classList.add("active");
+                break;
+            }
+            }
+        };
+        setMenuTag();
+        window.onscroll = setMenuTag;
+    })();
+    </script>
+</body>
+
+</html>

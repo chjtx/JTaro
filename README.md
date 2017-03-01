@@ -1,21 +1,14 @@
-# 注意：尚在开发中...暂供学习研究...
 
 # 醉芋头 JTaro
 
 > An H5 SPA framework for Vue.js 2.0
-
-## 先睹为快
-
-<img width="160" height="160" src="http://www.chjtx.com/JTaro/demos/images/qrcode.png">
-
-[http://www.chjtx.com/JTaro/](http://www.chjtx.com/JTaro/)
 
 ## 依赖
 
 - Vue 2.x [Vue 2.x 中文教程](http://cn.vuejs.org/v2/guide/)
 - JRoll 2.x [JRoll 2.x 官网](http://www.chjtx.com/JRoll/)
 
-## 下载
+## 下载 download
 
 ### CDN
 
@@ -30,7 +23,7 @@
 npm install jtaro
 ```
 
-## 说明
+## 说明 brief 
 
 - JTaro是一款基于Vue2.0开发的轻量级SPA（单页应用）框架
 - JTaro不需要vue-router，自身提供简单路由功能和页面切换动画
@@ -46,7 +39,7 @@ npm install jtaro
 - 页面缓存，从列表页到详细页，再回到列表页不刷新
 - 基于页面开发，开发者只须关心各自的页面，更利于合作开发
 
-## 快速上手
+## 快速上手 quick start
 
 1、 创建index.html文件并在head里引入Vue、JRoll
 
@@ -81,7 +74,7 @@ Vue.use(JTaro)
 
 要了解更多请查看示例
 
-## 运行示例
+## 运行示例 run demo
 
 ```bash
 git clone https://github.com/chjtx/JTaro.git
@@ -100,7 +93,7 @@ npm run dev
 
 > `npm install`下载太慢？那就直接`clone`之后将`index.html`拖到浏览器即可。不要用`cnpm`，会导致很多依赖缺失
 
-## 基础用法
+## 基础用法 basic usage
 
 ### 启动 Vue.use(JTaro)
 
@@ -160,7 +153,7 @@ Vue.component('page', {
 - 支持在url传参，使用`?a=1&b=2`形式，最终也是保存在JTaro.params里
 - url传参优先级高于键值对传参
 
-## 路由
+## 路由 route
 
 ### 路由说明
 
@@ -300,7 +293,7 @@ JTaro.beforeLeave.run()
 
 注意：`run`方法一般不需要我们手动调用，JTaro会在适当的时候自动调用
 
-## 页面组件间通讯
+## 页面组件间通讯 communication
 
 - 使用`this.postMessage(<msg>, <page>)`发送消息
 
@@ -515,7 +508,7 @@ JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html�
 
 将会看到www文件夹下多了pages.js和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了
 
-## TODO
+## JTaro完成了哪些功能？
 
 - [x] 简单路由功能，根据组件名称动态创建页面
 - [x] 页面切换动画
@@ -525,16 +518,7 @@ JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html�
 - [x] JTaro.boot({...})选项配置
 - [x] 实现全局路由钩子
 - [x] 嵌入微型fastclick解决老机点击300ms延迟问题
-- [x] 使用webpack等构建工具进行开发的困扰
-  - 新人入项，总要安装一大堆脚本工具，npm安装则网络受限，cnpm安装则依赖缺失
-  - 公司预算约束，不可能给每位开发者提供mac设备，在3000元windows机上运行webpack等开发环境备受挑战
-  - webpack学习成本较高，出现问题处理成本更高，并非新手所能驾驭
-  - 经webpack处理过的脚本，并不能很直观的反映出是哪段业务代码报的错误，增加开发成本
-  - .vue文件将html、js、css合在一起适合编写单个组件，对于业务逻辑较多的文件应将html、css和js分离
-  - 工具应该用于解放劳动力，而不应该因维护工具而适得其反
+- [x] 使用 JTaro Module 进行模块管理
 - [x] 自动加载Vue页面组件
-  - 开发版嵌入组件加载器，自动处理页面组件的html和js
-  - 生产版去掉加载器，将所有页面组件打包成一个文件并使用uglify压缩
-  - 尽可能使开发简化，只需要将代码拷贝下来即可运行，无需安装一大堆构建脚本
 - [x] 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板
 
