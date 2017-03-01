@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "gulp dev",
     "build": "gulp build",
-    "demo": "node node_modules/jtaro-module/src/server.js 3030"
+    "demo": "node node_modules/jtaro-module/src/server.js 3030",
+    "www": "gulp www"
   },
   "repository": {
     "type": "git",
