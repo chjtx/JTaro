@@ -10,6 +10,12 @@
 
 ## 下载 download
 
+### 本地
+
+> [jtaro.0.4.3.js](http://www.chjtx.com/JTaro/dist/jtaro.js)
+
+> [jtaro.0.4.3.min.js](http://www.chjtx.com/JTaro/dist/jtaro.min.js)
+
 ### CDN
 
 ```html
