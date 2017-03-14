@@ -309,11 +309,9 @@ JTaro.beforeLeave.run()
  * @param name Vue组件名称
  */
 Vue.component('about', {
-  mounted: {
-    sendMessage: function () {
-      //向home页面发送modifyTitle消息通知home页面修改标题
-      this.postMessage('modifyTitle', 'home')
-    }
+  mounted: function () {
+    //向home页面发送modifyTitle消息通知home页面修改标题
+    this.postMessage('modifyTitle', 'home')
   }
 })
 ```
