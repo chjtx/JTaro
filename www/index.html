@@ -356,9 +356,11 @@ JTaro<span class="hljs-selector-class">.beforeLeave</span><span class="hljs-sele
  * <span class="hljs-doctag">@param</span> name Vue组件名称
  */</span>
 Vue.component(<span class="hljs-string">'about'</span>, {
-  mounted: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-    <span class="hljs-comment">//向home页面发送modifyTitle消息通知home页面修改标题</span>
-    this.postMessage(<span class="hljs-string">'modifyTitle'</span>, <span class="hljs-string">'home'</span>)
+  mounted: {
+    sendMessage: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+      <span class="hljs-comment">//向home页面发送modifyTitle消息通知home页面修改标题</span>
+      this.postMessage(<span class="hljs-string">'modifyTitle'</span>, <span class="hljs-string">'home'</span>)
+    }
   }
 })
 </code></pre>
