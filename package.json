@@ -1,6 +1,6 @@
 {
   "name": "jtaro",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {

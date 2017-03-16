@@ -90,8 +90,8 @@
 <h2 id="-download">下载 download</h2>
 <h3 id="-">本地</h3>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js">jtaro.0.4.3.js</a></p>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js">jtaro.0.4.3.min.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js">jtaro.0.4.4.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js">jtaro.0.4.4.min.js</a></p>
 </blockquote>
 <h3 id="cdn">CDN</h3>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -239,10 +239,11 @@ Vue.component(<span class="hljs-string">'page'</span>, {
 <h2 id="-route">路由 route</h2>
 <h3 id="-">路由说明</h3>
 <ul>
-<li>只识别以<code>#/</code>分割的hash，不支持<code>history.pushState</code></li>
-<li>每个hash路由都应有与之对应的Vue组件，如在浏览器访问<code>index.html#/home</code>，JTaro将自动查找以<code>home</code>命名的Vue组件并渲染到<code>div#jtaro_app</code>里。访问<code>index.html#/sub/abc</code>，将自动查找以<code>sub__abc</code>命名的Vue组件</li>
+<li>只识别以<code>#</code>分割的hash，不支持<code>history.pushState</code></li>
+<li>每个hash路由都应有与之对应的Vue组件，如在浏览器访问<code>index.html#home</code>，JTaro将自动查找以<code>home</code>命名的Vue组件并渲染到<code>div#jtaro_app</code>里。访问<code>index.html#sub/abc</code>，将自动查找以<code>sub__abc</code>命名的Vue组件</li>
 <li>路由不可重复，如有A、B、C、D四个页面，按顺序访问A-&gt;B-&gt;C-&gt;D，在D页面返回到B，将剩下A-&gt;B两个页面</li>
 <li>使用<code>this.go</code>可带参数返回之前的页面，如果使用history.back或浏览器后退键，回退页的afterEnter接收到的参数为null</li>
+<li>非首页刷新，自动加载历史页，即A-&gt;B，在B页面按F5刷新，会自动加载A-&gt;B，如果手动修改了url，可能会导致非预期效果，这时需要自行删除sessionStorage里的<code>JTaro.history</code></li>
 <li>请使用<code>this.go</code>进行页面跳转，其作用有：<ul>
 <li>避免直接操作hash破坏路由历史记录</li>
 <li>可调用beforeEnter路由钩子，直接修改hash将不会触发beforeEnter钩子</li>

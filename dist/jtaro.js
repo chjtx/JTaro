@@ -1,4 +1,4 @@
-/*! JTaro.js v0.4.3 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.4.4 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -135,7 +135,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.4.3'
+    JTaro.version = '0.4.4'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -296,7 +296,7 @@
     * 2、与路由对应页面已存在->将该页面往后的所有页面都删除
     */
     function pushView (_hash, jroll) {
-      var h = _hash.replace('#/', '').split('?')[0]
+      var h = _hash.replace('#', '').split('?')[0]
       var v = JTaro.vm.$data.views
       var i = JTaro.views.indexOf(h)
       var viewCompoent = findVueComponent(h)
@@ -311,7 +311,7 @@
         JTaro.views.push(h)
         JTaro.history.push({
           view: h,
-          url: _hash.replace('#/', ''),
+          url: _hash.replace('#', ''),
           params: JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params
         })
         window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
@@ -367,7 +367,7 @@
       if (!JTaro.sliding) {
         beforeLeaveHook(findJTaroView(this), function () {
           // 截取url参数
-          var h = route.replace('#/', '')
+          var h = route.replace('#', '')
           var p = h.split('?')
 
           // **JTaro Comment Start**
@@ -405,7 +405,7 @@
                   if (typeof route === 'number') {
                     window.history.go(route)
                   } else {
-                    window.location.hash = '/' + route
+                    window.location.hash = route
                   }
                 })
               }
@@ -448,7 +448,7 @@
             if (typeof route === 'number') {
               window.history.go(route)
             } else {
-              window.location.hash = '/' + route
+              window.location.hash = route
             }
           })
         })
@@ -466,7 +466,7 @@
     // 监听路由变化
     window.addEventListener('hashchange', function () {
       // **JTaro Comment Start**
-      var hash = window.location.hash.replace('#/', '').split('?')[0]
+      var hash = window.location.hash.replace('#', '').split('?')[0]
       var vueCompoent = Vue.options.components[path2id(hash)]
       if (!vueCompoent) {
         JTaroDevelopImport(Vue, hash, function (c) {
@@ -488,13 +488,13 @@
     // 启动
     function boot () {
       var hash = window.location.hash
-      var vueCompoent = Vue.options.components[path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default)]
+      var vueCompoent = Vue.options.components[path2id(hash.replace('#', '').split('?')[0] || JTaro.options.default)]
 
       // **JTaro Comment Start**
       if (!vueCompoent) {
-        JTaroDevelopImport(Vue, hash.replace('#/', '').split('?')[0] || JTaro.options.default, function (c) {
+        JTaroDevelopImport(Vue, hash.replace('#', '').split('?')[0] || JTaro.options.default, function (c) {
           if (!c) {
-            console.error('[JTaro warn]: Vue component <' + path2id(hash.replace('#/', '').split('?')[0] || JTaro.options.default) + '> is not define')
+            console.error('[JTaro warn]: Vue component <' + path2id(hash.replace('#', '').split('?')[0] || JTaro.options.default) + '> is not define')
           } else {
             beforeEnterHook(c, function (method) {
               if (method) {
@@ -505,7 +505,7 @@
 
               // 跳到默认路由
               if (hash === '') {
-                window.location.hash = '/' + JTaro.options.default
+                window.location.hash = JTaro.options.default
 
               // 跳到指定路由
               } else {
@@ -533,7 +533,7 @@
 
           // 跳到默认路由
           if (hash === '') {
-            window.location.hash = '/' + JTaro.options.default
+            window.location.hash = JTaro.options.default
 
           // 跳到指定路由
           } else {

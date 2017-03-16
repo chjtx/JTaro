@@ -12,9 +12,9 @@
 
 ### 本地
 
-> [jtaro.0.4.3.js](http://www.chjtx.com/JTaro/dist/jtaro.js)
+> [jtaro.0.4.4.js](http://www.chjtx.com/JTaro/dist/jtaro.js)
 
-> [jtaro.0.4.3.min.js](http://www.chjtx.com/JTaro/dist/jtaro.min.js)
+> [jtaro.0.4.4.min.js](http://www.chjtx.com/JTaro/dist/jtaro.min.js)
 
 ### CDN
 
@@ -163,10 +163,11 @@ Vue.component('page', {
 
 ### 路由说明
 
-- 只识别以`#/`分割的hash，不支持`history.pushState`
-- 每个hash路由都应有与之对应的Vue组件，如在浏览器访问`index.html#/home`，JTaro将自动查找以`home`命名的Vue组件并渲染到`div#jtaro_app`里。访问`index.html#/sub/abc`，将自动查找以`sub__abc`命名的Vue组件
+- 只识别以`#`分割的hash，不支持`history.pushState`
+- 每个hash路由都应有与之对应的Vue组件，如在浏览器访问`index.html#home`，JTaro将自动查找以`home`命名的Vue组件并渲染到`div#jtaro_app`里。访问`index.html#sub/abc`，将自动查找以`sub__abc`命名的Vue组件
 - 路由不可重复，如有A、B、C、D四个页面，按顺序访问A->B->C->D，在D页面返回到B，将剩下A->B两个页面
 - 使用`this.go`可带参数返回之前的页面，如果使用history.back或浏览器后退键，回退页的afterEnter接收到的参数为null
+- 非首页刷新，自动加载历史页，即A->B，在B页面按F5刷新，会自动加载A->B，如果手动修改了url，可能会导致非预期效果，这时需要自行删除sessionStorage里的`JTaro.history`
 - 请使用`this.go`进行页面跳转，其作用有：
   - 避免直接操作hash破坏路由历史记录
   - 可调用beforeEnter路由钩子，直接修改hash将不会触发beforeEnter钩子
