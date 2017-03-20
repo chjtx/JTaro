@@ -12,9 +12,9 @@
 
 ### 本地
 
-> [jtaro.0.4.4.js](http://www.chjtx.com/JTaro/dist/jtaro.js)
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.4.4.js</a>
 
-> [jtaro.0.4.4.min.js](http://www.chjtx.com/JTaro/dist/jtaro.min.js)
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.4.4.min.js</a>
 
 ### CDN
 
