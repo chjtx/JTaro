@@ -1,4 +1,4 @@
-/*! JTaro.js v0.4.4 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.4.5 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define MouseEvent JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -135,7 +135,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.4.4'
+    JTaro.version = '0.4.5'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -460,7 +460,7 @@
       data: {
         views: []
       },
-      template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view"></jt-view></div>'
+      template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view" :key="view"></jt-view></div>'
     })
 
     // 监听路由变化
