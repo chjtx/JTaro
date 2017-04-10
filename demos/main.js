@@ -32,7 +32,7 @@ Vue.component('home', {
   template: '<div id="home">' +
               '<my-head>{{title}}<a class="right" href="javascript:void(0)" @click="goAbout">about &gt;&gt;</a></my-head>' +
               '<div id="home_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">home page {{ i }}</p></div></div>' +
-            '<div>',
+            '</div>',
   mixins: [mixin],
   data: function () {
     return {
@@ -86,7 +86,7 @@ Vue.component('about', {
               '<my-head><a class="left" href="javascript:void(0)" @click="goIndex">&lt;&lt; home</a>' +
               'About<a class="right" href="javascript:void(0)" @click="goList">list &gt;&gt;</a></my-head>' +
               '<div id="about_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
-            '<div>',
+            '</div>',
   mixins: [mixin],
   beforeEnter: function (cb) {
     console.log('About - beforeEnter')
@@ -121,7 +121,7 @@ Vue.component('list', {
               '<my-head><a class="left" href="javascript:void(0)" @click="goAbout">&lt;&lt; about</a>' +
               'List<a class="right" href="javascript:void(0)" @click="goFour">four &gt;&gt;</a></my-head>' +
               '<div id="list_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
-            '<div>',
+            '</div>',
   mixins: [mixin],
   methods: {
     goAbout: function () {
@@ -142,7 +142,7 @@ Vue.component('four', {
               '<my-head><a class="left" href="javascript:void(0)" @click="goAbout">&lt;&lt; about</a>' +
               '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goIndex">&lt;&lt; home</a>Four</my-head>' +
               '<div id="four_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">four page {{ i }}</p></div></div>' +
-            '<div>',
+            '</div>',
   mixins: [mixin],
   methods: {
     goAbout: function () {

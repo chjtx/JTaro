@@ -459,7 +459,7 @@
       data: {
         views: []
       },
-      template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view"></jt-view></div>'
+      template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view" :key="view"></jt-view></div>'
     })
 
     // 监听路由变化
