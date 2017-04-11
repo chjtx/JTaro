@@ -124,7 +124,7 @@
     if (!style) {
       style = document.createElement('style')
       style.id = 'jtaro_style'
-      style.innerHTML = 'html,body{height:100%;padding:0;margin:0}#jtaro_app{position:relative;width:100%;height:100%;overflow:hidden}.jtaro-view{position:absolute;width:100%;height:100%;overflow:hidden;background:#fff;-webkit-box-shadow: rgba(0,0,0,.3) -5px 0 8px;box-shadow: rgba(0,0,0,.3) -5px 0 8px;}'
+      style.innerHTML = 'html,body{height:100%;padding:0;margin:0}#jtaro_app{position:relative;width:100%;height:100%;overflow:hidden}.jtaro-view{position:absolute;width:100%;height:100%;overflow:hidden;background:#fff;}'
       document.head.appendChild(style)
     }
 
