@@ -1,44 +1,10 @@
-/* global define MouseEvent JTaroLoader JTaroModules */
+/* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
   : typeof define === 'function' && define.amd ? define(factory)
   : (global.JTaro = factory())
 }(this, function () {
   'use strict'
-
-  /**
-   * 微型fastclick
-   * 忽略表单控件，只保证div等普通元素点击加速
-   * 注意！！！微型fastclick的代码将来可能会移除，交由将要开发的`JTaro UI`处理
-   */
-  var clickEvent
-  var stopClick
-  var clickTime
-  document.addEventListener('touchstart', function (e) {
-    clickEvent = e
-    clickTime = e.timeStamp
-    if (/^AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA$/.test(e.target.tagName)) {
-      stopClick = true
-    } else {
-      stopClick = false
-    }
-  }, true)
-  document.addEventListener('touchmove', function () {
-    stopClick = true
-  }, true)
-  document.addEventListener('touchend', function (e) {
-    if (!stopClick && (e.timeStamp - clickTime < 300)) {
-      e.preventDefault()
-      e.stopPropagation()
-      var evt = new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true
-      })
-      document.activeElement.blur()
-      clickEvent.target.dispatchEvent(evt)
-      return false
-    }
-  }, true)
 
   // 将路径转为vue组件id
   function path2id (p) {

@@ -335,11 +335,11 @@ Vue.component('home', {
 
 *答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。这也是页面组件通讯的必要性*
 
-## 优化
+## ~~优化~~ 该优化已转交 JTaro UI 库处理
 
-JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。
+~~JTaro嵌入了微型加速点击代码，效果类似于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。~~
 
-该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素
+~~该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素~~
 
 ## 配合 JTaro Module 使用
 
@@ -524,7 +524,7 @@ JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html�
 - [x] 实现页面beforeEnter、afterEnter和beforeLeave路由钩子
 - [x] JTaro.boot({...})选项配置
 - [x] 实现全局路由钩子
-- [x] 嵌入微型fastclick解决老机点击300ms延迟问题
+- [x] ~~嵌入微型fastclick解决老机点击300ms延迟问题~~
 - [x] 使用 JTaro Module 进行模块管理
 - [x] 自动加载Vue页面组件
 - [x] 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板

@@ -378,9 +378,9 @@ Vue.component(<span class="hljs-string">'about'</span>, {
 <h3 id="q-a">Q &amp; A</h3>
 <p><em>问：为什么不提供获取页面实例的方法？例如<code>getPageByName(&#39;home&#39;)</code>获取home页面，然后可以在其它页面操作home页面</em></p>
 <p><em>答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。这也是页面组件通讯的必要性</em></p>
-<h2 id="-">优化</h2>
-<p>JTaro嵌入了微型加速点击代码，效果类型于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。</p>
-<p>该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素</p>
+<h2 id="-jtaro-ui-"><del>优化</del> 该优化已转交 JTaro UI 库处理</h2>
+<p><del>JTaro嵌入了微型加速点击代码，效果类似于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。</del></p>
+<p><del>该优化只针对普通的div/span/a等非控件元素起作用，忽略AUDIO|BUTTON|VIDEO|SELECT|INPUT|TEXTAREA等多媒体或表单元素</del></p>
 <h2 id="-jtaro-module-">配合 JTaro Module 使用</h2>
 <h3 id="-">开发模式</h3>
 <p><a target="_blank" href="https://github.com/chjtx/JTaro-Module">JTaro Module</a> 是开发JTaro应用时用于管理模块的插件，上线时可删除</p>
@@ -517,7 +517,7 @@ jtaroBundle.bundle({
 <li><input type="checkbox" checked disabled> 实现页面beforeEnter、afterEnter和beforeLeave路由钩子</li>
 <li><input type="checkbox" checked disabled> JTaro.boot({...})选项配置</li>
 <li><input type="checkbox" checked disabled> 实现全局路由钩子</li>
-<li><input type="checkbox" checked disabled> 嵌入微型fastclick解决老机点击300ms延迟问题</li>
+<li><input type="checkbox" checked disabled> <del>嵌入微型fastclick解决老机点击300ms延迟问题</del></li>
 <li><input type="checkbox" checked disabled> 使用 JTaro Module 进行模块管理</li>
 <li><input type="checkbox" checked disabled> 自动加载Vue页面组件</li>
 <li><input type="checkbox" checked disabled> 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板</li>
