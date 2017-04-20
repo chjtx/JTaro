@@ -120,7 +120,7 @@ Vue.use(JTaro, {
 |:----:|:----:|:----|
 | el | '#jtaro_app' | 给Vue挂载的元素 |
 | default | 'home' | 默认首页 |
-| distance | 0.3 | 页面折叠距离倍数，以屏幕宽度为1，取值范围为0 <= distance <= 1 |
+| distance | 0.1 | 页面折叠距离倍数，以屏幕宽度为1，取值范围为0 <= distance <= 1 |
 | duration | 200 | 页面切换过渡时间 |
 | JRoll | window.JRoll | 用于异步引入JRoll，不能确保JRoll和JTaro顺序时使用 |
 

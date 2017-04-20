@@ -105,8 +105,8 @@
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
       default: options.default || 'home',  // 默认页
-      distance: options.distance || 0.3,    // 页面后退距离百分比，以屏幕宽度为1
-      duration: options.duration || 200     // 页面过渡时间
+      distance: isNaN(options.distance) ? 0.1 : Number(options.distance),    // 页面后退距离百分比，以屏幕宽度为1
+      duration: isNaN(options.duration) ? 200 : Number(options.duration)     // 页面过渡时间
     }
 
     // beforeEnter路由钩子
