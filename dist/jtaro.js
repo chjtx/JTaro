@@ -1,4 +1,4 @@
-/*! JTaro.js v0.4.8 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.4.9 ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -101,7 +101,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.4.8'
+    JTaro.version = '0.4.9'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -332,6 +332,14 @@
       // 页面切换过程中不执行路由跳转
       if (!JTaro.sliding) {
         beforeLeaveHook(findJTaroView(this), function () {
+          /** Fixed issues#2
+           *  使用this.go传进数字时直接调用原生的history.go
+           */
+          if (!isNaN(route)) {
+            window.history.go(route)
+            return
+          }
+
           // 截取url参数
           var h = route.replace('#', '')
           var p = h.split('?')

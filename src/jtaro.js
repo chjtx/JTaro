@@ -331,6 +331,14 @@
       // 页面切换过程中不执行路由跳转
       if (!JTaro.sliding) {
         beforeLeaveHook(findJTaroView(this), function () {
+          /** Fixed issues#2
+           *  使用this.go传进数字时直接调用原生的history.go
+           */
+          if (!isNaN(route)) {
+            window.history.go(route)
+            return
+          }
+
           // 截取url参数
           var h = route.replace('#', '')
           var p = h.split('?')

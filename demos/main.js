@@ -98,12 +98,16 @@ Vue.component('about', {
   afterEnter: function (params) {
     console.log(params)
   },
+  beforeLeave: function () {
+    console.log('About BeforeLeave')
+    return true
+  },
   methods: {
     goIndex: function () {
       this.postMessage('modifyTitle', 'home')
-      this.postMessage('alertMessage', 'home')
+      // this.postMessage('alertMessage', 'home')
       this.postMessage('modifyTitle', 'list') // nothing will do
-      this.go('home')
+      this.go(-1)
     },
     goList: function () {
       this.go('list', { a: 123 })
