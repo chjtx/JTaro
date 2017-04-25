@@ -375,8 +375,10 @@ Vue.component(<span class="hljs-string">'about'</span>, {
 <blockquote>
 <p>注意：只有页面组件（与路由对应的组件）才可以使用postMessage和onMessage，</p>
 </blockquote>
-<h3 id="q-a">Q &amp; A</h3>
-<p><em>问：为什么不提供获取页面实例的方法？例如<code>getPageByName(&#39;home&#39;)</code>获取home页面，然后可以在其它页面操作home页面</em></p>
+<h2 id="q-a">Q &amp; A</h2>
+<p><em>问：为什么我手动删除了URL上的hash，回车，不会自动回到默认页？</em></p>
+<p><em>答：JTaro有自动缓存页面路由机制，不管在哪个页面刷新都会自动一层一层跳回到那个页面。如果直接手动删除了hash，JTaro会认为这是一个刷新操作。在开发过程中如果需要清掉hash重新回到默认首页，请先清掉<code>sessionStorage</code>的<code>JTaro.history</code></em></p>
+<p><em>问：为什么不提供获取页面实例的方法？例如<code>getPageByName(&#39;home&#39;)</code>获取home页面，然后可以在其它页面操作home页面，用<code>this.postMessage</code>有什么好处？</em></p>
 <p><em>答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。这也是页面组件通讯的必要性</em></p>
 <h2 id="-jtaro-ui-"><del>优化</del> 该优化已转交 JTaro UI 库处理</h2>
 <p><del>JTaro嵌入了微型加速点击代码，效果类似于fastclick.js，用于解决IOS8以下苹果机和旧安卓系统的点击300ms延迟问题。</del></p>
