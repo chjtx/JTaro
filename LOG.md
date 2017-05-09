@@ -1,5 +1,10 @@
 # 更新日志
 
+## v0.5.0 (2017-05-09)
+
+- 重写路由变更逻辑，解决直接修改hash无法执行beforeLeave勾子的问题
+- 在hash为空时自动清除`sessionStorage['JTaro.history']`
+
 ## v0.4.9 (2017-04-25)
 
 - Fixed issues#2 修复使用this.go传进数字时报错的问题

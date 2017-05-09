@@ -90,8 +90,8 @@
 <h2 id="-download">下载 download</h2>
 <h3 id="-">本地</h3>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.4.9.js</a></p>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.4.9.min.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.0.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.0.min.js</a></p>
 </blockquote>
 <h3 id="cdn">CDN</h3>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -139,18 +139,13 @@ Vue.use(JTaro)
 <p>4、 将index.html文件拖到浏览器访问</p>
 <p>要了解更多请查看示例</p>
 <h2 id="-run-demo">运行示例 run demo</h2>
-<pre><code class="lang-bash">git clone https://github.com/chjtx/JTaro.git
+<pre><code class="lang-bash">git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/chjtx/JTaro.git
 
 cd JTaro
 
 npm install
 
-<span class="hljs-comment"># 使用 JTaro Module 配合开发</span>
-npm <span class="hljs-keyword">run</span><span class="bash"> demo
-</span>
-<span class="hljs-comment"># 或</span>
-<span class="hljs-comment"># 配合browser-sync开发，修改文件自动刷新</span>
-npm <span class="hljs-keyword">run</span><span class="bash"> dev</span>
+npm run dev
 </code></pre>
 <blockquote>
 <p><code>npm install</code>下载太慢？那就直接<code>clone</code>之后将<code>index.html</code>拖到浏览器即可。不要用<code>cnpm</code>，会导致很多依赖缺失</p>
@@ -246,7 +241,6 @@ Vue.component(<span class="hljs-string">'page'</span>, {
 <li>非首页刷新，自动加载历史页，即A-&gt;B，在B页面按F5刷新，会自动加载A-&gt;B，如果手动修改了url，可能会导致非预期效果，这时需要自行删除sessionStorage里的<code>JTaro.history</code></li>
 <li>请使用<code>this.go</code>进行页面跳转，其作用有：<ul>
 <li>避免直接操作hash破坏路由历史记录</li>
-<li>可调用beforeEnter路由钩子，直接修改hash将不会触发beforeEnter钩子</li>
 <li>在页面切换动画进行时不会触发hashChange，阻止频繁切换页面</li>
 </ul>
 </li>
@@ -376,8 +370,6 @@ Vue.component(<span class="hljs-string">'about'</span>, {
 <p>注意：只有页面组件（与路由对应的组件）才可以使用postMessage和onMessage，</p>
 </blockquote>
 <h2 id="q-a">Q &amp; A</h2>
-<p><em>问：为什么我手动删除了URL上的hash，回车，不会自动回到默认页？</em></p>
-<p><em>答：JTaro有自动缓存页面路由机制，不管在哪个页面刷新都会自动一层一层跳回到那个页面。如果直接手动删除了hash，JTaro会认为这是一个刷新操作。在开发过程中如果需要清掉hash重新回到默认首页，请先清掉<code>sessionStorage</code>的<code>JTaro.history</code></em></p>
 <p><em>问：为什么不提供获取页面实例的方法？例如<code>getPageByName(&#39;home&#39;)</code>获取home页面，然后可以在其它页面操作home页面，用<code>this.postMessage</code>有什么好处？</em></p>
 <p><em>答：为了方便维护，每处修改都有据可寻，因此建议每个页面组件只操作自身的数据，如果需要操作其它页面的数据，只需要向目标页面发送消息，让目标页面去处理。这也是页面组件通讯的必要性</em></p>
 <h2 id="-jtaro-ui-"><del>优化</del> 该优化已转交 JTaro UI 库处理</h2>

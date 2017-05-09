@@ -12,9 +12,9 @@
 
 ### 本地
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.4.9.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.0.js</a>
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.4.9.min.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.0.min.js</a>
 
 ### CDN
 
@@ -89,11 +89,6 @@ cd JTaro
 
 npm install
 
-# 使用 JTaro Module 配合开发
-npm run demo
-
-# 或
-# 配合browser-sync开发，修改文件自动刷新
 npm run dev
 ```
 
@@ -170,7 +165,6 @@ Vue.component('page', {
 - 非首页刷新，自动加载历史页，即A->B，在B页面按F5刷新，会自动加载A->B，如果手动修改了url，可能会导致非预期效果，这时需要自行删除sessionStorage里的`JTaro.history`
 - 请使用`this.go`进行页面跳转，其作用有：
   - 避免直接操作hash破坏路由历史记录
-  - 可调用beforeEnter路由钩子，直接修改hash将不会触发beforeEnter钩子
   - 在页面切换动画进行时不会触发hashChange，阻止频繁切换页面
 
 ### 路由钩子
@@ -330,10 +324,6 @@ Vue.component('home', {
 > 注意：只有页面组件（与路由对应的组件）才可以使用postMessage和onMessage，
 
 ## Q & A
-
-*问：为什么我手动删除了URL上的hash，回车，不会自动回到默认页？*
-
-*答：JTaro有自动缓存页面路由机制，不管在哪个页面刷新都会自动一层一层跳回到那个页面。如果直接手动删除了hash，JTaro会认为这是一个刷新操作。在开发过程中如果需要清掉hash重新回到默认首页，请先清掉`sessionStorage`的`JTaro.history`*
 
 *问：为什么不提供获取页面实例的方法？例如`getPageByName('home')`获取home页面，然后可以在其它页面操作home页面，用`this.postMessage`有什么好处？*
 

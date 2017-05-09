@@ -95,6 +95,7 @@
     }
 
     var WIDTH = window.innerWidth
+    var currentPage = '' // 当前路由
 
     options = options || {}
 
@@ -146,13 +147,13 @@
 
     // beforeLeave路由钩子
     function beforeLeaveHook (viewCompoent, callback) {
-      var beforeLeave = Vue.options.components[path2id(viewCompoent.$parent.jtaro_tag)].options.beforeLeave
+      var beforeLeave = Vue.options.components[path2id(viewCompoent.jtaro_tag)].options.beforeLeave
 
       // 先执行全局beforeLeave路由钩子
       JTaro.beforeLeave.run()
 
       if (typeof beforeLeave === 'function') {
-        if (beforeLeave.call(viewCompoent, function () { callback() })) {
+        if (beforeLeave.call(viewCompoent.$children[0], function () { callback() })) {
           callback()
         }
       } else {
@@ -266,6 +267,10 @@
       var i = JTaro.views.indexOf(h)
       var viewCompoent = findVueComponent(h)
 
+      // 保存当前页面路由
+      currentPage = h
+
+      // 页面不存在
       if (i === -1) {
         if (v.indexOf(h) === -1) {
           v.push(h)
@@ -280,10 +285,9 @@
           params: JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params
         })
         window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
+
+      // 页面已存在
       } else {
-        if (JTaro.method) {
-          JTaro.method.call(viewCompoent, viewCompoent)
-        }
         recursionDelPage(JTaro.views, JTaro.vm.$el.childNodes, jroll, i)
       }
     }
@@ -322,109 +326,48 @@
 
     // 跳到路由
     Vue.prototype.go = function (route, options) {
-      function findJTaroView (v) {
-        while (!v.$el.classList.contains('jtaro-view')) {
-          if (v.$parent) v = v.$parent
-        }
-        return v
-      }
       // 页面切换过程中不执行路由跳转
       if (!JTaro.sliding) {
-        beforeLeaveHook(findJTaroView(this), function () {
-          /** Fixed issues#2
-           *  使用this.go传进数字时直接调用原生的history.go
-           */
-          if (!isNaN(route)) {
-            window.history.go(route)
-            return
+        /** Fixed issues#2
+         *  使用this.go传进数字时直接调用原生的history.go
+         */
+        if (!isNaN(route)) {
+          window.history.go(route)
+          return
+        }
+
+        // 截取url参数
+        var h = route.replace('#', '')
+        var p = h.split('?')
+
+        /** Fixed issues#1
+         *  如果目标路由对应的页面已存在，且非当前路由，转为负数使用history.go(-?)清除历史记录
+         */
+        var i = JTaro.views.indexOf(p[0])
+        var k
+        var o
+        if (~i) {
+          i = 1 - (JTaro.views.length - i)
+          if (i) route = i
+        }
+
+        // 设置当前页面的参数
+        JTaro.params = {}
+        if (options) {
+          JTaro.params = options
+        }
+        if (p[1]) {
+          o = parseUrlParams(p[1])
+          for (k in o) {
+            if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
           }
+        }
 
-          // 截取url参数
-          var h = route.replace('#', '')
-          var p = h.split('?')
-
-          // **JTaro Comment Start**
-          if (!Vue.options.components[path2id(p[0])]) {
-            JTaroDevelopImport(Vue, p[0], function (c) {
-              if (!c) {
-                console.error('[JTaro warn]: Vue component <' + path2id(p[0]) + '> is not define')
-              } else {
-                beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
-                  var i = JTaro.views.indexOf(p[0])
-                  var k
-                  var o
-                  if (~i) {
-                    i = 1 - (JTaro.views.length - i)
-                    if (i) route = i
-                  }
-                  if (method) {
-                    JTaro.method = method
-                  } else {
-                    JTaro.method = null
-                  }
-
-                  // 设置当前页面的参数
-                  JTaro.params = {}
-                  if (options) {
-                    JTaro.params = options
-                  }
-                  if (p[1]) {
-                    o = parseUrlParams(p[1])
-                    for (k in o) {
-                      if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
-                    }
-                  }
-
-                  if (typeof route === 'number') {
-                    window.history.go(route)
-                  } else {
-                    window.location.hash = route
-                  }
-                })
-              }
-            })
-
-            return
-          }
-          // **JTaro Comment end**;;
-
-          beforeEnterHook(Vue.options.components[path2id(p[0])], function (method) {
-            /** Fixed issues#1
-             *  如果目标路由对应的页面已存在，且非当前路由，转为负数使用history.go(-?)清除历史记录
-             */
-            var i = JTaro.views.indexOf(p[0])
-            var k
-            var o
-            if (~i) {
-              i = 1 - (JTaro.views.length - i)
-              if (i) route = i
-            }
-
-            if (method) {
-              JTaro.method = method
-            } else {
-              JTaro.method = null
-            }
-
-            // 设置当前页面的参数
-            JTaro.params = {}
-            if (options) {
-              JTaro.params = options
-            }
-            if (p[1]) {
-              o = parseUrlParams(p[1])
-              for (k in o) {
-                if (o.hasOwnProperty(k)) JTaro.params[k] = o[k]
-              }
-            }
-
-            if (typeof route === 'number') {
-              window.history.go(route)
-            } else {
-              window.location.hash = route
-            }
-          })
-        })
+        if (typeof route === 'number') {
+          window.history.go(route)
+        } else {
+          window.location.hash = route
+        }
       }
     }
 
@@ -438,21 +381,52 @@
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
-      // **JTaro Comment Start**
+      // 如果hash为空，清空历史记录缓存，跳回默认页
+      if (window.location.hash === '') {
+        window.sessionStorage.getItem('JTaro.history')
+        window.location.hash = JTaro.options.default
+        return
+      }
+
       var hash = window.location.hash.replace('#', '').split('?')[0]
+      function beforeEnterCallback (method) {
+        if (method) {
+          JTaro.method = method
+        } else {
+          JTaro.method = null
+        }
+        pushView(window.location.hash, JTaro.options.JRoll)
+      }
+
+      // **JTaro Comment Start**
       var vueCompoent = Vue.options.components[path2id(hash)]
       if (!vueCompoent) {
         JTaroDevelopImport(Vue, hash, function (c) {
           if (!c) {
             console.error('[JTaro warn]: Vue component <' + path2id(hash) + '> is not define')
           } else {
-            pushView(window.location.hash, JTaro.options.JRoll)
+            // 如果存在上一页页面先执行上一页面的beforeLeave
+            if (currentPage) {
+              beforeLeaveHook(findVueComponent(currentPage), function () {
+                beforeEnterHook(Vue.options.components[path2id(hash)], beforeEnterCallback)
+              })
+            } else {
+              beforeEnterHook(Vue.options.components[path2id(hash)], beforeEnterCallback)
+            }
           }
         })
         return
       }
       // **JTaro Comment end**;;
-      pushView(window.location.hash, JTaro.options.JRoll)
+
+      // 如果存在上一页页面先执行上一页面的beforeLeave
+      if (currentPage) {
+        beforeLeaveHook(findVueComponent(currentPage), function () {
+          beforeEnterHook(Vue.options.components[path2id(hash)], beforeEnterCallback)
+        })
+      } else {
+        beforeEnterHook(Vue.options.components[path2id(hash)], beforeEnterCallback)
+      }
     })
     // 页面宽度改变更新动画宽度
     window.addEventListener('resize', reset)
@@ -461,13 +435,20 @@
     // 启动
     function boot () {
       var hash = window.location.hash
-      var vueCompoent = Vue.options.components[path2id(hash.replace('#', '').split('?')[0] || JTaro.options.default)]
+      if (hash === '') {
+        // 跳到默认路由
+        window.location.hash = JTaro.options.default
+        return
+      }
+
+      var _hash = hash.replace('#', '').split('?')[0]
+      var vueCompoent = Vue.options.components[path2id(_hash)]
 
       // **JTaro Comment Start**
       if (!vueCompoent) {
-        JTaroDevelopImport(Vue, hash.replace('#', '').split('?')[0] || JTaro.options.default, function (c) {
+        JTaroDevelopImport(Vue, _hash, function (c) {
           if (!c) {
-            console.error('[JTaro warn]: Vue component <' + path2id(hash.replace('#', '').split('?')[0] || JTaro.options.default) + '> is not define')
+            console.error('[JTaro warn]: Vue component <' + path2id(_hash) + '> is not define')
           } else {
             beforeEnterHook(c, function (method) {
               if (method) {
@@ -476,19 +457,13 @@
                 JTaro.method = null
               }
 
-              // 跳到默认路由
-              if (hash === '') {
-                window.location.hash = JTaro.options.default
-
-              // 跳到指定路由
-              } else {
-                var p = hash.split('?')
-                JTaro.params = {}
-                if (p[1]) {
-                  JTaro.params = parseUrlParams(p[1])
-                }
-                pushView(hash, JTaro.options.JRoll)
+              // 保存参数
+              var p = hash.split('?')
+              JTaro.params = {}
+              if (p[1]) {
+                JTaro.params = parseUrlParams(p[1])
               }
+              pushView(hash, JTaro.options.JRoll)
             })
           }
         })
@@ -504,19 +479,13 @@
             JTaro.method = null
           }
 
-          // 跳到默认路由
-          if (hash === '') {
-            window.location.hash = JTaro.options.default
-
-          // 跳到指定路由
-          } else {
-            var p = hash.split('?')
-            JTaro.params = {}
-            if (p[1]) {
-              JTaro.params = parseUrlParams(p[1])
-            }
-            pushView(hash, JTaro.options.JRoll)
+          // 保存参数
+          var p = hash.split('?')
+          JTaro.params = {}
+          if (p[1]) {
+            JTaro.params = parseUrlParams(p[1])
           }
+          pushView(hash, JTaro.options.JRoll)
         })
       }
     }
@@ -529,7 +498,7 @@
         // setTimeout保证上一页面的afterEnter执行完再执行下一页
         setTimeout(function () {
           view.go(historyViews[0].url, historyViews[0].params)
-        }, 0)
+        }, 4)
       }
     })
     // 如果在非首页刷新页面，自动补全之前的页面

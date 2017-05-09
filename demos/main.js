@@ -83,7 +83,7 @@ Vue.component('home', {
 // 关于页
 Vue.component('about', {
   template: '<div id="about">' +
-              '<my-head><a class="left" href="javascript:void(0)" @click="goIndex">&lt;&lt; home</a>' +
+              '<my-head><a class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>' +
               'About<a class="right" href="javascript:void(0)" @click="goList">list &gt;&gt;</a></my-head>' +
               '<div id="about_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">about page {{ i }}</p></div></div>' +
             '</div>',
@@ -103,7 +103,7 @@ Vue.component('about', {
     return true
   },
   methods: {
-    goIndex: function () {
+    goHome: function () {
       this.postMessage('modifyTitle', 'home')
       // this.postMessage('alertMessage', 'home')
       this.postMessage('modifyTitle', 'list') // nothing will do
@@ -144,7 +144,7 @@ Vue.component('list', {
 Vue.component('four', {
   template: '<div id="four">' +
               '<my-head><a class="left" href="javascript:void(0)" @click="goAbout">&lt;&lt; about</a>' +
-              '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goIndex">&lt;&lt; home</a>Four</my-head>' +
+              '<a style="margin-left:10px" class="left" href="javascript:void(0)" @click="goHome">&lt;&lt; home</a>Four</my-head>' +
               '<div id="four_wrapper"><div><p v-for="i in items" @click="deleteItem(i)">four page {{ i }}</p></div></div>' +
             '</div>',
   mixins: [mixin],
@@ -152,7 +152,7 @@ Vue.component('four', {
     goAbout: function () {
       this.go('about')
     },
-    goIndex: function () {
+    goHome: function () {
       this.go('home')
     }
   },
