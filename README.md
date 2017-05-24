@@ -3,6 +3,10 @@
 
 > An H5 SPA framework for Vue.js 2.0
 
+## 相关视频教程
+
+JTaro Tutorial：[https://github.com/chjtx/JTaro-Tutorial](https://github.com/chjtx/JTaro-Tutorial)
+
 ## 依赖
 
 - Vue 2.x [Vue 2.x 中文教程](http://cn.vuejs.org/v2/guide/)
