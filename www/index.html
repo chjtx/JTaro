@@ -126,6 +126,7 @@
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jroll/src/jroll.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
 <p>2、 在body里创建id为<code>jtaro_app</code>的div，并在其后引入JTaro</p>
+<p><strong><span style="color:red">注意：压缩版 jtaro.min.js 去除了所有开发相关代码，开发过程中请使用未经压缩的 jtaro.js</span></strong></p>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">"jtaro_app"</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/src/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
@@ -464,6 +465,7 @@ npm i -D jtaro jtaro-module jtaro-bundle
 <p><a target="_blank" href="https://github.com/chjtx/JTaro-Bundle">JTaro Bundle</a> 是部署JTaro应用时用于将零散的开发代码合并压缩的插件</p>
 <h4 id="-www-index-html">【步骤一】创建www/index.html</h4>
 <p>在工程文件夹（即是与index.html同级）新建一个<code>www</code>文件夹，用于存放上线代码，在www文件夹下新建index.html</p>
+<p><strong><span style="color:red">注意：上线方可使用压缩版 jtaro.min.js</span></strong></p>
 <p>www/index.html</p>
 <pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"zh-CN"</span>&gt;</span>
@@ -489,7 +491,7 @@ npm i -D jtaro jtaro-module jtaro-bundle
 <ul>
 <li>没有client.js，上线版本不需要node环境也可以运行</li>
 <li>多了pages.js，打包时 JTaro Bundle 会将pages文件夹打包成pages.js</li>
-<li>jroll/vue/jtaro换成了带.min后缀的压缩版 （<strong>注意：</strong>jtaro.min删除了全部开发提示代码，不能在开发环境下运行）</li>
+<li>jroll/vue/jtaro换成了带.min后缀的压缩版</li>
 </ul>
 <h4 id="-">【步骤二】打包</h4>
 <p>在工程文件夹新建一个<code>build.js</code></p>
