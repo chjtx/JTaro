@@ -61,7 +61,7 @@ npm install jtaro
 
 2、 在body里创建id为`jtaro_app`的div，并在其后引入JTaro
 
-**<span style="color:red">注意：压缩版 jtaro.min.js 去除了所有开发相关代码，开发过程中请使用未经压缩的 jtaro.js</span>**
+<span style="color:red">注意：压缩版 jtaro.min.js 去除了所有开发相关代码，开发过程中请使用未经压缩的 jtaro.js</span>
 
 ```html
 <div id="jtaro_app"></div>
@@ -460,7 +460,7 @@ node ./node_modules/jtaro-module/src/server.js
 
 在工程文件夹（即是与index.html同级）新建一个`www`文件夹，用于存放上线代码，在www文件夹下新建index.html
 
-**<span style="color:red">上线方可使用压缩版 jtaro.min.js</span>**
+<span style="color:red">上线方可使用压缩版 jtaro.min.js</span>
 
 www/index.html
 
