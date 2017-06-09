@@ -61,6 +61,8 @@ npm install jtaro
 
 2、 在body里创建id为`jtaro_app`的div，并在其后引入JTaro
 
+**<span style="color:red">注意：压缩版 jtaro.min.js 去除了所有开发相关代码，开发过程中请使用未经压缩的 jtaro.js</span>**
+
 ```html
 <div id="jtaro_app"></div>
 <script src='https://unpkg.com/jtaro/src/jtaro.js'></script>
@@ -458,6 +460,8 @@ node ./node_modules/jtaro-module/src/server.js
 
 在工程文件夹（即是与index.html同级）新建一个`www`文件夹，用于存放上线代码，在www文件夹下新建index.html
 
+**<span style="color:red">上线方可使用压缩版 jtaro.min.js</span>**
+
 www/index.html
 
 ```html
@@ -486,7 +490,7 @@ www/index.html
 
 - 没有client.js，上线版本不需要node环境也可以运行
 - 多了pages.js，打包时 JTaro Bundle 会将pages文件夹打包成pages.js
-- jroll/vue/jtaro换成了带.min后缀的压缩版 （**注意：**jtaro.min删除了全部开发提示代码，不能在开发环境下运行）
+- jroll/vue/jtaro换成了带.min后缀的压缩版
 
 #### 【步骤二】打包
 
