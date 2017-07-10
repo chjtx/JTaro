@@ -500,13 +500,13 @@ npm i -D jtaro jtaro-module jtaro-bundle
 
 jtaroBundle.bundle({
   origin: <span class="hljs-symbol">'index</span>.html',
-  target: <span class="hljs-symbol">'www</span>/index.html'
+  target: <span class="hljs-symbol">'www</span>/index_template.html'
 })
 </code></pre>
 <p>在命令行运行</p>
 <pre><code><span class="hljs-keyword">node</span> <span class="hljs-title">build</span>.js
-</code></pre><p>JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件</p>
-<p>将会看到www文件夹下多了pages.js和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了</p>
+</code></pre><p>JTaro Bundle 会自动根据www/index_template.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件</p>
+<p>将会看到www文件夹下多了pages.js、index.html和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了</p>
 <h2 id="jtaro-">JTaro完成了哪些功能？</h2>
 <ul>
 <li><input type="checkbox" checked disabled> 简单路由功能，根据组件名称动态创建页面</li>

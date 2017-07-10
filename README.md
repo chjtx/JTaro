@@ -503,7 +503,7 @@ var jtaroBundle = require('jtaro-bundle')
 
 jtaroBundle.bundle({
   origin: 'index.html',
-  target: 'www/index.html'
+  target: 'www/index_template.html'
 })
 ```
 
@@ -513,9 +513,9 @@ jtaroBundle.bundle({
 node build.js
 ```
 
-JTaro Bundle 会自动根据www/index.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件
+JTaro Bundle 会自动根据www/index_template.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件
 
-将会看到www文件夹下多了pages.js和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了
+将会看到www文件夹下多了pages.js、index.html和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了
 
 ## JTaro完成了哪些功能？
 
