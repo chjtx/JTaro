@@ -490,17 +490,24 @@
       }
     }
 
-    // 自动补全历史页面功能
-    var historyViews = window.sessionStorage.getItem('JTaro.history')
-    JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
-      if (historyViews && historyViews.length > 1) {
-        var view = findVueComponent(historyViews.shift().view).$children[0]
-        // setTimeout保证上一页面的afterEnter执行完再执行下一页
-        setTimeout(function () {
-          view.go(historyViews[0].url, historyViews[0].params)
-        }, 4)
-      }
-    })
+    var historyViews = null
+    // 如果hash为空，清空历史记录缓存
+    if (window.location.hash === '') {
+      window.sessionStorage.getItem('JTaro.history')
+    } else {
+      // 自动补全历史页面功能
+      historyViews = window.sessionStorage.getItem('JTaro.history')
+      JTaro.afterEnter.add('__autoLoadHistoryPages__', function () {
+        if (historyViews && historyViews.length > 1) {
+          var view = findVueComponent(historyViews.shift().view).$children[0]
+          // setTimeout保证上一页面的afterEnter执行完再执行下一页
+          setTimeout(function () {
+            view.go(historyViews[0].url, historyViews[0].params)
+          }, 4)
+        }
+      })
+    }
+
     // 如果在非首页刷新页面，自动补全之前的页面
     if (historyViews && (historyViews = JSON.parse(historyViews)).length > 1) {
       window.history.go(1 - historyViews.length)

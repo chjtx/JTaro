@@ -29,7 +29,7 @@ gulp.task('dev', function () {
 
 gulp.task('build', function () {
   var version = JSON.parse(fs.readFileSync('./package.json')).version
-  var copyright = `/*! JTaro.js v${version} ~ (c) 2016 Author:BarZu Git:https://github.com/chjtx/JTaro */\n`
+  var copyright = `/*! JTaro.js v${version} ~ (c) 2016-2017 Author:BarZu Git:https://github.com/chjtx/JTaro */\n`
 
   gulp.src('src/jtaro.js')
 
