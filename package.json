@@ -1,6 +1,6 @@
 {
   "name": "jtaro",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {
@@ -33,10 +33,10 @@
     "gulp-replace": "^0.5.4",
     "gulp-uglify": "^2.0.0",
     "highlight.js": "^9.9.0",
-    "jtaro-bundle": "^0.1.1",
-    "jtaro-module": "^0.1.0",
+    "jtaro-bundle": "^0.3.0",
+    "jtaro-module": "^0.3.3",
     "marked": "^0.3.6",
     "rollup": "^0.40.0",
-    "rollup-plugin-jtaro-module": "0.0.3"
+    "rollup-plugin-jtaro-module": "0.2.2"
   }
 }

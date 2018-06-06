@@ -1,4 +1,4 @@
-/*! JTaro.js v0.5.1 ~ (c) 2016-2017 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.5.2 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -86,15 +86,6 @@
     }
     // **JTaro Comment end**;;
 
-    // 创建样式
-    var style = document.getElementById('jtaro_style')
-    if (!style) {
-      style = document.createElement('style')
-      style.id = 'jtaro_style'
-      style.innerHTML = 'html,body{height:100%;padding:0;margin:0}#jtaro_app{position:relative;width:100%;height:100%;overflow:hidden}.jtaro-view{position:absolute;width:100%;height:100%;overflow:hidden;background:#fff;}'
-      document.head.appendChild(style)
-    }
-
     var WIDTH = window.innerWidth
     var currentPage = '' // 当前路由
 
@@ -102,13 +93,22 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.5.1'
+    JTaro.version = '0.5.2'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
       default: options.default || 'home',  // 默认页
-      distance: isNaN(options.distance) ? 0.1 : Number(options.distance),    // 页面后退距离百分比，以屏幕宽度为1
-      duration: isNaN(options.duration) ? 200 : Number(options.duration)     // 页面过渡时间
+      distance: isNaN(options.distance) ? 0.2 : Number(options.distance),    // 页面后退距离百分比，以屏幕宽度为1
+      duration: isNaN(options.duration) ? 300 : Number(options.duration)     // 页面过渡时间
+    }
+
+    // 创建样式
+    var style = document.getElementById('jtaro_style')
+    if (!style) {
+      style = document.createElement('style')
+      style.id = 'jtaro_style'
+      style.innerHTML = 'html,body{height:100%;padding:0;margin:0}#jtaro_app{position:relative;width:100%;height:100%;overflow:hidden}.jtaro-view{position:absolute;width:100%;height:100%;overflow:hidden;background:#fff;-webkit-transition:transform ' + JTaro.options.duration + 'ms ease-out;transition:transform ' + JTaro.options.duration + 'ms ease-out;}'
+      document.head.appendChild(style)
     }
 
     // beforeEnter路由钩子
@@ -172,28 +172,29 @@
       }
 
       JTaro.sliding = true
-      _jroll.utils.moveTo(el, WIDTH, 0)
+      el.style[_jroll.utils.TSF] = 'translate(' + WIDTH + 'px, 0px) translateZ(0px)'
 
       setTimeout(function () {
         // 收入当前页
         if (preSib) {
-          _jroll.utils.moveTo(preSib, -WIDTH * JTaro.options.distance, 0, JTaro.options.duration, function () {
+          preSib.style[_jroll.utils.TSF] = 'translate(' + -WIDTH * JTaro.options.distance + 'px, 0px) translateZ(0px)'
+          setTimeout(function () {
             // 将当前页的上一页隐藏，保持只有两个页面为display:block
             var preSibSib = preSib.previousElementSibling
             if (preSibSib) {
               preSibSib.style.display = 'none'
             }
-          })
+          }, JTaro.options.duration)
         }
 
         // 滑进新建页
-        _jroll.utils.moveTo(el, 0, 0, (JTaro.views.length === 1 ? 0 : JTaro.options.duration), function () {
+        el.style[_jroll.utils.TSF] = 'translate(0px, 0px) translateZ(0px)'
+        setTimeout(function () {
           JTaro.sliding = false
-
           // afterEnter hook 前进
           afterEnterHook(viewCompoent)
-        })
-      }, 0)
+        }, JTaro.views.length === 1 ? 0 : JTaro.options.duration)
+      }, 100)
     }
 
     // 页面切出动画（删除页面）
@@ -203,18 +204,20 @@
 
       // 撤出当前页
       if (nxtSib) {
-        _jroll.utils.moveTo(nxtSib, WIDTH, 0, JTaro.options.duration, cb)
+        nxtSib.style[_jroll.utils.TSF] = 'translate(' + WIDTH + 'px, 0px) translateZ(0px)'
+        setTimeout(cb, JTaro.options.duration)
       }
 
       // 滑出上一页
-      _jroll.utils.moveTo(el, 0, 0, JTaro.options.duration, function () {
+      el.style[_jroll.utils.TSF] = 'translate(0px, 0px) translateZ(0px)'
+      setTimeout(function () {
         JTaro.sliding = false
         // 将上一页的上一页显示，保持有两个页面为display:block
         var preSib = el.previousElementSibling
         if (preSib) {
           preSib.style.display = 'block'
         }
-      })
+      }, JTaro.options.duration)
     }
 
     // 递归删除页面
