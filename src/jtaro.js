@@ -171,9 +171,11 @@
       }
 
       JTaro.sliding = true
+      el.style[_jroll.utils.TSD] = '0ms'
       el.style[_jroll.utils.TSF] = 'translate(' + WIDTH + 'px, 0px) translateZ(0px)'
 
       setTimeout(function () {
+        el.style[_jroll.utils.TSD] = ''
         // 收入当前页
         if (preSib) {
           preSib.style[_jroll.utils.TSF] = 'translate(' + -WIDTH * JTaro.options.distance + 'px, 0px) translateZ(0px)'
@@ -208,8 +210,10 @@
       }
 
       // 滑出上一页
+      el.style[_jroll.utils.TSD] = '0ms'
       el.style[_jroll.utils.TSF] = 'translate(0px, 0px) translateZ(0px)'
       setTimeout(function () {
+        el.style[_jroll.utils.TSD] = ''
         JTaro.sliding = false
         // 将上一页的上一页显示，保持有两个页面为display:block
         var preSib = el.previousElementSibling
@@ -436,8 +440,13 @@
     window.addEventListener('orientationchange', reset)
 
     // 启动
-    function boot () {
+    function boot (forcedToHome) {
       var hash = window.location.hash
+      if (forcedToHome) {
+        // 强制去首页
+        window.location.hash = JTaro.options.default
+        return
+      }
       if (hash === '') {
         // 跳到默认路由
         window.location.hash = JTaro.options.default
@@ -496,7 +505,7 @@
     var historyViews = null
     // 如果hash为空，清空历史记录缓存
     if (window.location.hash === '') {
-      window.sessionStorage.getItem('JTaro.history')
+      window.sessionStorage.remove('JTaro.history')
     } else {
       // 自动补全历史页面功能
       historyViews = window.sessionStorage.getItem('JTaro.history')
@@ -512,12 +521,16 @@
     }
 
     // 如果在非首页刷新页面，自动补全之前的页面
-    if (historyViews && (historyViews = JSON.parse(historyViews)).length > 1) {
-      window.history.go(1 - historyViews.length)
+    if (historyViews) {
+      if ((historyViews = JSON.parse(historyViews)).length > 1) {
+        window.history.go(1 - historyViews.length)
+      } else {
+        boot()
+      }
 
     // 否则根据路由启动页面
     } else {
-      boot()
+      boot(1)
     }
   }
 

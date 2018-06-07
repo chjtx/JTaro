@@ -16,9 +16,9 @@ JTaro Tutorial：[https://github.com/chjtx/JTaro-Tutorial](https://github.com/ch
 
 ### 本地
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.1.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.3.js</a>
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.1.min.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.3.min.js</a>
 
 ### CDN
 
@@ -456,13 +456,13 @@ node ./node_modules/jtaro-module/src/server.js
 
 [JTaro Bundle](https://github.com/chjtx/JTaro-Bundle) 是部署JTaro应用时用于将零散的开发代码合并压缩的插件
 
-#### 【步骤一】创建www/index.html
+#### 【步骤一】创建www/index_template.html
 
-在工程文件夹（即是与index.html同级）新建一个`www`文件夹，用于存放上线代码，在www文件夹下新建index.html
+在工程文件夹（即是与index.html同级）新建一个`www`文件夹，用于存放上线代码，在www文件夹下新建index_template.html
 
 **<span style="color:red">注意：上线方可使用压缩版 jtaro.min.js</span>**
 
-www/index.html
+www/index_template.html
 
 ```html
 <!DOCTYPE html>
@@ -486,7 +486,7 @@ www/index.html
 </html>
 ```
 
-这个要上线的index.html与开发的index.html区别在于
+这个要上线的index.html（根据index_template.html自动生成）与开发的index.html区别在于
 
 - 没有client.js，上线版本不需要node环境也可以运行
 - 多了pages.js，打包时 JTaro Bundle 会将pages文件夹打包成pages.js

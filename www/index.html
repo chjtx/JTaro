@@ -93,8 +93,10 @@
 <h2 id="-download">下载 download</h2>
 <h3 id="-">本地</h3>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.1.js</a></p>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.1.min.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.3.js</a></p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.3.min.js</a></p>
 </blockquote>
 <h3 id="cdn">CDN</h3>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -365,8 +367,8 @@ Vue.component(<span class="hljs-string">'about'</span>, {
 <li>使用<code>onMessage</code>选项接收消息</li>
 </ul>
 <pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
-  <span class="hljs-attr">onMessage</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) </span>{
-    <span class="hljs-built_in">console</span>.log(event) <span class="hljs-comment">// {message: 'modifyTitle', origin: 'about'}</span>
+  onMessage: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(event)</span></span> {
+    console.<span class="hljs-built_in">log</span>(event) // {message: <span class="hljs-string">'modifyTitle'</span>, origin: <span class="hljs-string">'about'</span>}
   }
 })
 </code></pre>
@@ -386,26 +388,26 @@ Vue.component(<span class="hljs-string">'about'</span>, {
 <p>需要 nodejs 6 以上版本，若未安装，请访问<a target="_blank" href="http://nodejs.cn/">http://nodejs.cn/</a></p>
 <p>创建一个空文件夹，然后在命令行里cd到该文件夹，初始化工程，然后安装JTaro、JTaro Module、JTaro Bundle</p>
 <pre><code class="lang-bash"><span class="hljs-comment"># 初始化</span>
-npm init
+<span class="hljs-string">npm</span> <span class="hljs-string">init</span>
 
 <span class="hljs-comment"># 输入项目名称</span>
-<span class="hljs-attr">name:</span> (jtaro-demo) jtaro-demo
+<span class="hljs-attr">name:</span> <span class="hljs-string">(jtaro-demo)</span> <span class="hljs-string">jtaro-demo</span>
 
 <span class="hljs-comment"># 以下选项一路回车即可</span>
-<span class="hljs-attr">version:</span> (<span class="hljs-number">1.0</span><span class="hljs-number">.0</span>)
+<span class="hljs-attr">version:</span> <span class="hljs-string">(1.0.0)</span>
 <span class="hljs-attr">description:</span>
-entry point: (index.js)
-test command:
-git repository:
+<span class="hljs-string">entry</span> <span class="hljs-attr">point:</span> <span class="hljs-string">(index.js)</span>
+<span class="hljs-string">test</span> <span class="hljs-attr">command:</span>
+<span class="hljs-string">git</span> <span class="hljs-attr">repository:</span>
 <span class="hljs-attr">keywords:</span>
 <span class="hljs-attr">author:</span>
-<span class="hljs-attr">license:</span> (ISC)
+<span class="hljs-attr">license:</span> <span class="hljs-string">(ISC)</span>
 
 <span class="hljs-comment"># 输入yes结束</span>
-Is this ok? (<span class="hljs-literal">yes</span>) <span class="hljs-literal">yes</span>
+<span class="hljs-string">Is</span> <span class="hljs-string">this</span> <span class="hljs-string">ok?</span> <span class="hljs-string">(yes)</span> <span class="hljs-literal">yes</span>
 
 <span class="hljs-comment"># 安装JTaro</span>
-npm i -D jtaro jtaro-module jtaro-bundle
+<span class="hljs-string">npm</span> <span class="hljs-string">i</span> <span class="hljs-bullet">-D</span> <span class="hljs-string">jtaro</span> <span class="hljs-string">jtaro-module</span> <span class="hljs-string">jtaro-bundle</span>
 </code></pre>
 <h4 id="-index-html">【步骤二】创建index.html</h4>
 <p>index.html</p>
@@ -463,10 +465,10 @@ npm i -D jtaro jtaro-module jtaro-bundle
 </code></pre><p>在浏览器上运行<code>localhost:3000/</code>，能够看到<code>Hello JTaro</code>文字表示成功了</p>
 <h3 id="-">上线模式</h3>
 <p><a target="_blank" href="https://github.com/chjtx/JTaro-Bundle">JTaro Bundle</a> 是部署JTaro应用时用于将零散的开发代码合并压缩的插件</p>
-<h4 id="-www-index-html">【步骤一】创建www/index.html</h4>
-<p>在工程文件夹（即是与index.html同级）新建一个<code>www</code>文件夹，用于存放上线代码，在www文件夹下新建index.html</p>
+<h4 id="-www-index_template-html">【步骤一】创建www/index_template.html</h4>
+<p>在工程文件夹（即是与index.html同级）新建一个<code>www</code>文件夹，用于存放上线代码，在www文件夹下新建index_template.html</p>
 <p><strong><span style="color:red">注意：上线方可使用压缩版 jtaro.min.js</span></strong></p>
-<p>www/index.html</p>
+<p>www/index_template.html</p>
 <pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">html</span> <span class="hljs-attr">lang</span>=<span class="hljs-string">"zh-CN"</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span>
@@ -487,7 +489,7 @@ npm i -D jtaro jtaro-module jtaro-bundle
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
 </code></pre>
-<p>这个要上线的index.html与开发的index.html区别在于</p>
+<p>这个要上线的index.html（根据index_template.html自动生成）与开发的index.html区别在于</p>
 <ul>
 <li>没有client.js，上线版本不需要node环境也可以运行</li>
 <li>多了pages.js，打包时 JTaro Bundle 会将pages文件夹打包成pages.js</li>
