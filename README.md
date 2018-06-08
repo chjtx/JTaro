@@ -16,9 +16,9 @@ JTaro Tutorial：[https://github.com/chjtx/JTaro-Tutorial](https://github.com/ch
 
 ### 本地
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.4.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.5.js</a>
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.4.min.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.5.min.js</a>
 
 ### CDN
 

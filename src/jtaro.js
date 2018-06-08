@@ -96,9 +96,9 @@
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
-      default: options.default || 'home',  // 默认页
-      distance: isNaN(options.distance) ? 0.2 : Number(options.distance),    // 页面后退距离百分比，以屏幕宽度为1
-      duration: isNaN(options.duration) ? 300 : Number(options.duration)     // 页面过渡时间
+      default: options.default || 'home', // 默认页
+      distance: isNaN(options.distance) ? 0.2 : Number(options.distance), // 页面后退距离百分比，以屏幕宽度为1
+      duration: isNaN(options.duration) ? 300 : Number(options.duration) // 页面过渡时间
     }
 
     // 创建样式
@@ -442,7 +442,7 @@
     // 启动
     function boot (forcedToHome) {
       var hash = window.location.hash
-      if (forcedToHome) {
+      if (forcedToHome && window.location.hash.substr(1) !== JTaro.options.default) {
         // 强制去首页
         window.location.hash = JTaro.options.default
         return
