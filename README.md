@@ -247,13 +247,19 @@ afterEnter 不会阻断路由执行
 离开该路由（页面滑出）之前执行
 
 ```js
+/** v0.6.0以前的旧用法 */
 Vue.component('home', {
-  // beforeLeave: function (cb) {
-  //   setTimeout(function () {
-  //     // ...
-  //     cb()
-  //   }, 1000)
-  // }
+  beforeLeave: function (cb) {
+    // setTimeout(function () {
+    //   // ...
+    //   cb()
+    // }, 1000)
+  }
+})
+```
+```js
+/** v0.6.1 新用法*/
+Vue.component('home', {
   beforeLeave: function (resolve, reject) {
     if (confirm('您有数据尚未保存，确实要离开吗？')) {
       resolve()
