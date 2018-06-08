@@ -93,10 +93,10 @@
 <h2 id="-download">下载 download</h2>
 <h3 id="-">本地</h3>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.0.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.1.js</a></p>
 </blockquote>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.0.min.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.1.min.js</a></p>
 </blockquote>
 <h3 id="cdn">CDN</h3>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -310,16 +310,26 @@ Vue.component(<span class="hljs-string">'home'</span>, {
 <h4 id="beforeleave">beforeLeave</h4>
 <p>离开该路由（页面滑出）之前执行</p>
 <pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
-  beforeLeave: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(cb)</span> </span>{
-    setTimeout(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
-      <span class="hljs-comment">// ...</span>
-      cb()
-    }, <span class="hljs-number">1000</span>)
+  <span class="hljs-regexp">//</span> beforeLeave: <span class="hljs-keyword">function</span> (cb) {
+  <span class="hljs-regexp">//</span>   setTimeout(<span class="hljs-keyword">function</span> () {
+  <span class="hljs-regexp">//</span>     <span class="hljs-regexp">//</span> ...
+  <span class="hljs-regexp">//</span>     cb()
+  <span class="hljs-regexp">//</span>   }, <span class="hljs-number">1000</span>)
+  <span class="hljs-regexp">//</span> }
+  beforeLeave: <span class="hljs-keyword">function</span> (resolve, reject) {
+    <span class="hljs-keyword">if</span> (confirm(<span class="hljs-string">'您有数据尚未保存，确实要离开吗？'</span>)) {
+      resolve()
+    } <span class="hljs-keyword">else</span> {
+      reject()
+    }
   }
 })
 </code></pre>
-<p>beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要<code>return true</code>或者执行回调<code>cb()</code>来继续执行后面的代码。不同的是beforeLeave能够获取到this，因而在<code>cb()</code>里传入function是无效的。</p>
+<p><del>beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要<code>return true</code>或者执行回调<code>cb()</code>来继续执行后面的代码。不同的是beforeLeave能够获取到this，因而在<code>cb()</code>里传入function是无效的。</del></p>
+<p>v0.6.1版本改进了<code>beforeLeave</code>的用法，resolve 和 reject 必须执行一个。执行 resolve() 将顺利跳转到下一页面，执行 reject() 将终止跳转到下一页面并回退到当前路由。</p>
+<blockquote>
 <p>四个钩子执行顺序 beforeEnter -&gt; (mounted) -&gt; afterEnter -&gt; beforeLeave</p>
+</blockquote>
 <p><strong>注意：</strong></p>
 <ol>
 <li>mounted为Vue原有生命周期钩子，首次访问页面时会执行该钩子，此后JTaro将缓存该页面，不会再执行该钩子</li>

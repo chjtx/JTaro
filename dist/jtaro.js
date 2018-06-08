@@ -1,9 +1,9 @@
-/*! JTaro.js v0.6.0 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.6.1 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
-  : typeof define === 'function' && define.amd ? define(factory)
-  : (global.JTaro = factory())
+    : typeof define === 'function' && define.amd ? define(factory)
+      : (global.JTaro = factory())
 }(this, function () {
   'use strict'
 
@@ -88,12 +88,13 @@
 
     var WIDTH = window.innerWidth
     var currentPage = '' // 当前路由
+    var leaving = false // 正要离开当前路由
 
     options = options || {}
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.6.0'
+    JTaro.version = '0.6.1'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -146,6 +147,19 @@
       JTaro.params = null
     }
 
+    // 回滚路由
+    function rollback () {
+      var i = JTaro.history.length
+      var hash = window.location.hash.replace('#', '').split('?')[0]
+      while (i--) {
+        if (JTaro.history[i].url === hash) {
+          window.location.hash = currentPage
+          return
+        }
+      }
+      window.history.back()
+    }
+
     // beforeLeave路由钩子
     function beforeLeaveHook (viewCompoent, callback) {
       var beforeLeave = Vue.options.components[path2id(viewCompoent.jtaro_tag)].options.beforeLeave
@@ -154,9 +168,11 @@
       JTaro.beforeLeave.run()
 
       if (typeof beforeLeave === 'function') {
-        if (beforeLeave.call(viewCompoent.$children[0], function () { callback() })) {
+        leaving = true
+        beforeLeave.call(viewCompoent.$children[0], function () {
+          leaving = false
           callback()
-        }
+        }, rollback)
       } else {
         callback()
       }
@@ -387,6 +403,10 @@
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
+      if (leaving) {
+        leaving = false
+        return
+      }
       // 如果hash为空，清空历史记录缓存，跳回默认页
       if (window.location.hash === '') {
         window.sessionStorage.getItem('JTaro.history')

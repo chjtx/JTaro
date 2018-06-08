@@ -16,9 +16,9 @@ JTaro Tutorial：[https://github.com/chjtx/JTaro-Tutorial](https://github.com/ch
 
 ### 本地
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.0.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.1.js</a>
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.0.min.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.1.min.js</a>
 
 ### CDN
 
@@ -248,18 +248,27 @@ afterEnter 不会阻断路由执行
 
 ```js
 Vue.component('home', {
-  beforeLeave: function (cb) {
-    setTimeout(function () {
-      // ...
-      cb()
-    }, 1000)
+  // beforeLeave: function (cb) {
+  //   setTimeout(function () {
+  //     // ...
+  //     cb()
+  //   }, 1000)
+  // }
+  beforeLeave: function (resolve, reject) {
+    if (confirm('您有数据尚未保存，确实要离开吗？')) {
+      resolve()
+    } else {
+      reject()
+    }
   }
 })
 ```
 
-beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要`return true`或者执行回调`cb()`来继续执行后面的代码。不同的是beforeLeave能够获取到this，因而在`cb()`里传入function是无效的。
+~~beforeLeave 和 beforeEnter 一样都会阻断路由执行，因此需要`return true`或者执行回调`cb()`来继续执行后面的代码。不同的是beforeLeave能够获取到this，因而在`cb()`里传入function是无效的。~~
 
-四个钩子执行顺序 beforeEnter -> (mounted) -> afterEnter -> beforeLeave
+v0.6.1版本改进了`beforeLeave`的用法，resolve 和 reject 必须执行一个。执行 resolve() 将顺利跳转到下一页面，执行 reject() 将终止跳转到下一页面并回退到当前路由。
+
+> 四个钩子执行顺序 beforeEnter -> (mounted) -> afterEnter -> beforeLeave
 
 **注意：**
 
