@@ -16,9 +16,9 @@ JTaro Tutorial：[https://github.com/chjtx/JTaro-Tutorial](https://github.com/ch
 
 ### 本地
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.5.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.0.js</a>
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.5.min.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.0.min.js</a>
 
 ### CDN
 
@@ -212,9 +212,16 @@ Vue.component('home', {
 Vue.component('home', {
   beforeEnter: function (cb) {
     console.log(this) // JTaro
-    cb(function (vm) {
+    /** v0.5.x */
+    // cb(function (vm) {
+    //   console.log(this) // <home>组件实例`this`
+    //   console.log(vm)   // <home>组件实例`this`
+    // })
+
+    /** v0.6.0 之后vm改为params */
+    cb(function (params) {
       console.log(this) // <home>组件实例`this`
-      console.log(vm)   // <home>组件实例`this`
+      console.log(params)   // 上一个页面使用this.go传过来的参数
     })
   }
 })

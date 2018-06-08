@@ -93,10 +93,10 @@
 <h2 id="-download">下载 download</h2>
 <h3 id="-">本地</h3>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.5.5.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.0.js</a></p>
 </blockquote>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.5.5.min.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.0.min.js</a></p>
 </blockquote>
 <h3 id="cdn">CDN</h3>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -283,9 +283,16 @@ Vue.component(<span class="hljs-string">'home'</span>, {
 <pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
   <span class="hljs-attr">beforeEnter</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">cb</span>) </span>{
     <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>) <span class="hljs-comment">// JTaro</span>
-    cb(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">vm</span>) </span>{
+    <span class="hljs-comment">/** v0.5.x */</span>
+    <span class="hljs-comment">// cb(function (vm) {</span>
+    <span class="hljs-comment">//   console.log(this) // &lt;home&gt;组件实例`this`</span>
+    <span class="hljs-comment">//   console.log(vm)   // &lt;home&gt;组件实例`this`</span>
+    <span class="hljs-comment">// })</span>
+
+    <span class="hljs-comment">/** v0.6.0 之后vm改为params */</span>
+    cb(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">params</span>) </span>{
       <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>) <span class="hljs-comment">// &lt;home&gt;组件实例`this`</span>
-      <span class="hljs-built_in">console</span>.log(vm)   <span class="hljs-comment">// &lt;home&gt;组件实例`this`</span>
+      <span class="hljs-built_in">console</span>.log(params)   <span class="hljs-comment">// 上一个页面使用this.go传过来的参数</span>
     })
   }
 })

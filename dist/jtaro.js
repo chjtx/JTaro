@@ -1,4 +1,4 @@
-/*! JTaro.js v0.5.5 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.6.0 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -93,7 +93,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.5.5'
+    JTaro.version = '0.6.0'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -168,7 +168,7 @@
       var preSib = el.previousElementSibling
 
       if (JTaro.method) {
-        JTaro.method.call(viewCompoent.$children[0], viewCompoent.$children[0])
+        JTaro.method.call(viewCompoent.$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
       }
 
       JTaro.sliding = true
@@ -211,10 +211,8 @@
       }
 
       // 滑出上一页
-      el.style[_jroll.utils.TSD] = '0ms'
       el.style[_jroll.utils.TSF] = 'translate(0px, 0px) translateZ(0px)'
       setTimeout(function () {
-        el.style[_jroll.utils.TSD] = ''
         JTaro.sliding = false
         // 将上一页的上一页显示，保持有两个页面为display:block
         var preSib = el.previousElementSibling
