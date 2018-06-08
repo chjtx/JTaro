@@ -1,6 +1,6 @@
 {
   "name": "jtaro",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {
@@ -20,8 +20,8 @@
   "author": "BarZu",
   "license": "MIT",
   "dependencies": {
-    "jroll": "^2.4.5",
-    "vue": "^2.2.1"
+    "jroll": "^2.6.1",
+    "vue": "^2.5.16"
   },
   "devDependencies": {
     "eslint": "^3.9.1",
@@ -37,6 +37,6 @@
     "jtaro-module": "^0.3.3",
     "marked": "^0.3.6",
     "rollup": "^0.40.0",
-    "rollup-plugin-jtaro-module": "0.2.2"
+    "rollup-plugin-jtaro-module": "0.2.3"
   }
 }

@@ -1,4 +1,4 @@
-/*! JTaro.js v0.5.3 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.5.4 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -93,7 +93,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.5.3'
+    JTaro.version = '0.5.4'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -506,7 +506,7 @@
     var historyViews = null
     // 如果hash为空，清空历史记录缓存
     if (window.location.hash === '') {
-      window.sessionStorage.remove('JTaro.history')
+      window.sessionStorage.removeItem('JTaro.history')
     } else {
       // 自动补全历史页面功能
       historyViews = window.sessionStorage.getItem('JTaro.history')

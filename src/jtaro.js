@@ -505,7 +505,7 @@
     var historyViews = null
     // 如果hash为空，清空历史记录缓存
     if (window.location.hash === '') {
-      window.sessionStorage.remove('JTaro.history')
+      window.sessionStorage.removeItem('JTaro.history')
     } else {
       // 自动补全历史页面功能
       historyViews = window.sessionStorage.getItem('JTaro.history')
