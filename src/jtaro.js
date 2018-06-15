@@ -182,6 +182,7 @@
       var el = viewCompoent.$el
       var preSib = el.previousElementSibling
 
+      // 执行beforeEnter cb里的方法
       if (JTaro.method) {
         JTaro.method.call(viewCompoent.$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
       }
@@ -241,6 +242,12 @@
     function recursionDelPage (views, children, _jroll, i) {
       var l = views.length
       if (l - 1 > i) {
+        if (l - 2 === i) {
+          // 执行beforeEnter cb里的方法
+          if (JTaro.method) {
+            JTaro.method.call(findVueComponent(views[i]).$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
+          }
+        }
         slideOut(children[l - 2], _jroll, function () {
           views.splice(l - 1)
           JTaro.history.splice(l - 1)
@@ -250,8 +257,7 @@
             recursionDelPage(views, children, _jroll, i)
           }, 0)
         })
-      }
-      if (l - 1 === i) {
+      } else {
         // afterEnter hook 后退
         afterEnterHook(findVueComponent(views[i]))
       }

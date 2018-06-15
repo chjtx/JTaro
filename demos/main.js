@@ -57,10 +57,10 @@ Vue.component('home', {
   afterEnter: function () {
     console.log('Home - afterEnter')
   },
-  beforeLeave: function (cb) {
+  beforeLeave: function (resolve, reject) {
     setTimeout(function () {
       console.log('Home - beforeLeave')
-      cb()
+      resolve()
     })
   },
   afterLeave: function () {
@@ -98,9 +98,9 @@ Vue.component('about', {
   afterEnter: function (params) {
     console.log(params)
   },
-  beforeLeave: function () {
+  beforeLeave: function (resolve, reject) {
     console.log('About BeforeLeave')
-    return true
+    resolve()
   },
   methods: {
     goHome: function () {

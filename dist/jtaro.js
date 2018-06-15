@@ -1,4 +1,4 @@
-/*! JTaro.js v0.6.1 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
+/*! JTaro.js v0.6.2 ~ (c) 2016-2018 Author:BarZu Git:https://github.com/chjtx/JTaro */
 /* global define JTaroLoader JTaroModules */
 ;(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory()
@@ -94,7 +94,7 @@
 
     JTaro.views = []
     JTaro.history = []
-    JTaro.version = '0.6.1'
+    JTaro.version = '0.6.2'
     JTaro.options = {
       JRoll: options.JRoll || window.JRoll,
       el: options.el || '#jtaro_app', // 默认挂载元素
@@ -183,6 +183,7 @@
       var el = viewCompoent.$el
       var preSib = el.previousElementSibling
 
+      // 执行beforeEnter cb里的方法
       if (JTaro.method) {
         JTaro.method.call(viewCompoent.$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
       }
@@ -242,6 +243,12 @@
     function recursionDelPage (views, children, _jroll, i) {
       var l = views.length
       if (l - 1 > i) {
+        if (l - 2 === i) {
+          // 执行beforeEnter cb里的方法
+          if (JTaro.method) {
+            JTaro.method.call(findVueComponent(views[i]).$children[0], JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params)
+          }
+        }
         slideOut(children[l - 2], _jroll, function () {
           views.splice(l - 1)
           JTaro.history.splice(l - 1)
@@ -251,8 +258,7 @@
             recursionDelPage(views, children, _jroll, i)
           }, 0)
         })
-      }
-      if (l - 1 === i) {
+      } else {
         // afterEnter hook 后退
         afterEnterHook(findVueComponent(views[i]))
       }

@@ -1,5 +1,9 @@
 # 更新日志
 
+## v0.6.2 (2018-06-15)
+
+- 修复返回上一页时没执行`beforeEnter` cb 里的方法的bug
+
 ## v0.6.1 (2018-06-08)
 
 - `beforeLeave`添加`resolve`和`reject`方法控制是否离开
