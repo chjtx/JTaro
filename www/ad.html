@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  </style>
+</head>
+<body>
+  <script>
+    // 广告
+    window.onload = function () {
+      if (/mobile|phone|android|pad/.test(navigator.userAgent.toLowerCase())) {
+        // 手机
+        var s = "_" + Math.random().toString(36).slice(2);
+        document.write('<div style="" id="' + s + '"></div>');
+        (window.slotbydup = window.slotbydup || []).push({
+          id: "u3563080",
+          container:  s
+        });
+      } else {
+        // 电脑
+        var s = "_" + Math.random().toString(36).slice(2);
+        document.write('<div style="" id="' + s + '"></div>');
+        (window.slotbydup = window.slotbydup || []).push({
+          id: "u3460240",
+          container:  s
+        });
+      }
+    }  
+  </script>
+  <script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/c.js" async="async" defer="defer" ></script>
+</body>
+</html>

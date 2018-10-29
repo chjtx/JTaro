@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8">
-    <title>JTaro 醉芋头</title>
-    <link href="http://www.chjtx.com/JTaro/favicon.ico" type="image/x-icon" rel="icon">
-    <link rel="stylesheet" href="./github-markdown.css">
-    <link rel="stylesheet" href="./github-gist.css">
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>JTaro 醉芋头</title>
+  <link href="http://www.chjtx.com/JTaro/favicon.ico" type="image/x-icon" rel="icon">
+  <link rel="stylesheet" href="./github-markdown.css">
+  <link rel="stylesheet" href="./github-gist.css">
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: "Microsoft Yahei", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
       line-height: 1.75;
+      margin-right: 150px;
     }
 
     h1 {
-      text-align: center!important;
-      border-bottom: none!important;
+      text-align: center !important;
+      border-bottom: none !important;
       padding: 30px 0;
     }
 
-    menu {
+    #menu_btn,
+    #mask {
+      display: none;
+    }
+
+    #menu {
       position: fixed;
       top: 160px;
-      left: 20px;
+      left: 0;
       line-height: 1.8;
       overflow: auto;
       bottom: 0;
-      width: 138px;
+      width: 200px;
+      background: #fff;
+      padding-left: 30px;
+      padding-top: 30px;
     }
 
-    menu li {
+    #menu li {
       list-style-type: none;
     }
 
-    menu a {
+    #menu a {
       color: #000;
       text-decoration: none;
     }
 
-    menu a.active {
+    #menu a.active {
       color: #0d7d9c;
     }
 
@@ -47,12 +62,12 @@
     }
 
     article {
-      margin: 20px 10px 100px 220px;
-
+      margin: 0 20px 200px 220px;
+      padding-top: 20px;
     }
 
     #logo {
-      background: url(http://www.chjtx.com/assets/images/jtaro-logo.png) center no-repeat;
+      background: url(http://www.chjtx.com/assets/images/jtaro-logo.png) center no-repeat #fff;
       background-size: 120px 120px;
       width: 200px;
       height: 160px;
@@ -61,25 +76,96 @@
       top: 0;
       border-bottom: 1px dashed #ddd;
     }
+    #ad {
+      border: none;
+      width: 100%;
+      position: fixed;
+      right: 10px;
+      top: 138px;
+      width: 120px;
+      height: 600px;
+    }
+    @media screen and (max-width: 768px) {
+      #menu,
+      #logo {
+        transform: translateX(-110%);
+        transition: 300ms ease-out;
+        z-index: 2;
+      }
+      #menu.show,
+      #logo.show {
+        transform: translateX(0%);
+      }
+      article {
+        margin-left: 20px;
+      }
+      body {
+        margin-right: 0;
+      }
+      #menu_btn {
+        display: block;
+        position: fixed;
+        color: #fff;
+        background: #0d7d9c;
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+        position: fixed;
+        top: 53px;
+        left: -10px;
+        width: 55px;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        font-size: 14px;
+        box-shadow: 3px 3px 10px 0px rgba(0,0,0,.4);
+        transform: translateX(0);
+        transition: 300ms ease-out;
+        z-index: 3;
+      }
+      #menu_btn.hide {
+        transform: translateX(-110%);
+      }
+      #mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,.3);
+      }
+      #mask.show {
+        display: block;
+      }
+      #ad {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 48px;
+      }
+    }
   </style>
 </head>
 
 <body>
-    <a target="_blank" href="https://github.com/chjtx/JTaro"><img style="position: fixed; top: 0; right: 0; border: 0;" src="http://www.chjtx.com/assets/images/jtaro-github-ribbon.png"></a>
+  <a target="_blank" href="https://github.com/chjtx/JTaro"><img style="position: fixed; top: 0; right: 0; border: 0;"
+      src="http://www.chjtx.com/assets/images/jtaro-github-ribbon.png"></a>
 
-    <div id="logo"></div>
-    <menu>
-        <li><a href="#-download">下载</a></li>
-        <li><a href="#-brief">说明</a></li>
-        <li><a href="#-quick-start">快速上手</a></li>
-        <li><a href="#-run-demo">运行示例</a></li>
-        <li><a href="#-basic-usage">基础用法</a></li>
-        <li><a href="#-route">路由</a></li>
-        <li><a href="#-communication">页面组件间通讯</a></li>
-        <li><a href="#-jtaro-module-">组合开发</a></li>
-    </menu>
-    <article class="markdown-body">
-        <h1 id="-jtaro">醉芋头 JTaro</h1>
+  <div id="menu_btn">菜单</div>
+  <div id="mask"></div>
+  <div id="logo"></div>
+  <menu id="menu">
+    <li><a href="#-download">下载</a></li>
+    <li><a href="#-brief">说明</a></li>
+    <li><a href="#-quick-start">快速上手</a></li>
+    <li><a href="#-run-demo">运行示例</a></li>
+    <li><a href="#-basic-usage">基础用法</a></li>
+    <li><a href="#-route">路由</a></li>
+    <li><a href="#-communication">页面组件间通讯</a></li>
+    <li><a href="#-jtaro-module-">组合开发</a></li>
+  </menu>
+  <article class="markdown-body">
+    <h1 id="-jtaro">醉芋头 JTaro</h1>
 <blockquote>
 <p>An H5 SPA framework for Vue.js 2.0</p>
 </blockquote>
@@ -558,41 +644,72 @@ jtaroBundle.bundle({
 <li><input type="checkbox" checked disabled> <del>在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板</del>开发版保留该功能，方便开发，生产版刷新始终回到首页<code>v0.7.0</code></li>
 </ul>
 
-    </article>
-    <script>
-    (function() {
-        var alist = document.querySelectorAll("menu a");
-        var hrefs = [];
-        var offsets = [];
-        Array.prototype.forEach.call(alist, function(a) {
-            var h = a.hash;
-            if (h.indexOf("#") !== -1) {
-            hrefs.push(h.replace("#", ""));
-            }
-        });
-        hrefs.forEach(function(o) {
-            var d = document.getElementById(o);
-            if (d) {
-            offsets.push(d.offsetTop);
-            }
-        });
+  </article>
+  <script>
+    (function (document) {
+      var alist = document.querySelectorAll("#menu a");
+      var hrefs = [];
+      var offsets = [];
 
-        function setMenuTag() {
-            var t = window.scrollY + 90;
-            for (var i = offsets.length - 1; i >= 0; i--) {
-            if (t > offsets[i]) {
-                Array.prototype.forEach.call(alist, function(a) {
-                a.classList.remove("active");
-                });
-                alist[i].classList.add("active");
-                break;
-            }
-            }
-        };
-        setMenuTag();
-        window.onscroll = setMenuTag;
-    })();
-    </script>
+      var menu = document.getElementById('menu')
+      var logo = document.getElementById('logo')
+      var mask = document.getElementById('mask')
+      var menu_btn = document.getElementById('menu_btn')
+
+      Array.prototype.forEach.call(alist, function (a) {
+        var h = a.hash;
+        if (h.indexOf("#") !== -1) {
+          hrefs.push(h.replace("#", ""));
+        }
+      });
+      hrefs.forEach(function (o) {
+        var d = document.getElementById(o);
+        if (d) {
+          offsets.push(d.offsetTop);
+        }
+      });
+
+      function setMenuTag() {
+        var t = window.scrollY + 90;
+        for (var i = offsets.length - 1; i >= 0; i--) {
+          if (t > offsets[i]) {
+            Array.prototype.forEach.call(alist, function (a) {
+              a.classList.remove("active");
+            });
+            alist[i].classList.add("active");
+            break;
+          }
+        }
+      };
+      setMenuTag();
+      window.onscroll = setMenuTag;
+
+      function showMenu () {
+        menu.classList.add('show')
+        logo.classList.add('show')
+        mask.classList.add('show')
+        menu_btn.classList.add('hide')
+      }
+      function hideMenu () {
+        menu.classList.remove('show')
+        logo.classList.remove('show')
+        mask.classList.remove('show')
+        menu_btn.classList.remove('hide')
+      }
+      menu.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') {
+          hideMenu()
+        }
+      })
+      menu_btn.addEventListener('click', function () {
+        showMenu()
+      }, false)
+      mask.addEventListener('click', function () {
+        hideMenu()
+      }, false)
+    })(document);
+  </script>
+  <iframe id="ad" frameborder="no" marginwidth="0" marginheight="0" scrolling="no" src="./ad.html"></iframe>
 </body>
 
 </html>
