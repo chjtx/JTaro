@@ -93,10 +93,10 @@
 <h2 id="-download">下载 download</h2>
 <h3 id="-">本地</h3>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.2.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.7.0.js</a></p>
 </blockquote>
 <blockquote>
-<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.2.min.js</a></p>
+<p><a target="_blank" href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.7.0.min.js</a></p>
 </blockquote>
 <h3 id="cdn">CDN</h3>
 <pre><code class="lang-html"><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://unpkg.com/jtaro/dist/jtaro.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -117,7 +117,7 @@
 <li>使用Vue2作为底层，省去直接操作dom的烦恼，带来组件复用的便利</li>
 <li>提供页面切换动画，让H5应用看上去更像原生APP</li>
 <li>自动路由管理，无需手动配置</li>
-<li>在任何页面刷新，自动从第一页切回到当前页</li>
+<li><del>在任何页面刷新，自动从第一页切回到当前页</del>，该功能不稳定，生产版刷新始终回到首页<code>v0.7.0</code></li>
 <li>页面缓存，从列表页到详细页，再回到列表页不刷新</li>
 <li>基于页面开发，开发者只须关心各自的页面，更利于合作开发</li>
 </ul>
@@ -166,7 +166,10 @@ npm run dev
   <span class="hljs-attribute">default</span>: <span class="hljs-string">'home'</span>,
   <span class="hljs-attribute">distance</span>: <span class="hljs-number">0.3</span>,
   <span class="hljs-attribute">duration</span>: <span class="hljs-number">200</span>,
-  <span class="hljs-attribute">JRoll</span>: window.JRoll
+  <span class="hljs-attribute">JRoll</span>: window.JRoll,
+  <span class="hljs-attribute">vueOptions</span>: {
+    <span class="hljs-attribute">store</span>: store
+  } <span class="hljs-comment">// 0.7.0新增</span>
 })
 </code></pre>
 <table>
@@ -203,8 +206,15 @@ npm run dev
 <td style="text-align:center">window.JRoll</td>
 <td style="text-align:left">用于异步引入JRoll，不能确保JRoll和JTaro顺序时使用</td>
 </tr>
+<tr>
+<td style="text-align:center">vueOptions</td>
+<td style="text-align:center">Object</td>
+<td style="text-align:left">用于传入Vue的初始参数，对于使用<code>Vuex</code>的项目传入<code>store</code>很有用，<code>el</code>、<code>render</code>、<code>template</code>这3个参数传入无效</td>
+</tr>
 </tbody>
 </table>
+<h3 id="-jtaro-vm">实例 JTaro.vm</h3>
+<p>可通过<code>JTaro.vm</code>获取 Vue 根实例</p>
 <h3 id="-this-go">跳转 this.go</h3>
 <pre><code class="lang-js">Vue.component(<span class="hljs-string">'home'</span>, {
   <span class="hljs-attr">methods</span>: {
@@ -531,6 +541,8 @@ jtaroBundle.bundle({
 <pre><code><span class="hljs-keyword">node</span> <span class="hljs-title">build</span>.js
 </code></pre><p>JTaro Bundle 会自动根据www/index_template.html里的内容去查找相对index.html的文件并拷贝，如果该文件不存在，则查找对应名称的文件夹，如果文件夹存在，即尝试将该文件夹里的文件打包成一个与文件夹同名的js文件</p>
 <p>将会看到www文件夹下多了pages.js、index.html和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了</p>
+<h2 id="-">更新日志</h2>
+<p><a target="_blank" href="https://github.com/chjtx/JTaro/blob/master/LOG.md">https://github.com/chjtx/JTaro/blob/master/LOG.md</a></p>
 <h2 id="jtaro-">JTaro完成了哪些功能？</h2>
 <ul>
 <li><input type="checkbox" checked disabled> 简单路由功能，根据组件名称动态创建页面</li>
@@ -543,7 +555,7 @@ jtaroBundle.bundle({
 <li><input type="checkbox" checked disabled> <del>嵌入微型fastclick解决老机点击300ms延迟问题</del></li>
 <li><input type="checkbox" checked disabled> 使用 JTaro Module 进行模块管理</li>
 <li><input type="checkbox" checked disabled> 自动加载Vue页面组件</li>
-<li><input type="checkbox" checked disabled> 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板</li>
+<li><input type="checkbox" checked disabled> <del>在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板</del>开发版保留该功能，方便开发，生产版刷新始终回到首页<code>v0.7.0</code></li>
 </ul>
 
     </article>

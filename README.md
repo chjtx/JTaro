@@ -16,9 +16,9 @@ JTaro Tutorial：[https://github.com/chjtx/JTaro-Tutorial](https://github.com/ch
 
 ### 本地
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.6.2.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.js" download>jtaro.0.7.0.js</a>
 
-> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.6.2.min.js</a>
+> <a href="http://www.chjtx.com/JTaro/dist/jtaro.min.js" download>jtaro.0.7.0.min.js</a>
 
 ### CDN
 
@@ -45,7 +45,7 @@ npm install jtaro
 - 使用Vue2作为底层，省去直接操作dom的烦恼，带来组件复用的便利
 - 提供页面切换动画，让H5应用看上去更像原生APP
 - 自动路由管理，无需手动配置
-- 在任何页面刷新，自动从第一页切回到当前页
+- ~~在任何页面刷新，自动从第一页切回到当前页~~，该功能不稳定，生产版刷新始终回到首页`v0.7.0`
 - 页面缓存，从列表页到详细页，再回到列表页不刷新
 - 基于页面开发，开发者只须关心各自的页面，更利于合作开发
 
@@ -113,7 +113,10 @@ Vue.use(JTaro, {
   default: 'home',
   distance: 0.3,
   duration: 200,
-  JRoll: window.JRoll
+  JRoll: window.JRoll,
+  vueOptions: {
+    store: store
+  } // 0.7.0新增
 })
 ```
 
@@ -124,7 +127,11 @@ Vue.use(JTaro, {
 | distance | 0.1 | 页面折叠距离倍数，以屏幕宽度为1，取值范围为0 <= distance <= 1 |
 | duration | 200 | 页面切换过渡时间 |
 | JRoll | window.JRoll | 用于异步引入JRoll，不能确保JRoll和JTaro顺序时使用 |
+| vueOptions | Object | 用于传入Vue的初始参数，对于使用`Vuex`的项目传入`store`很有用，`el`、`render`、`template`这3个参数传入无效 |
 
+### 实例 JTaro.vm
+
+可通过`JTaro.vm`获取 Vue 根实例
 
 ### 跳转 this.go
 
@@ -539,6 +546,10 @@ JTaro Bundle 会自动根据www/index_template.html里的内容去查找相对in
 
 将会看到www文件夹下多了pages.js、index.html和node_modules/文件夹，然后将www/indwx.html拖到浏览器访问，能看到与开发环境一致的效果表明成功了
 
+## 更新日志
+
+[https://github.com/chjtx/JTaro/blob/master/LOG.md](https://github.com/chjtx/JTaro/blob/master/LOG.md)
+
 ## JTaro完成了哪些功能？
 
 - [x] 简单路由功能，根据组件名称动态创建页面
@@ -551,5 +562,5 @@ JTaro Bundle 会自动根据www/index_template.html里的内容去查找相对in
 - [x] ~~嵌入微型fastclick解决老机点击300ms延迟问题~~
 - [x] 使用 JTaro Module 进行模块管理
 - [x] 自动加载Vue页面组件
-- [x] 在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板
+- [x] ~~在非首页刷新自动切换到当前页，解决单页应用每次刷新都回到首页的短板~~开发版保留该功能，方便开发，生产版刷新始终回到首页`v0.7.0`
 

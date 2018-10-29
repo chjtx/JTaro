@@ -16,7 +16,21 @@
     <script src="./src/jtaro.js"></script>
     <script src="./demos/main.js"></script>
     <script>
-        Vue.use(JTaro)
+        Vue.use(JTaro, {
+            vueOptions: {
+                el: '#app',
+                data: {
+                    views: 123,
+                    haha: 123123
+                },
+                render: function (h) {
+                    return h('div', '123')
+                },
+                mounted: function () {
+                    console.log('Vue Options Created!!!')
+                }
+            }
+        })
     </script>
 </body>
 </html>

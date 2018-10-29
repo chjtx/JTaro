@@ -1,12 +1,12 @@
 {
   "name": "jtaro",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "An H5 SPA framework for Vue.js 2.0",
   "main": "dist/jtaro.js",
   "scripts": {
-    "build": "gulp build",
+    "build": "node ./build.js code",
     "dev": "node node_modules/jtaro-module/src/server.js 3030",
-    "www": "gulp www"
+    "www": "node ./build.js www"
   },
   "repository": {
     "type": "git",
@@ -27,16 +27,12 @@
     "eslint": "^3.9.1",
     "eslint-config-vue": "^2.0.0",
     "eslint-plugin-vue": "^1.0.0",
-    "gulp": "^3.9.1",
-    "gulp-header": "^1.8.8",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.4",
-    "gulp-uglify": "^2.0.0",
     "highlight.js": "^9.9.0",
     "jtaro-bundle": "^0.3.0",
-    "jtaro-module": "^0.3.3",
+    "jtaro-module": "^0.3.4",
     "marked": "^0.3.6",
     "rollup": "^0.40.0",
-    "rollup-plugin-jtaro-module": "0.2.3"
+    "rollup-plugin-jtaro-module": "^0.3.2",
+    "uglify-js": "^3.4.9"
   }
 }

@@ -99,7 +99,8 @@
       el: options.el || '#jtaro_app', // 默认挂载元素
       default: options.default || 'home', // 默认页
       distance: isNaN(options.distance) ? 0.2 : Number(options.distance), // 页面后退距离百分比，以屏幕宽度为1
-      duration: isNaN(options.duration) ? 300 : Number(options.duration) // 页面过渡时间
+      duration: isNaN(options.duration) ? 300 : Number(options.duration), // 页面过渡时间
+      vueOptions: options.vueOptions || {}
     }
 
     // 创建样式
@@ -251,7 +252,9 @@
         slideOut(children[l - 2], _jroll, function () {
           views.splice(l - 1)
           JTaro.history.splice(l - 1)
+          // **JTaro Comment Start**
           window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
+          // **JTaro Comment end**;;
           children[l - 1].parentNode.removeChild(children[l - 1])
           setTimeout(function () {
             recursionDelPage(views, children, _jroll, i)
@@ -311,7 +314,9 @@
           url: _hash.replace('#', ''),
           params: JTaro.tools.isEmptyObject(JTaro.params) ? null : JTaro.params
         })
+        // **JTaro Comment Start**
         window.sessionStorage.setItem('JTaro.history', JSON.stringify(JTaro.history))
+        // **JTaro Comment end**;;
 
       // 页面已存在
       } else {
@@ -398,13 +403,31 @@
       }
     }
 
-    JTaro.vm = new Vue({
-      el: JTaro.options.el,
-      data: {
-        views: []
-      },
-      template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view" :key="view"></jt-view></div>'
+    var dataOptions = Object.assign((JTaro.options.vueOptions.data || {}), {
+      views: []
     })
+
+    JTaro.vm = new Vue(Object.assign(JTaro.options.vueOptions, {
+      el: JTaro.options.el,
+      data: dataOptions,
+      render: function (h) {
+        var me = this
+        return h('div', {
+          attrs: {
+            id: JTaro.options.el.replace('#', '')
+          }
+        }, [me.views.map(function (view) {
+          return h('jt-view', {
+            staticClass: 'jtaro-view',
+            props: {
+              view: view,
+              key: view
+            }
+          })
+        })])
+      }
+      // template: '<div id="' + JTaro.options.el.replace('#', '') + '"><jt-view class="jtaro-view" v-for="view in views" :view="view" :key="view"></jt-view></div>'
+    }))
 
     // 监听路由变化
     window.addEventListener('hashchange', function () {
@@ -414,7 +437,9 @@
       }
       // 如果hash为空，清空历史记录缓存，跳回默认页
       if (window.location.hash === '') {
-        window.sessionStorage.getItem('JTaro.history')
+        // **JTaro Comment Start**
+        window.sessionStorage.removeItem('JTaro.history')
+        // **JTaro Comment end**;;
         window.location.hash = JTaro.options.default
         return
       }
@@ -527,6 +552,7 @@
     }
 
     var historyViews = null
+    // **JTaro Comment Start**
     // 如果hash为空，清空历史记录缓存
     if (window.location.hash === '') {
       window.sessionStorage.removeItem('JTaro.history')
@@ -551,11 +577,13 @@
       } else {
         boot()
       }
-
-    // 否则根据路由启动页面
     } else {
+      // 否则根据路由启动页面
+    // **JTaro Comment end**;;
       boot(1)
+    // **JTaro Comment Start**
     }
+    // **JTaro Comment end**;;
   }
 
   return JTaro
