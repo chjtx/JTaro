@@ -31,15 +31,20 @@
       display: none;
     }
 
-    #menu {
+    #left {
       position: fixed;
-      top: 160px;
+      top: 0;
       left: 0;
-      line-height: 1.8;
-      overflow: auto;
       bottom: 0;
       width: 200px;
       background: #fff;
+      z-index: 2;
+    }
+
+    #menu {
+      line-height: 1.8;
+      overflow: auto;
+      width: 200px;
       padding-left: 30px;
       padding-top: 30px;
     }
@@ -62,7 +67,8 @@
     }
 
     article {
-      margin: 0 20px 200px 220px;
+      margin-left: 220px;
+      margin-right: 20px;
       padding-top: 20px;
     }
 
@@ -71,9 +77,6 @@
       background-size: 120px 120px;
       width: 200px;
       height: 160px;
-      position: fixed;
-      left: 0;
-      top: 0;
       border-bottom: 1px dashed #ddd;
     }
     #ad {
@@ -86,14 +89,12 @@
       height: 600px;
     }
     @media screen and (max-width: 768px) {
-      #menu,
-      #logo {
+      #left {
         transform: translateX(-110%);
         transition: 300ms ease-out;
         z-index: 2;
       }
-      #menu.show,
-      #logo.show {
+      #left.show {
         transform: translateX(0%);
       }
       article {
@@ -145,6 +146,15 @@
       }
     }
   </style>
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?13d1748106859cff17352f69a8fa8457";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 </head>
 
 <body>
@@ -153,20 +163,23 @@
 
   <div id="menu_btn">菜单</div>
   <div id="mask"></div>
-  <div id="logo"></div>
-  <menu id="menu">
-    <li><a href="#-download">下载</a></li>
-    <li><a href="#-brief">说明</a></li>
-    <li><a href="#-quick-start">快速上手</a></li>
-    <li><a href="#-run-demo">运行示例</a></li>
-    <li><a href="#-basic-usage">基础用法</a></li>
-    <li><a href="#-route">路由</a></li>
-    <li><a href="#-communication">页面组件间通讯</a></li>
-    <li><a href="#-jtaro-module-">组合开发</a></li>
-  </menu>
+  <div id="left">
+    <div id="logo"></div>
+    <menu id="menu">
+      <li><a href="#-download">下载</a></li>
+      <li><a href="#-brief">说明</a></li>
+      <li><a href="#-quick-start">快速上手</a></li>
+      <li><a href="#-run-demo">运行示例</a></li>
+      <li><a href="#-basic-usage">基础用法</a></li>
+      <li><a href="#-route">路由</a></li>
+      <li><a href="#-communication">页面组件间通讯</a></li>
+      <li><a href="#-jtaro-module-">组合开发</a></li>
+    </menu>
+  </div>
   <article class="markdown-body">
     {{doc}}
   </article>
+  <p style="text-align:center;margin-top:100px;margin-bottom:58px;color:#ccc;">&copy;2016-2018 chjtx.com</p>
   <script>
     (function (document) {
       var alist = document.querySelectorAll("#menu a");
@@ -174,7 +187,7 @@
       var offsets = [];
 
       var menu = document.getElementById('menu')
-      var logo = document.getElementById('logo')
+      var left = document.getElementById('left')
       var mask = document.getElementById('mask')
       var menu_btn = document.getElementById('menu_btn')
 
@@ -207,14 +220,12 @@
       window.onscroll = setMenuTag;
 
       function showMenu () {
-        menu.classList.add('show')
-        logo.classList.add('show')
+        left.classList.add('show')
         mask.classList.add('show')
         menu_btn.classList.add('hide')
       }
       function hideMenu () {
-        menu.classList.remove('show')
-        logo.classList.remove('show')
+        left.classList.remove('show')
         mask.classList.remove('show')
         menu_btn.classList.remove('hide')
       }
@@ -231,7 +242,7 @@
       }, false)
     })(document);
   </script>
-  <iframe id="ad" frameborder="no" marginwidth="0" marginheight="0" scrolling="no" src="./ad.html"></iframe>
+  <iframe id="ad" frameborder="no" marginwidth="0" marginheight="0" scrolling="no" src="//www.chjtx.com/JTaro/ad.html?v=1"></iframe>
 </body>
 
 </html>
