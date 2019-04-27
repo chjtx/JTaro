@@ -18,10 +18,10 @@
     window.onload = function () {
       if (/mobile|phone|android|pad/.test(navigator.userAgent.toLowerCase())) {
         // 手机
-        document.write('<a style="display:block;text-align: center;background:#000;" target="_blank" href="https://goodgoodsbook.com/?from=jroll"><img src="https://goodgoodsbook.com/imgs/ad-small.jpg"></a>');
+        document.write('<a style="display:block;text-align: center;background:#000;" target="_blank" href="https://goodgoodsbook.com/?from=' + /from=(\w+)/.exec(document.location.search)[1] + '"><img src="http://www.chjtx.com/assets/images/gg-small.jpg"></a>');
       } else {
         // 电脑
-        document.write('<a style="display:block;" target="_blank" href="https://goodgoodsbook.com/?from=jroll"><img src="https://goodgoodsbook.com/imgs/ad-big.jpg"></a>');
+        document.write('<a style="display:block;" target="_blank" href="https://goodgoodsbook.com/?from=' + /from=(\w+)/.exec(document.location.search)[1] + '"><img src="http://www.chjtx.com/assets/images/gg-big.jpg"></a>');
       }
     }  
   </script>
