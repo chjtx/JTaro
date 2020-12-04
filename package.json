@@ -27,7 +27,7 @@
     "eslint": "^3.9.1",
     "eslint-config-vue": "^2.0.0",
     "eslint-plugin-vue": "^1.0.0",
-    "highlight.js": "^9.9.0",
+    "highlight.js": "^10.4.1",
     "jtaro-bundle": "^0.3.0",
     "jtaro-module": "^0.3.4",
     "marked": "^0.3.6",
