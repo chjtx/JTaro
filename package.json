@@ -30,7 +30,7 @@
     "highlight.js": "^9.9.0",
     "jtaro-bundle": "^0.3.0",
     "jtaro-module": "^0.3.4",
-    "marked": "^0.3.6",
+    "marked": "^4.0.10",
     "rollup": "^0.40.0",
     "rollup-plugin-jtaro-module": "^0.3.2",
     "uglify-js": "^3.4.9"
